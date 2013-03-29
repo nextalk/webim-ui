@@ -52,6 +52,7 @@ widget("chatlink",
 	       space_href: [/space\.php\?uid=(\d+)$/i, /space\-(\d+)\.html$/i, /space\-uid\-(\d+)\.html$/i, /\?mod=space&uid=(\d+)/, /\?(\d+)$/],
 	       space_class: /spacemenu_list|line_list|xl\sxl2\scl/i,
 	       space_id: /profile_act/i,
+	       link_class: null,
 	       off_link_class: null,
 	       link_wrap: null,
 	       space_wrap: null
@@ -64,6 +65,7 @@ widget("chatlink",
 		       space_href = options.space_href, 
 		       space_id = options.space_id, 
 		       off_link_class = options.off_link_class,
+		       link_class = options.link_class,
 		       space_class = options.space_class, 
 		       space_wrap = options.space_wrap || document, 
 		       link_wrap = options.link_wrap || document;
@@ -83,8 +85,8 @@ widget("chatlink",
 
 		       a && each(a, function(i, el){
 			       var id = parse_id(el.href, link_href), text = el.innerHTML;
-			       if(id && children(el).length == 0 && text && (!el.className || !off_link_class || !off_link_class.test(el.className))){
-				       anthors[id] ? anthors[id].push(el) :(anthors[id] = [el]);
+				   if(id && children(el).length == 0 && text && (!el.className || !link_class || link_class.test(el.className)) && (!el.className || !off_link_class || !off_link_class.test(el.className))){
+					   anthors[id] ? anthors[id].push(el) :(anthors[id] = [el]);
 				       list[id] = {id: id, name: text};
 			       }
 		       });
