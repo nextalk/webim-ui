@@ -17,7 +17,10 @@ function webimUI(element, options){
 	self.options = extend({}, webimUI.defaults, options);
 	self._init();
 }
-extend(webimUI.prototype, objectExtend, {
+
+ClassEvent.on( webimUI );
+
+extend(webimUI.prototype, {
 	render:function(){
 		var self = this, layout = self.layout;
 		// Use insertBefore instead of appendChild  to circumvent an IE6 bug.
@@ -369,7 +372,8 @@ function widget(name, defaults, prototype){
 	}
 	m.defaults = defaults;// default options;
 	// add prototype
-	extend(m.prototype, objectExtend, widget.prototype, prototype);
+	ClassEvent.on( m );
+	extend(m.prototype, widget.prototype, prototype);
 	webimUI[name] = m;
 }
 
