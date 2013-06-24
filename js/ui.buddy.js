@@ -28,8 +28,11 @@ app("buddy", function( options ){
 	}, options ) );
 
 	layout.addWidget( buddyUI, {
-		container: "tab",
+		className: "webim-buddy-window",
 		title: i18n( "buddy" ),
+		titleVisibleLength: 19,
+		sticky: im.setting.get("buddy_sticky"),
+		isMinimize: !im.status.get("b"),
 		icon: "buddy"
 	} );
 

@@ -5,8 +5,8 @@
  * Copyright (c) 2010 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Mon Jun 24 18:21:07 2013 +0800
- * Commit: 6089cf7ab70d071bf0a94c50c54f750186872ee5
+ * Date: Mon Jun 24 19:42:34 2013 +0800
+ * Commit: 93f5e7b34c39134ae1cb5c81b01817c02acc3324
  */
 (function(window, document, undefined){
 
@@ -1013,21 +1013,21 @@ comet.prototype = {
 	_onConnect: function() {
 		var self = this;
 		self.readyState = comet.OPEN;
-		self.d( 'open', 'success' );
+		self.trigger( 'open', 'success' );
 	},
 	_onClose: function( m ) {
 		var self = this;
 		self._setting();
-		self.d( 'close', [ m ] );
+		self.trigger( 'close', [ m ] );
 	},
 	_onData: function(data) {
 		var self = this;
-		self.d( 'message', [ data ] );
+		self.trigger( 'message', [ data ] );
 	},
 	_onError: function( text ) {
 		var self = this;
 		self._setting();
-		self.d( 'error', [ text ] );
+		self.trigger( 'error', [ text ] );
 	},
 	_startPolling: function() {
 		var self = this;
