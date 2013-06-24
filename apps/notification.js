@@ -1,16 +1,16 @@
 /**/
 /*
-notification //
-attributes：
-data []所有信息 readonly 
-methods:
-handle(data) //handle data and distribute events
-events:
-data
-*/
+ notification //
+ attributes：
+ data []所有信息 readonly 
+ methods:
+ handle(data) //handle data and distribute events
+ events:
+ data
+ */
 /*
-* {"from":"","text":"","link":""}
-*/
+ * {"from":"","text":"","link":""}
+ */
 
 model("notification",{
 	url: "webim/notifications"
@@ -33,7 +33,7 @@ model("notification",{
 	load: function(){
 		var self = this, options = self.options;
 		self.request({
-			url: options.url,
+			url: route( "notifications" ),
 			cache: false,
 			dataType: "json",
 			context: self,

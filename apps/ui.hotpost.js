@@ -27,7 +27,7 @@ app("hotpost",{
 			onlyIcon: true,
 			isMinimize: true
 		}, "setting");
-		model.bind("data",function( data){
+	 model.bind("data",function(e, data){
 			widget.$.ul.innerHTML = "";
 			widget.add(data);
 		});

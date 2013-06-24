@@ -371,7 +371,7 @@ widget("layout",{
 		win.html(el);
 		self.$[container ? container : "widgets"].insertBefore(win.element, before && self.widgets[before] ? self.widgets[before].window.element : null);
 		widget.window = win;
-		win.bind("displayStateChange", function(state){ self._widgetStateChange(this, state);});
+		win.bind("displayStateChange", function(e, state){ self._widgetStateChange(this, state);});
 		self.widgets[widget.name] = widget;
 	},
 	focusChat: function(type, id){
@@ -435,7 +435,7 @@ widget("layout",{
 				isMinimize: self.activeTabId || !self.options.chatAutoPop,
 				tabWidth: self.tabWidth -2,
 				titleVisibleLength: 9
-			},winOptions)).bind("close", function(){ self._onChatClose(id)}).bind("displayStateChange", function(state){ self._onChatChange(id,state)});
+			},winOptions)).bind("close", function(){ self._onChatClose(id)}).bind("displayStateChange", function(e, state){ self._onChatChange(id,state)});
 			self.tabIds.push(id);
 			self.$.tabs.insertBefore(win.element, self.$.tabs.firstChild);
 			chat = panels[id] = new webimUI.chat(null, extend({

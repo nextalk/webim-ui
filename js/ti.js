@@ -17,24 +17,24 @@ extend(webimUI.prototype, objectExtend, {
 		buddyUI = self.buddy, 
 		layout = self.layout, 
 		room = im.room;
-		buddy.bind("online", function( data ){
+		buddy.bind("online", function( e, data ){
 			layout.updateChat( "buddy", data );
-		}).bind("offline", function( data ){
+		}).bind("offline", function( e, data ){
 			layout.updateChat( "buddy", data );
-		}).bind("update", function( data ){
+		}).bind("update", function( e, data ){
 			layout.updateChat( "buddy", data );
 		});
-		room.bind("addMember", function(room_id, info){
+		room.bind("addMember", function(e, room_id, info){
 			var c = layout.chat( "room", room_id );
 			c && c.addMember && c.addMember( info.id, info.nick, info.id == im.data.user.id );
-		}).bind("removeMember", function( room_id, info ){
+		}).bind("removeMember", function( e, room_id, info ){
 			var c = layout.chat( "room", room_id );
 			c && c.removeMember && c.removeMember( info.id, info.nick );
 		});
 
 		//all ready.
 		//message
-		im.bind( "message", function( data ){
+		im.bind( "message", function( e, data ){
 			var show = false,
 			l = data.length, d, uid = im.data.user.id, id, c, count = "+1";
 			for(var i = 0; i < l; i++){
@@ -64,7 +64,7 @@ extend(webimUI.prototype, objectExtend, {
 			}
 		});
 
-		im.bind("status", function(data){
+		im.bind("status", function(e, data){
 			each(data,function(n,msg){
 				var userId = im.data.user.id;
 				var id = msg['from'];
@@ -78,21 +78,21 @@ extend(webimUI.prototype, objectExtend, {
 			});
 		});
 		//for test
-		history.bind("unicast", function( id, data){
+		history.bind("unicast", function( e, id, data){
 			var c = layout.chat("unicast", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
 			}
 			//(c ? c.history.add(data) : im.addChat(id));
 		});
-		history.bind("multicast", function(id, data){
+		history.bind("multicast", function(e, id, data){
 			var c = layout.chat("multicast", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
 			}
 			//(c ? c.history.add(data) : im.addChat(id));
 		});
-		history.bind("clear", function(type, id){
+		history.bind("clear", function(e, type, id){
 			var c = layout.chat(type, id);
 			c && c.history.clear();
 		});
@@ -139,7 +139,7 @@ extend(webimUI.prototype, objectExtend, {
 	_initEvents: function() {
 		var self = this;
 		//im events
-		self.im.bind( "go", function( data ){
+		self.im.bind( "go", function( e, data ){
 			date.init( data.server_time );
 			//setting.set(data.setting);
 		});

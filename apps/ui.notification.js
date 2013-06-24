@@ -1,18 +1,17 @@
 //
 /* ui.notification:
-*
-options:
-data [{}]
-attributes：
+ *
+ options:
+ data [{}]
+ attributes：
 
-methods:
+ methods:
 
-destroy()
-events: 
+ destroy()
+ events: 
 
-*/
-app("notification", {
-	init: function(options){
+ */
+app("notification", function(options){
 		var ui = this, im = ui.im, layout = ui.layout;
 		var notificationUI = ui.notification = new webimUI.notification(null, options);
 		var notification = im.notification = new webim.notification(null, {
@@ -26,21 +25,20 @@ app("notification", {
 			isMinimize: true
 		});
 		///notification
-		notification.bind("data",function( data){
+		notification.bind("data",function( e, data){
 			notificationUI.window.notifyUser("information", "+" + data.length);
 			notificationUI.add(data);
 		});
 		setTimeout(function(){
 			notification.load();
 		}, 2000);  
-	}
 });
 
 widget("notification",{
 	template: '<div id="webim-notification" class="webim-notification">\
-		<ul id=":ul"><%=list%></ul>\
-			<div id=":empty" class="webim-notification-empty"><%=empty notification%></div>\
-				</div>',
+	<ul id=":ul"><%=list%></ul>\
+	<div id=":empty" class="webim-notification-empty"><%=empty notification%></div>\
+	</div>',
 	tpl_li: '<li><a href="<%=link%>" target="<%=target%>"><%=text%></a></li>'
 },{
 	_init: function(){

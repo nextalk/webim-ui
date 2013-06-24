@@ -95,7 +95,7 @@ widget("layout", {
 			self.tabs.select( options.title );
 		}
 		//self.$[container ? container : "widgets"].insertBefore(win.element, before && self.widgets[before] ? self.widgets[before].window.element : null);
-		//win.bind("displayStateChange", function(state){ self._widgetStateChange(this, state);});
+		//win.bind("displayStateChange", function(e, state){ self._widgetStateChange(this, state);});
 	},
 	focusChat: function( type, id ) {
 		id = _id_with_type(type, id);

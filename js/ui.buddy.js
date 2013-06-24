@@ -33,14 +33,13 @@ app("buddy", function( options ){
 		icon: "buddy"
 	} );
 
-
 	//select a buddy
-	buddyUI.a("select", function(e, info){
+	buddyUI.bind("select", function(e, info){
 		ui.addChat("buddy", info.id);
 		ui.layout.focusChat("buddy", info.id);
 	});
 	/*
-	buddyUI.window.a("displayStateChange",function(type){
+	buddyUI.window.bind("displayStateChange",function(type){
 		if(type != "minimize"){
 			buddy.option("active", true);
 			im.status.set("b", 1);
@@ -56,25 +55,25 @@ app("buddy", function( options ){
 	var grepVisible = function(a){ return a.show != "invisible" && a.presence == "online"};
 	var grepInvisible = function(a){ return a.show == "invisible"; };
 	//some buddies online.
-	buddy.a("online", function( e, data){
+	buddy.bind("online", function( e, data){
 		buddyUI.add(grep(data, grepVisible));
 	});
 	//some buddies offline.
-	buddy.a("offline", function( e, data){
+	buddy.bind("offline", function( e, data){
 		buddyUI.remove(map(data, mapId));
 	});
 	//some information has been modified.
-	buddy.a( "update", function( e, data){
+	buddy.bind( "update", function( e, data){
 		buddyUI.add(grep(data, grepVisible));
 		buddyUI.update(grep(data, grepVisible));
 		buddyUI.remove(map(grep(data, grepInvisible), mapId));
 	} );
 	buddyUI.offline();
-	im.a( "beforeOnline", function(){
+	im.bind( "beforeOnline", function(){
 		buddyUI.online();
-	}).a("online", function() {
+	}).bind("online", function() {
 		buddyUI.titleCount();
-	}).a( "offline", function( type, msg ) {
+	}).bind( "offline", function( type, msg ) {
 		buddyUI.offline();
 		if ( type == "connect" ) {
 		}

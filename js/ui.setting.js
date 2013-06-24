@@ -14,8 +14,7 @@ events:
 change
 
 */
-app("setting", {
-	init: function(options){
+app("setting", function(options){
 		var ui = this, im = ui.im, setting = im.setting, layout = ui.layout;
 		var settingUI = ui.setting = new webimUI.setting(null, options);
 		layout.addWidget(settingUI, {
@@ -26,12 +25,12 @@ app("setting", {
 			isMinimize: true
 		});
 		//setting events
-		setting.bind("update",function(key, val){
+		setting.bind("update",function(e, key, val){
 			if(typeof val != "object"){
 				settingUI.check_tag(key, val);
 			}
 		});
-		settingUI.bind("change", function(key, val){
+		settingUI.bind("change", function(e, key, val){
 			setting.set(key, val);
 		});
 		//handle 
@@ -42,16 +41,8 @@ app("setting", {
 		//	im.trigger("ready");  
 		//	im.online();
 		//});
-	},
-	//ready: function(){
-	//	//this.setting.online();
-	//},
-	//go: function(){
-	//},
-	stop: function(){
-		//this.setting.offline();
-	}
 });
+
 widget("setting",{
 	template: '<div id="webim-setting" class="webim-setting">\
 			<ul id=":ul"><%=tags%></ul>\

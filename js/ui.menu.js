@@ -11,8 +11,7 @@ destroy()
 events: 
 
 */
-app("menu", {
-	init: function(options){
+app("menu", function(options){
 		var ui = this, layout = ui.layout;
 		var menuUI = ui.menu = new webimUI.menu(null, options);
 		layout.addWidget(menuUI, {
@@ -22,7 +21,6 @@ app("menu", {
 			onlyIcon: false,
 			isMinimize: true
 		}, null,"shortcut");
-	}
 });
 widget("menu",{
 	template: '<div id="webim-menu" class="webim-menu">\

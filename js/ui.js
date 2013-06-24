@@ -43,10 +43,7 @@ extend(webimUI.prototype, {
 		var e = webimUI.apps[name];
 		if(!e)return;
 		var self = this, im = self.im;
-		isFunction(e.init) && e.init.apply(self, [options]);
-		isFunction(e.ready) && im.bind("ready", function(){e.ready.apply(self, arguments);});
-		isFunction(e.go) && im.bind("go", function(){e.go.apply(self, arguments);});
-		isFunction(e.stop) && im.bind("stop", function(){e.stop.apply(self, arguments);});
+		isFunction(e) && e.apply(self, [options]);
 	},
 	initSound: function(urls){
 		sound.init(urls || this.options.soundUrls);
@@ -56,19 +53,19 @@ extend(webimUI.prototype, {
 		//im events
 		im.bind("ready",function(){
 			layout.changeState("ready");
-		}).bind("go",function(data){
+		}).bind("go",function(e, data){
 			layout.changeState("active");
 			layout.option.user = data.user;
 			date.init(data.server_time);
 			self._initStatus();
 			//setting.set(data.setting);
-		}).bind("stop", function(type){
+		}).bind("stop", function(e, type){
 			type == "offline" && layout.removeAllChat();
 			layout.updateAllChat();
 			layout.changeState("stop");
 		});
 		//setting events
-		setting.bind("update",function(key, val){
+		setting.bind("update",function(e, key, val){
 			switch(key){
 				case "play_sound": (val ? sound.enable() : sound.disable() ); 
 				break;
@@ -80,17 +77,17 @@ extend(webimUI.prototype, {
 			}
 		});
 
-		buddy.bind("online", function(data){
+		buddy.bind("online", function(e, data){
 			layout.updateChat("buddy", data);
-		}).bind("offline", function(data){
+		}).bind("offline", function(e, data){
 			layout.updateChat("buddy", data);
-		}).bind("update", function(data){
+		}).bind("update", function(e, data){
 			layout.updateChat("buddy", data);
 		});
-		room.bind("addMember", function(room_id, info){
+		room.bind("addMember", function(e, room_id, info){
 			var c = layout.chat("room", room_id);
 			c && c.addMember(info.id, info.nick, info.id == im.data.user.id);
-		}).bind("removeMember", function(room_id, info){
+		}).bind("removeMember", function(e, room_id, info){
 			var c = layout.chat("room", room_id);
 			c && c.removeMember(info.id, info.nick);
 		});
@@ -108,7 +105,7 @@ extend(webimUI.prototype, {
 
 		//all ready.
 		//message
-		im.bind("message", function(data){
+		im.bind("message", function(e, data){
 			var show = false,
 			l = data.length, d, uid = im.data.user.id, id, c, count = "+1";
 			for(var i = 0; i < l; i++){
@@ -137,7 +134,7 @@ extend(webimUI.prototype, {
 			}
 		});
 
-		im.bind("status",function(data){
+		im.bind("status",function(e, data){
 			each(data,function(n,msg){
 				var userId = im.data.user.id;
 				var id = msg['from'];
@@ -151,21 +148,21 @@ extend(webimUI.prototype, {
 			});
 		});
 		//for test
-		history.bind("unicast", function( id, data){
+		history.bind("unicast", function( e, id, data){
 			var c = layout.chat("unicast", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
 			}
 			//(c ? c.history.add(data) : im.addChat(id));
 		});
-		history.bind("multicast", function(id, data){
+		history.bind("multicast", function(e, id, data){
 			var c = layout.chat("multicast", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
 			}
 			//(c ? c.history.add(data) : im.addChat(id));
 		});
-		history.bind("clear", function(type, id){
+		history.bind("clear", function(e, type, id){
 			var c = layout.chat(type, id);
 			c && c.history.clear();
 		});
@@ -206,18 +203,18 @@ extend(webimUI.prototype, {
 			layout.addChat(type, _info, extend({history: h, block: true, emot:true, clearHistory: false, member: true, msgType: "multicast"}, chatOptions), winOptions);
 			if(!h) history.load("multicast", id);
 			var chat = layout.chat(type, id);
-			chat.bind("sendMsg", function(msg){
+			chat.bind("sendMsg", function(e, msg){
 				im.sendMsg(msg);
 				history.handle(msg);
-			}).bind("downloadHistory", function(info){
+			}).bind("downloadHistory", function(e, info){
 				history.download("multicast", info.id);
-			}).bind("select", function(info){
+			}).bind("select", function(e, info){
 				buddy.online(info.id);//online
 				self.addChat("buddy", info.id, null, null, info.nick);
 				layout.focusChat("buddy", info.id);
-			}).bind("block", function(d){
+			}).bind("block", function(e, d){
 				room.block(d.id);
-			}).bind("unblock", function(d){
+			}).bind("unblock", function(e, d){
 				room.unblock(d.id);
 			}).window.bind("close",function(){
 				chat.options.info.blocked && room.leave(id);
@@ -237,14 +234,14 @@ extend(webimUI.prototype, {
 			layout.addChat(type, _info, extend({history: h, block: false, emot:true, clearHistory: true, member: false, msgType: "unicast"}, chatOptions), winOptions);
 			if(!info) buddy.update(id);
 			if(!h) history.load("unicast", id);
-			layout.chat(type, id).bind("sendMsg", function(msg){
+			layout.chat(type, id).bind("sendMsg", function(e, msg){
 				im.sendMsg(msg);
 				history.handle(msg);
-			}).bind("sendStatus", function(msg){
+			}).bind("sendStatus", function(e, msg){
 				im.sendStatus(msg);
-			}).bind("clearHistory", function(info){
+			}).bind("clearHistory", function(e, info){
 				history.clear("unicast", info.id);
-			}).bind("downloadHistory", function(info){
+			}).bind("downloadHistory", function(e, info){
 				history.download("unicast", info.id);
 			});
 		}

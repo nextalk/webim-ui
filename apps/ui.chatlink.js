@@ -21,18 +21,18 @@
 app("chatlink", {
 	init: function(options){
 		var ui = this, im = ui.im;
-		var chatlink = ui.chatlink = new webim.ui.chatlink(null, options).bind("select", function(id){
+		var chatlink = ui.chatlink = new webim.ui.chatlink(null, options).bind("select", function(e, id){
 			ui.addChat("buddy", id);
 			ui.layout.focusChat("buddy", id);
 		});
 		var grepVisible = function(a){ return a.show != "invisible" && a.presence == "online"};
 		var grepInvisible = function(a){ return a.show == "invisible" };
-		im.buddy.bind("online",function(data){
+		im.buddy.bind("online",function(e, data){
 			chatlink.add(grep(data, grepVisible));
-		}).bind("update",function(data){
+		}).bind("update",function(e, data){
 			chatlink.add(grep(data, grepVisible));
 			chatlink.remove(grep(data, grepInvisible));
-		}).bind("offline",function(data){
+		}).bind("offline",function(e, data){
 			chatlink.remove(data);
 		});
 	},

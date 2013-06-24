@@ -1,5 +1,4 @@
 module("ui");
-webim.notification.defaults.url = "data/notifications.php";
 test("webim.ui", 1, function() {
 	stop();
 	var is_login = false;

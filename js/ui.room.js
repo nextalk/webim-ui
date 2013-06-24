@@ -22,7 +22,7 @@ online
 */
 app("room", function( options ) {
 	var ui = this, im = ui.im, room = im.room, setting = im.setting,u = im.data.user, layout = ui.layout;
-	var roomUI = ui.room = new webim.ui.room(null).a("select",function( e, info){
+	var roomUI = ui.room = new webim.ui.room(null).bind("select",function( e, info){
 		ui.addChat("room", info.id);
 		ui.layout.focusChat("room", info.id);
 	});
@@ -32,24 +32,24 @@ app("room", function( options ) {
 		icon: "room"
 	} );
 	//
-	im.setting.a("update",function(key, val){
+	im.setting.bind("update",function(key, val){
 		//if(key == "buddy_sticky")roomUI.window.option("sticky", val);
 	});
-	room.a("join",function( e, info){
+	room.bind("join",function( e, info){
 		updateRoom(info);
-	}).a("leave", function( e, rooms){
+	}).bind("leave", function( e, rooms){
 
-	}).a("block", function( e, id, list){
+	}).bind("block", function( e, id, list){
 		setting.set("blocked_rooms",list);
 		updateRoom(room.get(id));
 		room.leave(id);
-	}).a("unblock", function( e, id, list){
+	}).bind("unblock", function( e, id, list){
 		setting.set("blocked_rooms",list);
 		updateRoom(room.get(id));
 		room.join(id);
-	}).a("addMember", function( e, room_id, info){
+	}).bind("addMember", function( e, room_id, info){
 		updateRoom(room.get(room_id));
-	}).a("removeMember", function( e, room_id, info){
+	}).bind("removeMember", function( e, room_id, info){
 		updateRoom(room.get(room_id));
 	});
 	//room
