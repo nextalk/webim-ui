@@ -137,12 +137,12 @@ widget("buddy",{
 var a = $.online.firstChild;
 addEvent(a, "click", function(e){
 preventDefault(e);
-self.d("online");
+self.trigger("online");
 });
 hoverClass(a, "ui-state-hover");
 addEvent($.offline.firstChild, "click", function(e){
 preventDefault(e);
-self.d("offline");
+self.trigger("offline");
 });
 */
 
@@ -234,7 +234,7 @@ self.d("offline");
 			var a = el.firstChild;
 			addEvent(a, "click",function(e){
 				preventDefault(e);
-				self.d("select", [info]);
+				self.trigger("select", [info]);
 				this.blur();
 			});
 

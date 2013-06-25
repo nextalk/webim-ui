@@ -36,21 +36,21 @@ app( "chat", function( options ) {
 			history.load( "multicast", id );
 		extend( options, { history: h, block: true, emot: true, clearHistory: false, member: true, type: type, downloadHistory: false } );
 		var chatUI = new webimUI.chat( null, options );
-		chatUI.a( "sendMessage", function( e, msg ) {
+		chatUI.bind( "sendMessage", function( e, msg ) {
 			im.sendMessage( msg );
 			history.set( msg );
-		}).a("downloadHistory", function( e, info ){
+		}).bind("downloadHistory", function( e, info ){
 			history.download( "multicast", info.id );
-		}).a("select", function( e, info ) {
+		}).bind("select", function( e, info ) {
 			info.presence = "online";
 			buddy.presence( info );//online
-			self.addChat( "buddy", info.id, info.nick );
+			ui.addChat( "buddy", info.id, info.nick );
 			layout.focusChat( "buddy", info.id );
-		}).a("block", function( e, d ){
+		}).bind("block", function( e, d ){
 			room.block( d.id );
-		}).a("unblock", function( e, d ) {
+		}).bind("unblock", function( e, d ) {
 			room.unblock( d.id );
-		}).a( "destroy", function() {
+		}).bind( "destroy", function() {
 			chatUI.options.info.blocked && room.leave(id);
 		});
 		setTimeout( function(){
@@ -69,14 +69,14 @@ app( "chat", function( options ) {
 		extend( options, { history: h, block: false, emot:true, clearHistory: true, member: false, type: type, downloadHistory: false } );
 		var chatUI = new webimUI.chat( null, options );
 
-		chatUI.a("sendMessage", function( e, msg ) {
+		chatUI.bind("sendMessage", function( e, msg ) {
 			im.sendMessage( msg );
 			history.set( msg );
-		}).a("sendStatus", function( e, msg ) {
+		}).bind("sendStatus", function( e, msg ) {
 			im.sendStatus( msg );
-		}).a("clearHistory", function( e, info ){
+		}).bind("clearHistory", function( e, info ){
 			history.clear( "unicast", info.id );
-		}).a("downloadHistory", function( e, info ) {
+		}).bind("downloadHistory", function( e, info ) {
 			history.download( "unicast", info.id );
 		});
 	}
@@ -136,8 +136,9 @@ widget("chat",{
 	setWindow: function( win ) {
 		var self = this;
 		self.window = win;
-		win.header( self.header );
-		win.content( self.element );
+		console.log( win );
+		//win.header( self.header );
+		//win.content( self.element );
 		win.title( self.options.info.nick );
 		self._bindWindow();
 	},
@@ -148,6 +149,7 @@ widget("chat",{
 			self.history.options.info = info;
 			self._updateInfo(info);
 		}
+		console.log( self.options );
 		var userOn = self.options.user.presence == "online";
 		var buddyOn = self.options.info.presence == "online";
 		if(!userOn){
@@ -203,17 +205,17 @@ widget("chat",{
 	},
 	_bindWindow: function(){
 		var self = this, win = self.window;
-		win.a("displayStateChange", function(e, type){
+		win.bind("displayStateChange", function(e, type){
 			if(type != "minimize"){
         //fix firefox
         window.setTimeout(function(){self.$.input.focus();},0);
 				//self.$.input.focus();
 				self._adjustContent();
 			}
-		}).a("close", function(){
+		}).bind("close", function(){
 			self.destroy();
 		});
-		//win.a("resize",{self: self}, self._fitUI);
+		//win.bind("resize",{self: self}, self._fitUI);
 	},
 	_inputAutoHeight:function(){
 		var el = this.$.input, scrollTop = el[0].scrollTop;
@@ -271,9 +273,9 @@ widget("chat",{
 	_initEvents: function(){
 		var self = this, options = self.options, $ = self.$, placeholder = i18n("input notice"), gray = "webim-gray", input = $.input;
 
-		self.history.a("update", function(){
+		self.history.bind("update", function(){
 			self._adjustContent();
-		}).a("clear", function(){
+		}).bind("clear", function(){
 			self.notice(i18n("clear history notice"), 3000);
 		});
 		//输入法中，进入输入法模式时keydown,keypress触发，离开输入法模式时keyup事件发生。
@@ -393,7 +395,7 @@ plugin.add("chat","fontcolor",{
 	init:function(e, ui){
 		var chat = ui.self;
 		var fontcolor = new webimUI.fontcolor();
-		fontcolor.a("select",function(e, alt){
+		fontcolor.bind("select",function(e, alt){
 			chat.focus();
 			chat.setStyle("color", alt);
 		});
@@ -415,7 +417,7 @@ plugin.add("chat","emot",{
 	init:function(e, ui){
 		var chat = ui.self;
 		var emot = new webimUI.emot();
-		emot.a("select",function( e, alt){
+		emot.bind("select",function( e, alt){
      
 			chat.focus();
 			chat.insert(alt, true);

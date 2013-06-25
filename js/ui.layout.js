@@ -438,7 +438,7 @@ widget("layout",{
 			},winOptions)).bind("close", function(){ self._onChatClose(id)}).bind("displayStateChange", function(e, state){ self._onChatChange(id,state)});
 			self.tabIds.push(id);
 			self.$.tabs.insertBefore(win.element, self.$.tabs.firstChild);
-			chat = panels[id] = new webimUI.chat(null, extend({
+			chat = panels[id] = webimUI.apps.chat(extend({
 				window: win,
 				user: self.options.user,
 				info: info

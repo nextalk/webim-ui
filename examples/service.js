@@ -2,6 +2,7 @@
 	webim.ui.ready(function(){
 		var log = webim.log;
 		var _path = "http://p.com/webim/service/";
+		_path = "http://blog.webim20.cn/webim/";
 		webim.extend( webim.setting.defaults.data, {
 			play_sound: true,
 			minimize_layout: true,
@@ -9,7 +10,7 @@
 		} );
 
 		webim.route( {
-			online: _path + "im.php?webim_action=online&domain=",	
+			online: _path + "im.php?webim_action=online&domain=webim20.cn",	
 			offline: _path + "im.php?webim_action=offline",	
 			deactivate: _path + "im.php?webim_action=refresh",	
 			message: _path + "im.php?webim_action=message",	
