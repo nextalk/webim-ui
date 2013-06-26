@@ -28,7 +28,7 @@ widget("history", {
 	clear:function(){
 		var self = this;
 		self.$.content.innerHTML = "";
-		self.d("clear");
+		self.trigger("clear");
 	},
 	add: function(data){
 		data = makeArray(data);
@@ -39,7 +39,7 @@ widget("history", {
 			markup.push(self._renderMsg(val));
 		}
 		self.$.content.innerHTML += markup.join('');
-		self.d("update");
+		self.trigger("update");
 	},
 	_renderMsg: function(logItem){
 		var self = this;

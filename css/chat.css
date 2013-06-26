@@ -8,8 +8,13 @@
 	border-left-width:0;
 	border-right-width:0;
 }
+
+.webim .webim-chat-content{
+	height: 16em;
+}
+
 .webim .webim-chat-main, .webim .webim-chat-sidebar{
-        /*height: 16em; */
+        height: 16em; 
         overflow-y: auto;
         overflow-x: hidden;
         *background: url(about:blank);

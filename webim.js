@@ -5,8 +5,8 @@
  * Copyright (c) 2010 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Mon Jun 24 19:42:34 2013 +0800
- * Commit: 93f5e7b34c39134ae1cb5c81b01817c02acc3324
+ * Date: Tue Jun 25 21:47:13 2013 +0800
+ * Commit: f2ede8df7b2d791ff53a8a98d0e8c84c33912a2d
  */
 (function(window, document, undefined){
 
@@ -1944,7 +1944,6 @@ model("history", {
 		var self = this, 
 		options = self.options, 
 		url = route( "download" ),
-		now = now(), 
 		f = document.createElement('iframe'), 
 		d = new Date(),
 		ar = [],

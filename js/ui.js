@@ -43,7 +43,7 @@ extend(webimUI.prototype, {
 		var e = webimUI.apps[name];
 		if(!e)return;
 		var self = this, im = self.im;
-		isFunction(e) && e.apply(self, [options]);
+		return isFunction(e) && e.apply(self, [options]);
 	},
 	initSound: function(urls){
 		sound.init(urls || this.options.soundUrls);
@@ -149,6 +149,7 @@ extend(webimUI.prototype, {
 		});
 		//for test
 		history.bind("unicast", function( e, id, data){
+			console.log( arguments );
 			var c = layout.chat("unicast", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
@@ -196,56 +197,14 @@ extend(webimUI.prototype, {
 		type = _tr_type(type);
 		var self = this, layout = self.layout, im = self.im, history = self.im.history, buddy = im.buddy, room = im.room, options = self.options;
 		if(layout.chat(type, id))return;
-		
-		if(type == "room"){
-			chatOptions = extend({}, options.roomChatOptions, chatOptions);
-			var h = history.get("multicast", id), info = room.get(id), _info = info || {id:id, nick: nick || id};
-			_info.presence = "online";
-			layout.addChat(type, _info, extend({history: h, block: true, emot:true, clearHistory: false, member: true, msgType: "multicast"}, chatOptions), winOptions);
-			if(!h) history.load("multicast", id);
-			var chat = layout.chat(type, id);
-			chat.bind("sendMsg", function(e, msg){
-				im.sendMsg(msg);
-				history.handle(msg);
-			}).bind("downloadHistory", function(e, info){
-				history.download("multicast", info.id);
-			}).bind("select", function(e, info){
-				buddy.online(info.id);//online
-				self.addChat("buddy", info.id, null, null, info.nick);
-				layout.focusChat("buddy", info.id);
-			}).bind("block", function(e, d){
-				room.block(d.id);
-			}).bind("unblock", function(e, d){
-				room.unblock(d.id);
-			}).window.bind("close",function(){
-				chat.options.info.blocked && room.leave(id);
-			});
-			setTimeout(function(){
-				if(chat.options.info.blocked)room.join(id);
-				else room.initMember(id);
-			}, 500);
-			isArray(_info.members) && each(_info.members, function(n, info){
-				chat.addMember(info.id, info.nick, info.id == im.data.user.id);
-			});
 
-		}else{
-			chatOptions = extend({}, options.buddyChatOptions, chatOptions);
-			var h = history.get("unicast", id), info = buddy.get(id);
-			var _info = info || {id:id, nick: nick || id};
-			layout.addChat(type, _info, extend({history: h, block: false, emot:true, clearHistory: true, member: false, msgType: "unicast"}, chatOptions), winOptions);
-			if(!info) buddy.update(id);
-			if(!h) history.load("unicast", id);
-			layout.chat(type, id).bind("sendMsg", function(e, msg){
-				im.sendMsg(msg);
-				history.handle(msg);
-			}).bind("sendStatus", function(e, msg){
-				im.sendStatus(msg);
-			}).bind("clearHistory", function(e, info){
-				history.clear("unicast", info.id);
-			}).bind("downloadHistory", function(e, info){
-				history.download("unicast", info.id);
-			});
-		}
+		self.addApp("chat", extend({
+			id: id, 
+			type: type, 
+			nick: nick, 
+			winOptions: winOptions
+		}, chatOptions));
+		
 	},
 	_updateStatus: function(){
 		var self = this, layout = self.layout, _tabs = {}, panels = layout.panels;

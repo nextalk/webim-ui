@@ -26,16 +26,35 @@ app( "chat", function( options ) {
 	buddy = im.buddy,
 	room = im.room,
 	history = im.history,
-	info = options.info,
-	id = info.id,
+	id = options.id,
 	type = options.type;
 	if( type == "room" ) {
-		info.presence = "online";
+
 		var h = history.get( "multicast", id );
 		if( !h )
 			history.load( "multicast", id );
-		extend( options, { history: h, block: true, emot: true, clearHistory: false, member: true, type: type, downloadHistory: false } );
+
+		var info = im.room.get(id) || {
+			id: id,
+			nick: nick || id,
+		};
+		info.presence = "online";
+
+		options = extend( {
+			info: info,
+			user: im.user
+		}, ui.options.roomChatOptions, { 
+			history: h, 
+			block: true, 
+			emot: true, 
+			clearHistory: false, 
+			member: true, 
+			type: type, 
+			downloadHistory: false 
+		}, options );
+
 		var chatUI = new webimUI.chat( null, options );
+
 		chatUI.bind( "sendMessage", function( e, msg ) {
 			im.sendMessage( msg );
 			history.set( msg );
@@ -66,8 +85,28 @@ app( "chat", function( options ) {
 		var h = history.get( "unicast", id );
 		if( !h )
 			history.load( "unicast", id );
-		extend( options, { history: h, block: false, emot:true, clearHistory: true, member: false, type: type, downloadHistory: false } );
+
+		var info = im.buddy.get(id) || {
+			id: id,
+			nick: nick || id,
+		};
+
+		options = extend( {
+			info: info,
+			user: im.data.user
+		}, ui.options.buddyChatOptions, { 
+			history: h, 
+			block: false, 
+			emot: true, 
+			clearHistory: true, 
+			member: false, 
+			msgType: "unicast"
+		}, options );
+
 		var chatUI = new webimUI.chat( null, options );
+
+		if(!im.buddy.get(id)) 
+			im.buddy.update(id);
 
 		chatUI.bind("sendMessage", function( e, msg ) {
 			im.sendMessage( msg );
@@ -80,6 +119,7 @@ app( "chat", function( options ) {
 			history.download( "unicast", info.id );
 		});
 	}
+	ui.layout.addChat( chatUI, options.winOptions );
 	return chatUI;
 } );
 
@@ -121,7 +161,7 @@ widget("chat",{
 		self.$.main.insertBefore(history.element, self.$.main.firstChild);
 		self.header = createElement( tpl( options.tpl_header ) );
 		extend( self.$, mapElements( self.header ) );
-		//self._initEvents();
+		self._initEvents();
 		if( win ) {
 			self.setWindow( win );
 		}
@@ -136,9 +176,8 @@ widget("chat",{
 	setWindow: function( win ) {
 		var self = this;
 		self.window = win;
-		console.log( win );
-		//win.header( self.header );
-		//win.content( self.element );
+		win.subHeader( self.header );
+		win.html( self.element );
 		win.title( self.options.info.nick );
 		self._bindWindow();
 	},
@@ -149,7 +188,6 @@ widget("chat",{
 			self.history.options.info = info;
 			self._updateInfo(info);
 		}
-		console.log( self.options );
 		var userOn = self.options.user.presence == "online";
 		var buddyOn = self.options.info.presence == "online";
 		if(!userOn){
@@ -237,7 +275,7 @@ widget("chat",{
 			body: val
 		};
 		plugin.call(self, "send", [null, self.ui({msg: msg})]);
-		self.d('sendMessage', msg);
+		self.trigger('sendMessage', [msg]);
 		//self.sendStatus("");
 	},
 	_inputkeypress: function(e){
@@ -346,10 +384,10 @@ widget("chat",{
 		var self = this;
 		if (!show || show == self._statusText || self.options.info.presence == "offline") return;
 		self._statusText = show;
-		self.d('sendStatus', {
+		self.trigger('sendStatus', [ {
 			to: self.options.info.id,
 			show: show
-		});
+		} ]);
 	},
 	_checkST: false,
 	_typing: function(){
@@ -376,7 +414,7 @@ widget("chat",{
 			}, 10000);
 	},
 	destroy: function(){
-		this.d( "destroy" );
+		this.trigger( "destroy" );
 	},
 	ui:function(ext){
 		var self = this;
@@ -441,7 +479,7 @@ plugin.add("chat","clearHistory",{
 		var trigger = createElement(tpl('<a href="#chat-clearHistory" title="<%=clear history%>"><em class="webim-icon webim-icon-clear"></em></a>'));
 		addEvent(trigger,"click",function(e){
 			preventDefault(e);
-			chat.d("clearHistory",[chat.options.info]);
+			chat.trigger("clearHistory",[chat.options.info]);
 		});
 		ui.$.tools.appendChild(trigger);
 	}
@@ -458,13 +496,13 @@ plugin.add("chat","block",{
 			preventDefault(e);
 			hide(block);
 			show(unblock);
-			chat.d("block",[chat.options.info]);
+			chat.trigger("block",[chat.options.info]);
 		});
 		addEvent(unblock,"click",function(e){
 			preventDefault(e);
 			hide(unblock);
 			show(block);
-			chat.d("unblock",[chat.options.info]);
+			chat.trigger("unblock",[chat.options.info]);
 		});
 		ui.$.tools.appendChild(block);
 		ui.$.tools.appendChild(unblock);
@@ -478,7 +516,7 @@ extend(webimUI.chat.prototype, {
 		var el = createElement('<li><a class="'+ (disable ? 'ui-state-disabled' : '') +'" href="'+ id +'">'+ nick +'</a></li>');
 		addEvent(el.firstChild,"click",function(e){
 			preventDefault(e);
-			disable || self.d("select", [{id: id, nick: nick}]);
+			disable || self.trigger("select", [{id: id, nick: nick}]);
 		});
 		li[id] = el;
 		self.$.member.appendChild(el);
@@ -511,7 +549,7 @@ plugin.add("chat","downloadHistory",{
 		var trigger = createElement(tpl('<a style="float: right;" href="#chat-downloadHistory" title="<%=download history%>"><em class="webim-icon webim-icon-download"></em></a>'));
 		addEvent(trigger,"click",function(e){
 			preventDefault(e);
-			chat.d("downloadHistory",[chat.options.info]);
+			chat.trigger("downloadHistory",[chat.options.info]);
 		});
 		ui.$.tools.appendChild(trigger);
 	}

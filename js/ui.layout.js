@@ -427,22 +427,32 @@ widget("layout",{
 			self._updatePrevCount(id);
 		}
 	},
-	addChat: function(type, info, options, winOptions){
-		var self = this, panels = self.panels, id = info.id, chat;
+	addChat: function(widget, options){
+		  var self 	= this
+		  , panels 	= self.panels
+		  , id 		= widget.options.id
+		  , type 	= widget.options.type;
+
 		id = _id_with_type(type, id);
+
 		if(!panels[id]){
+
+			panels[id] = widget;
+
 			var win = self.tabs[id] = new webimUI.window(null, extend({
 				isMinimize: self.activeTabId || !self.options.chatAutoPop,
 				tabWidth: self.tabWidth -2,
 				titleVisibleLength: 9
-			},winOptions)).bind("close", function(){ self._onChatClose(id)}).bind("displayStateChange", function(e, state){ self._onChatChange(id,state)});
+			},options))
+				.bind("close", function(){ 
+					self._onChatClose(id)
+				})
+				.bind("displayStateChange", function(e, state){ 
+					self._onChatChange(id,state)
+				});
 			self.tabIds.push(id);
 			self.$.tabs.insertBefore(win.element, self.$.tabs.firstChild);
-			chat = panels[id] = webimUI.apps.chat(extend({
-				window: win,
-				user: self.options.user,
-				info: info
-			}, options));
+			widget.setWindow( win );
 			!win.isMinimize() && self._changeActive(id);
 			self._fitUI();
 		}//else self.focusChat(id);
@@ -476,16 +486,6 @@ widget("layout",{
 
 		hoverClass(temp.firstChild, "ui-state-hover");
 		content.appendChild(temp);
-	},
-	addWindow: function(){
-		new webimUI.window(null, {
-		});
-	},
-	online: function(){
-		var self = this, $ = self.$;
-	},
-	offline: function(){
-		var self = this, $ = self.$;
 	}
 
 });

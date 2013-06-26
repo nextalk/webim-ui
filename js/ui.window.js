@@ -25,8 +25,8 @@
  deactivate
  displayStateChange
  close
- resize
- move
+ //resize
+ //move
  */
 widget("window", {
         isMinimize: false,
