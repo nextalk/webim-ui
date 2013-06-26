@@ -149,7 +149,6 @@ extend(webimUI.prototype, {
 		});
 		//for test
 		history.bind("unicast", function( e, id, data){
-			console.log( arguments );
 			var c = layout.chat("unicast", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);

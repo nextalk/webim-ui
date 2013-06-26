@@ -24,7 +24,8 @@
 			join: _path + "im.php?webim_action=join",	
 			leave: _path + "im.php?webim_action=leave",	
 			buddies: _path + "im.php?webim_action=buddies",	
-			notifications: _path + "im.php?webim_action=notifications"
+			notifications: _path + "im.php?webim_action=notifications",
+			logmsg: _path + "im.php?webim_action=logmsg"	
 		} );
 
 		webim.ui.emot.init({"dir": _path + "static/images/emot/default"});
@@ -54,8 +55,8 @@
 			disable_group: true
 		} );
 
-		//ui.addApp("visitorstatus");
-		//ui.addApp("logmsg");
+		ui.addApp("visitorstatus");
+		ui.addApp("logmsg");
 
 		ui.render();
 		im.online();
