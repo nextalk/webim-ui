@@ -5,8 +5,8 @@
  * Copyright (c) 2010 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Tue Jun 25 21:47:13 2013 +0800
- * Commit: f2ede8df7b2d791ff53a8a98d0e8c84c33912a2d
+ * Date: Wed Jun 26 18:22:43 2013 +0800
+ * Commit: ec50c97178d72d593c6982941a623f0f1a961a7d
  */
 (function(window, document, undefined){
 
@@ -1380,23 +1380,23 @@ extend(webim.prototype, {
 	//stranger_ids: [],
 	online: function( params ) {
 		var self = this, status = self.status;
-		//var buddy_ids = [], room_ids = [], tabs = status.get("tabs"), tabIds = status.get("tabIds");
-		//if(tabIds && tabIds.length && tabs){
-		//	each(tabs, function(k,v){
-		//		if(k[0] == "b") buddy_ids.push(k.slice(2));
-		//		if(k[0] == "r") room_ids.push(k.slice(2));
-		//	});
-		//}
+		var buddy_ids = [], room_ids = [], tabs = status.get("tabs"), tabIds = status.get("tabIds");
+		if(tabIds && tabIds.length && tabs){
+			each(tabs, function(k,v){
+				if(k[0] == "b") buddy_ids.push(k.slice(2));
+				if(k[0] == "r") room_ids.push(k.slice(2));
+			});
+		}
 		params = extend({                                
 			//stranger_ids: self.stranger_ids.join(","),
-			//buddy_ids: buddy_ids.join(","),
-			//room_ids: room_ids.join(","),
-			//show: status.get("s") || "available"
+			buddy_ids: buddy_ids.join(","),
+			room_ids: room_ids.join(","),
+			show: status.get("s") || "available"
 		}, params);
 		self._ready(params);
 		//set auto open true
-		//status.set("o", false);
-		//status.set("s", params.show);
+		status.set("o", false);
+		status.set("s", params.show);
 
 		ajax({
 			type:"get",

@@ -41,18 +41,16 @@ app("buddy", function( options ){
 		ui.addChat("buddy", info.id);
 		ui.layout.focusChat("buddy", info.id);
 	});
-	/*
 	buddyUI.window.bind("displayStateChange",function(type){
 		if(type != "minimize"){
-			buddy.option("active", true);
+			buddy.options.active = true;
 			im.status.set("b", 1);
 			buddy.complete();
 		}else{
 			im.status.set("b", 0);
-			buddy.option("active", false);
+			buddy.options.active = false;
 		}
 	});
-	*/
 
 	var mapId = function(a){ return isObject(a) ? a.id : a };
 	var grepVisible = function(a){ return a.show != "invisible" && a.presence == "online"};

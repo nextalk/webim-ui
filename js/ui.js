@@ -51,15 +51,15 @@ extend(webimUI.prototype, {
 	_initEvents: function(){
 		var self = this, im = self.im, buddy = im.buddy, history = im.history, status = im.status, setting = im.setting, buddyUI = self.buddy, layout = self.layout, room = im.room;
 		//im events
-		im.bind("ready",function(){
+		im.bind("beforeOnline",function(){
 			layout.changeState("ready");
-		}).bind("go",function(e, data){
+		}).bind("online",function(e, data){
 			layout.changeState("active");
-			layout.option.user = data.user;
+			layout.options.user = data.user;
 			date.init(data.server_time);
 			self._initStatus();
 			//setting.set(data.setting);
-		}).bind("stop", function(e, type){
+		}).bind("offline", function(e, type, msg){
 			type == "offline" && layout.removeAllChat();
 			layout.updateAllChat();
 			layout.changeState("stop");
