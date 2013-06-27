@@ -36,13 +36,13 @@ app( "chat", function( options ) {
 
 		var info = im.room.get(id) || {
 			id: id,
-			nick: nick || id,
+			nick: options.nick || id,
 		};
 		info.presence = "online";
 
 		options = extend( {
 			info: info,
-			user: im.user
+			user: im.data.user
 		}, ui.options.roomChatOptions, { 
 			history: h, 
 			block: true, 
@@ -88,7 +88,7 @@ app( "chat", function( options ) {
 
 		var info = im.buddy.get(id) || {
 			id: id,
-			nick: nick || id,
+			nick: options.nick || id,
 		};
 
 		options = extend( {

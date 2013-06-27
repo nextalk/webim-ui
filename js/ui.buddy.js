@@ -41,7 +41,7 @@ app("buddy", function( options ){
 		ui.layout.addChat("buddy", info.id);
 		ui.layout.focusChat("buddy", info.id);
 	});
-	buddyUI.window.bind("displayStateChange",function(type){
+	buddyUI.window && buddyUI.window.bind("displayStateChange",function(type){
 		if(type != "minimize"){
 			buddy.options.active = true;
 			im.status.set("b", 1);

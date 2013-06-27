@@ -68,95 +68,95 @@ app("layout", function( options ) {
 		}
 	});
 
-		buddy.bind("online", function(e, data){
-			layout.updateChat("buddy", data);
-		}).bind("offline", function(e, data){
-			layout.updateChat("buddy", data);
-		}).bind("update", function(e, data){
-			layout.updateChat("buddy", data);
-		});
-		room.bind("addMember", function(e, room_id, info){
-			var c = layout.chat("room", room_id);
-			c && c.addMember(info.id, info.nick, info.id == im.data.user.id);
-		}).bind("removeMember", function(e, room_id, info){
-			var c = layout.chat("room", room_id);
-			c && c.removeMember(info.id, info.nick);
-		});
-		layout.bind("collapse", function(){
-			setting.set("minimize_layout", true);
-		});
-		layout.bind("expand", function(){
-			setting.set("minimize_layout", false);
-		});
+	buddy.bind("online", function(e, data){
+		layout.updateChat("buddy", data);
+	}).bind("offline", function(e, data){
+		layout.updateChat("buddy", data);
+	}).bind("update", function(e, data){
+		layout.updateChat("buddy", data);
+	});
+	room.bind("addMember", function(e, room_id, info){
+		var c = layout.chat("room", room_id);
+		c && c.addMember(info.id, info.nick, info.id == im.data.user.id);
+	}).bind("removeMember", function(e, room_id, info){
+		var c = layout.chat("room", room_id);
+		c && c.removeMember(info.id, info.nick);
+	});
+	layout.bind("collapse", function(){
+		setting.set("minimize_layout", true);
+	});
+	layout.bind("expand", function(){
+		setting.set("minimize_layout", false);
+	});
 
-		//display status
-		layout.bind("displayUpdate", function(e){
-			_updateStatus(); //save status
-		});
+	//display status
+	layout.bind("displayUpdate", function(e){
+		_updateStatus(); //save status
+	});
 
 	//all ready.
-		//message
-		im.bind("message", function(e, data){
-			var show = false,
+	//message
+	im.bind("message", function(e, data){
+		var show = false,
 			l = data.length, d, uid = im.data.user.id, id, c, count = "+1";
-			for(var i = 0; i < l; i++){
-				d = data[i];
-				id = d["id"], type = d["type"];
-				c = layout.chat(type, id);
-				c && c.status("");//clear status
-				if(!c){	
-					if (d.type === "unicast"){
-						layout.addChat(type, id, null, null, d.nick);
-					}else{
-						layout.addChat(type, id);  
-					}
-					c = layout.chat(type, id);
-				}
-				c && setting.get("msg_auto_pop") && !layout.activeTabId && layout.focusChat(id);
-				c.window.notifyUser("information", count);
-				var p = c.window.pos;
-				(p == -1) && layout.setNextMsgNum(count);
-				(p == 1) && layout.setPrevMsgNum(count);
-				if(d.from != uid)show = true;
-			}
-			if(show){
-				sound.play('msg');
-				titleShow(i18n("new message"), 5);
-			}
-		});
-
-		im.bind("status",function(e, data){
-			each(data,function(n,msg){
-				var userId = im.data.user.id;
-				var id = msg['from'];
-				if (userId != msg.to && userId != msg.from) {
-					id = msg.to; //群消息
-					var nick = msg.nick;
+		for(var i = 0; i < l; i++){
+			d = data[i];
+			id = d["id"], type = d["type"];
+			c = layout.chat(type, id);
+			c && c.status("");//clear status
+			if(!c){	
+				if (d.type === "unicast"){
+					layout.addChat(type, id, null, null, d.nick);
 				}else{
-					var c = layout.chat("buddy", id);
-					c && c.status(msg['show']);
+					layout.addChat(type, id);  
 				}
-			});
-		});
-		//for test
-		history.bind("unicast", function( e, id, data){
-			var c = layout.chat("unicast", id), count = "+" + data.length;
-			if(c){
-				c.history.add(data);
+				c = layout.chat(type, id);
 			}
-			//(c ? c.history.add(data) : im.addChat(id));
-		});
-		history.bind("multicast", function(e, id, data){
-			var c = layout.chat("multicast", id), count = "+" + data.length;
-			if(c){
-				c.history.add(data);
+			c && setting.get("msg_auto_pop") && !layout.activeTabId && layout.focusChat(id);
+			c.window.notifyUser("information", count);
+			var p = c.window.pos;
+			(p == -1) && layout.setNextMsgNum(count);
+			(p == 1) && layout.setPrevMsgNum(count);
+			if(d.from != uid)show = true;
+		}
+		if(show){
+			sound.play('msg');
+			titleShow(i18n("new message"), 5);
+		}
+	});
+
+	im.bind("status",function(e, data){
+		each(data,function(n,msg){
+			var userId = im.data.user.id;
+			var id = msg['from'];
+			if (userId != msg.to && userId != msg.from) {
+				id = msg.to; //群消息
+				var nick = msg.nick;
+			}else{
+				var c = layout.chat("buddy", id);
+				c && c.status(msg['show']);
 			}
-			//(c ? c.history.add(data) : im.addChat(id));
 		});
-		history.bind("clear", function(e, type, id){
-			var c = layout.chat(type, id);
-			c && c.history.clear();
-		});
+	});
+
+	history.bind("unicast", function( e, id, data){
+		var c = layout.chat("unicast", id), count = "+" + data.length;
+		if(c){
+			c.history.add(data);
+		}
+		//(c ? c.history.add(data) : im.addChat(id));
+	});
+	history.bind("multicast", function(e, id, data){
+		var c = layout.chat("multicast", id), count = "+" + data.length;
+		if(c){
+			c.history.add(data);
+		}
+		//(c ? c.history.add(data) : im.addChat(id));
+	});
+	history.bind("clear", function(e, type, id){
+		var c = layout.chat(type, id);
+		c && c.history.clear();
+	});
 
 	return layout;
 
@@ -166,11 +166,11 @@ app("layout", function( options ) {
 		// status start
 		__status = true;
 		var tabs = status.get("tabs"), 
-		tabIds = status.get("tabIds"),
-		//prev num
-		p = status.get("p"), 
-		//focus tab
-		a = status.get("a");
+			tabIds = status.get("tabIds"),
+			//prev num
+			p = status.get("p"), 
+			//focus tab
+			a = status.get("a");
 
 		tabIds && tabIds.length && tabs && each(tabs, function(k,v){
 			var id = k.slice(2), type = k.slice(0,1);
@@ -206,63 +206,63 @@ app("layout", function( options ) {
 });
 
 widget("layout",{
-        template: '<div id="webim" class="webim webim-state-ready">\
-                    <div class="webim-preload ui-helper-hidden-accessible">\
-                    <div id="webim-flashlib-c">\
-                    </div>\
-                    </div>\
-<div id=":layout" class="webim-layout"><iframe class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><div class="webim-layout-bg ui-state-default ui-toolbar"></div><div class="webim-ui ui-helper-clearfix">\
-                            <div id=":shortcut" class="webim-shortcut">\
-                            </div>\
-                            <div class="webim-layout-r">\
-                            <div id=":panels" class="webim-panels">\
-                                <div class="webim-window-tab-wrap ui-widget webim-panels-next-wrap">\
-                                            <div id=":next" class="webim-window-tab webim-panels-next ui-state-default">\
-                                                    <div id=":nextMsgCount" class="webim-window-tab-count">\
-                                                            0\
-                                                    </div>\
-                                                    <em class="ui-icon ui-icon-triangle-1-w"></em>\
-                                                    <span id=":nextCount">0</span>\
-                                            </div>\
-                                </div>\
-                                <div id=":tabsWrap" class="webim-panels-tab-wrap">\
-                                        <div id=":tabs" class="webim-panels-tab">\
-                                        </div>\
-                                </div>\
-                                <div class="webim-window-tab-wrap ui-widget webim-panels-prev-wrap">\
-                                            <div id=":prev" class="webim-window-tab webim-panels-prev ui-state-default">\
-                                                    <div id=":prevMsgCount" class="webim-window-tab-count">\
-                                                            0\
-                                                    </div>\
-                                                    <span id=":prevCount">0</span>\
-                                                    <em class="ui-icon ui-icon-triangle-1-e"></em>\
-                                            </div>\
-                                </div>\
-                                <div class="webim-window-tab-wrap webim-collapse-wrap ui-widget">\
-                                            <div id=":collapse" class="webim-window-tab webim-collapse ui-state-default" title="<%=collapse%>">\
-                                                    <em class="ui-icon ui-icon-circle-arrow-e"></em>\
-                                            </div>\
-                                </div>\
-                                <div class="webim-window-tab-wrap webim-expand-wrap ui-widget">\
-                                            <div id=":expand" class="webim-window-tab webim-expand ui-state-default" title="<%=expand%>">\
-                                                    <em class="ui-icon ui-icon-circle-arrow-w"></em>\
-                                            </div>\
-                                </div>\
-                            </div>\
-                            <div id=":widgets" class="webim-widgets">\
-                            </div>\
-                            </div>\
-            </div></div>\
-                    </div>',
-        shortcutLength:5,
-        chatAutoPop: true,
-        tpl_shortcut: '<div class="webim-window-tab-wrap ui-widget webim-shortcut-item"><a class="webim-window-tab" href="<%=link%>" target="<%=target%>">\
-                                                    <div class="webim-window-tab-tip">\
-                                                            <strong><%=title%></strong>\
-                                                    </div>\
-                                                    <em class="webim-icon" style="background-image:url(<%=icon%>)"></em>\
-                                            </a>\
-                                            </div>'
+	template: '<div id="webim" class="webim webim-state-ready">\
+	<div class="webim-preload ui-helper-hidden-accessible">\
+	<div id="webim-flashlib-c">\
+	</div>\
+	</div>\
+	<div id=":layout" class="webim-layout"><iframe class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><div class="webim-layout-bg ui-state-default ui-toolbar"></div><div class="webim-ui ui-helper-clearfix">\
+	<div id=":shortcut" class="webim-shortcut">\
+	</div>\
+	<div class="webim-layout-r">\
+	<div id=":panels" class="webim-panels">\
+	<div class="webim-window-tab-wrap ui-widget webim-panels-next-wrap">\
+	<div id=":next" class="webim-window-tab webim-panels-next ui-state-default">\
+	<div id=":nextMsgCount" class="webim-window-tab-count">\
+	0\
+	</div>\
+	<em class="ui-icon ui-icon-triangle-1-w"></em>\
+	<span id=":nextCount">0</span>\
+	</div>\
+	</div>\
+	<div id=":tabsWrap" class="webim-panels-tab-wrap">\
+	<div id=":tabs" class="webim-panels-tab">\
+	</div>\
+	</div>\
+	<div class="webim-window-tab-wrap ui-widget webim-panels-prev-wrap">\
+	<div id=":prev" class="webim-window-tab webim-panels-prev ui-state-default">\
+	<div id=":prevMsgCount" class="webim-window-tab-count">\
+	0\
+	</div>\
+	<span id=":prevCount">0</span>\
+	<em class="ui-icon ui-icon-triangle-1-e"></em>\
+	</div>\
+	</div>\
+	<div class="webim-window-tab-wrap webim-collapse-wrap ui-widget">\
+	<div id=":collapse" class="webim-window-tab webim-collapse ui-state-default" title="<%=collapse%>">\
+	<em class="ui-icon ui-icon-circle-arrow-e"></em>\
+	</div>\
+	</div>\
+	<div class="webim-window-tab-wrap webim-expand-wrap ui-widget">\
+	<div id=":expand" class="webim-window-tab webim-expand ui-state-default" title="<%=expand%>">\
+	<em class="ui-icon ui-icon-circle-arrow-w"></em>\
+	</div>\
+	</div>\
+	</div>\
+	<div id=":widgets" class="webim-widgets">\
+	</div>\
+	</div>\
+	</div></div>\
+	</div>',
+	shortcutLength:5,
+	chatAutoPop: true,
+	tpl_shortcut: '<div class="webim-window-tab-wrap ui-widget webim-shortcut-item"><a class="webim-window-tab" href="<%=link%>" target="<%=target%>">\
+	<div class="webim-window-tab-tip">\
+	<strong><%=title%></strong>\
+	</div>\
+	<em class="webim-icon" style="background-image:url(<%=icon%>)"></em>\
+	</a>\
+	</div>'
 },{
 	_init: function(element, options){
 		var self = this, options = self.options;
@@ -391,10 +391,10 @@ widget("layout",{
 				}
 
 				var tabs = self.$.tabs, old_left = parseFloat(tabs.style.left), 
-				left = -1 * self.tabWidth * self.nextCount, 
-				times = parseInt(500/13),
-				i = 1,
-				pre = (left - old_left)/times;
+					left = -1 * self.tabWidth * self.nextCount, 
+					times = parseInt(500/13),
+					i = 1,
+					pre = (left - old_left)/times;
 				var time = setInterval(function(){
 					tabs.style.left = old_left + pre*i + 'px';
 					if(i == times){
@@ -646,9 +646,9 @@ widget("layout",{
 		//ids = idsArray(ids);
 		//var self = this, id, l = ids.length, tab;
 		//for(var i = 0; i < l; i++){
-			//tab = this.tabs[ids[i]];
-			var tab = this.tabs[_id_with_type(type, id)];
-			tab && tab.close();
+		//tab = this.tabs[ids[i]];
+		var tab = this.tabs[_id_with_type(type, id)];
+		tab && tab.close();
 		//}
 	},
 	removeAllChat: function(){

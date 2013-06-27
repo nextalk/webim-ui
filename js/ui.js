@@ -32,7 +32,7 @@ extend(webimUI.prototype, {
 		var self = this
 		  , im = self.im = new webim(null, self.options.imOptions)
 		  , options = self.options
-		  , layout = self.layout = self.addApp( "layout", 
+		  , layout = self.layout = self.addApp( options.layout || "layout", 
 			options.layoutOptions );
 
 		im.setting.get("play_sound") ? 
