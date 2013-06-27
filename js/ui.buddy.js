@@ -38,7 +38,7 @@ app("buddy", function( options ){
 
 	//select a buddy
 	buddyUI.bind("select", function(e, info){
-		ui.addChat("buddy", info.id);
+		ui.layout.addChat("buddy", info.id);
 		ui.layout.focusChat("buddy", info.id);
 	});
 	buddyUI.window.bind("displayStateChange",function(type){

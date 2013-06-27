@@ -1,33 +1,33 @@
 //
 /* ui.chat:
-*
-options:
-window
-history
+ *
+ options:
+ window
+ history
 
-methods:
-update(info)
-status(type)
-insert(text, isCursorPos)
-focus
-notice(text, timeOut)
-destroy()
+ methods:
+ update(info)
+ status(type)
+ insert(text, isCursorPos)
+ focus
+ notice(text, timeOut)
+ destroy()
 
-events: 
-sendMessage
-sendStatus
+ events: 
+ sendMessage
+ sendStatus
 
-*/
+ */
 
 app( "chat", function( options ) {
 	options = options || {};
 	var ui = this, 
-	im = ui.im,
-	buddy = im.buddy,
-	room = im.room,
-	history = im.history,
-	id = options.id,
-	type = options.type;
+		im = ui.im,
+		buddy = im.buddy,
+		room = im.room,
+		history = im.history,
+		id = options.id,
+		type = options.type;
 	if( type == "room" ) {
 
 		var h = history.get( "multicast", id );
@@ -63,7 +63,7 @@ app( "chat", function( options ) {
 		}).bind("select", function( e, info ) {
 			info.presence = "online";
 			buddy.presence( info );//online
-			ui.addChat( "buddy", info.id, info.nick );
+			ui.layout.addChat( "buddy", info.id, info.nick );
 			layout.focusChat( "buddy", info.id );
 		}).bind("block", function( e, d ){
 			room.block( d.id );
@@ -119,37 +119,36 @@ app( "chat", function( options ) {
 			history.download( "unicast", info.id );
 		});
 	}
-	ui.layout.addChat( chatUI, options.winOptions );
 	return chatUI;
 } );
 
 widget("chat",{
 	tpl_header: '<div><div id=":user" class="webim-user"> \
-			<a id=":userPic" class="webim-user-pic ui-corner-all ui-state-active" href="#id"><img width="50" height="50" src="" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" class="ui-corner-all"></a> \
-			<span id=":userStatus" title="" class="webim-user-status">&nbsp;</span> \
-		     </div></div>',
-        template:'<div class="webim-chat webim-box webim-flex"> \
-				<div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"></div></div> \
-                                                <div id=":content" class="webim-chat-content webim-flex webim-box-h"> \
-                                                                                                                <div class="webim-flex webim-box"><div id=":main" class="webim-chat-main webim-flex"><div id=":status" class="webim-chat-status webim-gray"></div></div></div><div id=":sidebar" class="webim-chat-sidebar webim-box"></div> \
-                                                </div> \
-                                                <div id=":actions" class="webim-chat-actions"> \
-                                                        <div id=":toolContent" class="webim-chat-tool-content"></div>\
-                                                        <div id=":tools" class="webim-chat-tools ui-helper-clearfix ui-state-default"></div>\
-                                                        <table class="webim-chat-t" cellSpacing="0"> \
-                                                                <tr> \
-                                                                        <td style="vertical-align:top;"> \
-                                                                        <em class="webim-icon webim-icon-chat-edit"></em>\
-                                                                        </td> \
-                                                                        <td style="vertical-align:top;width:100%;"> \
-                                                                        <div class="webim-chat-input-wrap">\
-                                                                                <textarea id=":input" class="webim-chat-input webim-gray ui-widget-content"><%=input notice%></textarea> \
-                                                                        </div> \
-                                                                        </td> \
-                                                                </tr> \
-                                                        </table> \
-                                                </div> \
-                                        </div>'
+	<a id=":userPic" class="webim-user-pic ui-corner-all ui-state-active" href="#id"><img width="50" height="50" src="" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" class="ui-corner-all"></a> \
+	<span id=":userStatus" title="" class="webim-user-status">&nbsp;</span> \
+	</div></div>',
+	template:'<div class="webim-chat webim-box webim-flex"> \
+	<div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"></div></div> \
+	<div id=":content" class="webim-chat-content webim-flex webim-box-h"> \
+	<div class="webim-flex webim-box"><div id=":main" class="webim-chat-main webim-flex"><div id=":status" class="webim-chat-status webim-gray"></div></div></div><div id=":sidebar" class="webim-chat-sidebar webim-box"></div> \
+	</div> \
+	<div id=":actions" class="webim-chat-actions"> \
+	<div id=":toolContent" class="webim-chat-tool-content"></div>\
+	<div id=":tools" class="webim-chat-tools ui-helper-clearfix ui-state-default"></div>\
+	<table class="webim-chat-t" cellSpacing="0"> \
+	<tr> \
+	<td style="vertical-align:top;"> \
+	<em class="webim-icon webim-icon-chat-edit"></em>\
+	</td> \
+	<td style="vertical-align:top;width:100%;"> \
+	<div class="webim-chat-input-wrap">\
+	<textarea id=":input" class="webim-chat-input webim-gray ui-widget-content"><%=input notice%></textarea> \
+	</div> \
+	</td> \
+	</tr> \
+	</table> \
+	</div> \
+	</div>'
 },{
 	_init: function(){
 		var self = this, element = self.element, options = self.options, win = options.window;
@@ -201,9 +200,9 @@ widget("chat",{
 	},
 	focus: function(){
 		//this.$.input.focus();
-    //fix firefox
-    var item = this.$.input;
-    window.setTimeout(function(){item.focus()},0);
+		//fix firefox
+		var item = this.$.input;
+		window.setTimeout(function(){item.focus()},0);
 	},
 	_noticeTime: null,
 	_noticeTxt:"",
@@ -234,7 +233,7 @@ widget("chat",{
 		var main = this.$.main;
 		//Don't auto scroll when user view history.
 		//if ( main.scrollHeight - main.scrollTop - main.clientHeight < 200 )
-			main.scrollTop = main.scrollHeight;
+		main.scrollTop = main.scrollHeight;
 	},
 	_fitUI: function(e){
 		var self = this, win = self.window, $ = self.$;
@@ -245,8 +244,8 @@ widget("chat",{
 		var self = this, win = self.window;
 		win.bind("displayStateChange", function(e, type){
 			if(type != "minimize"){
-        //fix firefox
-        window.setTimeout(function(){self.$.input.focus();},0);
+				//fix firefox
+				window.setTimeout(function(){self.$.input.focus();},0);
 				//self.$.input.focus();
 				self._adjustContent();
 			}
@@ -303,10 +302,10 @@ widget("chat",{
 		//var val = el.setSelectionRange ? el.value.substring(el.selectionStart, el.selectionEnd) : (window.getSelection ? window.getSelection().toString() : (document.selection ? document.selection.createRange().text : ""));
 		var val = window.getSelection ? window.getSelection().toString() : (document.selection ? document.selection.createRange().text : "");
 		if(!val){
-      //self.$.input.focus();
-      //fix firefox
-      window.setTimeout(function(){self.$.input.focus();},0);
-    }
+			//self.$.input.focus();
+			//fix firefox
+			window.setTimeout(function(){self.$.input.focus();},0);
+		}
 	},
 	_initEvents: function(){
 		var self = this, options = self.options, $ = self.$, placeholder = i18n("input notice"), gray = "webim-gray", input = $.input;
@@ -428,27 +427,27 @@ widget("chat",{
 });
 
 /*
-webimUI.chat.defaults.fontcolor = true;
-plugin.add("chat","fontcolor",{
-	init:function(e, ui){
-		var chat = ui.self;
-		var fontcolor = new webimUI.fontcolor();
-		fontcolor.bind("select",function(e, alt){
-			chat.focus();
-			chat.setStyle("color", alt);
-		});
-		var trigger = createElement(tpl('<a href="#chat-fontcolor" title="<%=font color%>"><em class="webim-icon webim-icon-fontcolor"></em></a>'));
-		addEvent(trigger,"click",function(e){
-			preventDefault(e);
-			fontcolor.toggle();
-		});
-		ui.$.toolContent.appendChild(fontcolor.element);
-		ui.$.tools.appendChild(trigger);
-	},
-	send:function(e, ui){
-	}
-});
-*/
+ webimUI.chat.defaults.fontcolor = true;
+ plugin.add("chat","fontcolor",{
+ init:function(e, ui){
+ var chat = ui.self;
+ var fontcolor = new webimUI.fontcolor();
+ fontcolor.bind("select",function(e, alt){
+ chat.focus();
+ chat.setStyle("color", alt);
+ });
+ var trigger = createElement(tpl('<a href="#chat-fontcolor" title="<%=font color%>"><em class="webim-icon webim-icon-fontcolor"></em></a>'));
+ addEvent(trigger,"click",function(e){
+ preventDefault(e);
+ fontcolor.toggle();
+ });
+ ui.$.toolContent.appendChild(fontcolor.element);
+ ui.$.tools.appendChild(trigger);
+ },
+ send:function(e, ui){
+ }
+ });
+ */
 
 webimUI.chat.defaults.emot = true;
 plugin.add("chat","emot",{
@@ -456,7 +455,7 @@ plugin.add("chat","emot",{
 		var chat = ui.self;
 		var emot = new webimUI.emot();
 		emot.bind("select",function( e, alt){
-     
+
 			chat.focus();
 			chat.insert(alt, true);
 		});
@@ -489,9 +488,9 @@ plugin.add("chat","block",{
 	init:function(e, ui){
 		var chat = ui.self;
 		var blocked = chat.options.info.blocked,
-		nick = chat.options.info.nick,
-		block = createElement('<a href="#chat-block" style="display:'+(blocked ? 'none' : '')+'" title="'+ i18n('block group',{name:nick}) +'"><em class="webim-icon webim-icon-unblock"></em></a>'),
-		unblock = createElement('<a href="#chat-block" style="display:'+(blocked ? '' : 'none')+'" title="'+ i18n('unblock group',{name:nick}) +'"><em class="webim-icon webim-icon-block"></em></a>');
+			nick = chat.options.info.nick,
+			block = createElement('<a href="#chat-block" style="display:'+(blocked ? 'none' : '')+'" title="'+ i18n('block group',{name:nick}) +'"><em class="webim-icon webim-icon-unblock"></em></a>'),
+			unblock = createElement('<a href="#chat-block" style="display:'+(blocked ? '' : 'none')+'" title="'+ i18n('unblock group',{name:nick}) +'"><em class="webim-icon webim-icon-block"></em></a>');
 		addEvent(block,"click",function(e){
 			preventDefault(e);
 			hide(block);
@@ -556,5 +555,5 @@ plugin.add("chat","downloadHistory",{
 });
 
 function ieCacheSelection(e){
-        document.selection && (this.caretPos = document.selection.createRange());
+	document.selection && (this.caretPos = document.selection.createRange());
 }

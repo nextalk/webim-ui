@@ -23,7 +23,7 @@ online
 app("room", function( options ) {
 	var ui = this, im = ui.im, room = im.room, setting = im.setting,u = im.data.user, layout = ui.layout;
 	var roomUI = ui.room = new webim.ui.room(null).bind("select",function( e, info){
-		ui.addChat("room", info.id);
+		ui.layout.addChat("room", info.id);
 		ui.layout.focusChat("room", info.id);
 	});
 	layout.addWidget( roomUI, {
