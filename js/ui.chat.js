@@ -170,7 +170,9 @@ widget("chat",{
 		self.update(options.info);
 		history.add(options.history);
 		plugin.call(self, "init", [null, self.ui()]);
-		self._adjustContent();
+		setTimeout(function(){
+			self._adjustContent();
+		},0);
 	},
 	setWindow: function( win ) {
 		var self = this;

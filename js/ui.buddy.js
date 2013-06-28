@@ -91,7 +91,7 @@ widget("buddy",{
 						</div>\
 							</div>',
 	tpl_group: '<li><h4><%=title%>(<%=count%>)</h4><hr class="webim-line ui-state-default" /><ul></ul></li>',
-	tpl_li: '<li title=""><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><em class="webim-icon webim-icon-<%=show%>" title="<%=human_show%>"><%=show%></em><img width="25" src="<%=pic_url%>" defaultsrc="<%=default_pic_url%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong><span><%=status%></span></a></li>'
+	tpl_li: '<li title=""><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><em class="webim-icon webim-icon-<%=show%>" title="<%=human_show%>"><%=show%></em><img width="25" src="<%=pic_url%>" defaultsrc="<%=default_pic_url%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong><span><%=status%></span></a></li>'
 },{
 	_init: function(){
 		var self = this, options = self.options;
@@ -203,7 +203,8 @@ self.trigger("offline");
 	_updateInfo:function(el, info){
 		el = el.firstChild;
 		el.setAttribute("href", info.url);
-		el = el.firstChild;
+		el = el.firstChild;//tabCount...
+		el = el.nextSibling;
 		var show = info.show ? info.show : "available";
 		el.className = "webim-icon webim-icon-" + show;
 		el.setAttribute("title", i18n(show));
@@ -217,6 +218,12 @@ self.trigger("offline");
 		el = el.nextSibling;
 		el.innerHTML = stripHTML(info.status) || "&nbsp;";
 		return el;
+	},
+	showCount:function( id, count ){
+		var li = this.li;
+		if( li[id] ){
+			_countDisplay( li[id].firstChild.firstChild, count );
+		}
 	},
 	_addOne:function(info, end){
 		var self = this, li = self.li, id = info.id, ul = self.$.ul;
@@ -232,10 +239,10 @@ self.trigger("offline");
 			var a = el.firstChild;
 			addEvent(a, "click",function(e){
 				preventDefault(e);
+				self.showCount( id, 0 );
 				self.trigger("select", [info]);
 				this.blur();
 			});
-
 			var groups = self.groups, group_name = i18n(info["group"] || "friend"), group = groups[group_name];
 			if(!group){
 				var g_el = createElement(tpl(self.options.tpl_group));
