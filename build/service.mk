@@ -8,6 +8,6 @@ JS_APP_FILES = ${JS_SRC_DIR}/ui.buddy.js\
 
 CSS_APP_FILES = ${CSS_SRC_DIR}/buddy.css\
 	${CSS_SRC_DIR}/user.css\
-	${APP_SRC_DIR}/service.css\
+	${APP_SRC_DIR}/layout.service.css\
 
 include build/include.mk
