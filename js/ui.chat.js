@@ -36,7 +36,7 @@ app( "chat", function( options ) {
 
 		var info = im.room.get(id) || {
 			id: id,
-			nick: options.nick || id,
+			nick: options.nick || id
 		};
 		info.presence = "online";
 
@@ -88,7 +88,7 @@ app( "chat", function( options ) {
 
 		var info = im.buddy.get(id) || {
 			id: id,
-			nick: options.nick || id,
+			nick: options.nick || id
 		};
 
 		options = extend( {
