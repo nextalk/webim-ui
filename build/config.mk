@@ -1,8 +1,7 @@
 PREFIX := .
 
-IM_SRC = ${SRC_DIR}/im/src
-IM = ${SRC_DIR}/im/dist/webim.js
-BUILD_DIR = ${PREFIX}/im/build
+IM = ${PREFIX}/webim.js
+BUILD_DIR = ${PREFIX}/../js/build
 DOCS_DIR = ${PREFIX}/docs
 
 SRC_DIR = ${PREFIX}
