@@ -2,11 +2,11 @@
  * Webim v1.1.0
  * http://www.webim20.cn/
  *
- * Copyright (c) 2010 Arron
+ * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Wed Jun 26 18:22:43 2013 +0800
- * Commit: ec50c97178d72d593c6982941a623f0f1a961a7d
+ * Date: Thu Jul 11 09:16:43 2013 +0800
+ * Commit: a81493878ebeeee17b541a26084987da6e0744a3
  */
 (function(window, document, undefined){
 
@@ -1096,6 +1096,60 @@ comet.CLOSED = 2;
 //Make the class work with custom events
 ClassEvent.on( comet );
 /*
+ * websocket
+ */
+
+
+function socket( url ) {
+	var self = this;
+	var ws = self.ws = new WebSocket( url );
+	ws.onopen = function ( e ) { 
+		self.trigger( 'open', 'success' );
+	}; 
+	ws.onclose = function ( e ) { 
+		self.trigger( 'close', [ e.data ] );
+	}; 
+	ws.onmessage = function ( e ) { 
+		var data = e.data;
+
+		data = data ?
+			( window.JSON && window.JSON.parse ?
+			window.JSON.parse( data ) :
+			(new Function("return " + data))() ) :
+			data;
+
+		self.trigger( 'message', [ data ] );
+	}; 
+	ws.onerror = function ( e ) { 
+		self.trigger( 'error', [ ] );
+	}; 
+}
+
+socket.prototype = {
+	readyState: 0,
+	send: function( data ) {
+	},
+	close: function() {
+		this.ws.close();
+	}
+};
+
+socket.enable = !!window.WebSocket;
+
+//The connection has not yet been established.
+socket.CONNECTING = 0;
+
+//The connection is established and communication is possible.
+socket.OPEN = 1;
+
+//The connection has been closed or could not be opened.
+socket.CLOSED = 2;
+
+//Make the class work with custom events
+ClassEvent.on( socket );
+
+
+/*
  * Cookie plugin
  * Copyright (c) 2006 Klaus Hartl (stilbuero.de)
  * Dual licensed under the MIT and GPL licenses:
@@ -1229,7 +1283,10 @@ extend(webim.prototype, {
 		var self = this;
 		var url = self.data.connection;
 		url = url.server + ( /\?/.test( url ) ? "&" : "?" ) + ajax.param( { ticket: url.ticket, domain: url.domain } );
-		self.connection = new comet( url );
+
+		self.connection = url.ws && socket.enable ? 
+			new socket( url.ws ) : new comet( url );
+
 		self.connection.bind( "connect",function( e, data ) {
 		}).bind( "message", function( e, data ) {
 			self.handle( data );
@@ -1502,6 +1559,7 @@ extend( webim, {
 	JSON: JSON,
 	ajax: ajax,
 	comet: comet,
+	socket: socket,
 	model: model,
 	route: route,
 	ClassEvent: ClassEvent
