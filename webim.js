@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Thu Jul 11 09:16:43 2013 +0800
- * Commit: a81493878ebeeee17b541a26084987da6e0744a3
+ * Date: Thu Jul 11 10:14:53 2013 +0800
+ * Commit: 2219d0c68dcbc473357dd8d352e995f0059e28fc
  */
 (function(window, document, undefined){
 
@@ -1345,9 +1345,9 @@ extend(webim.prototype, {
 		self.buddy.clear();
 		self.trigger("offline", [type, msg] );
 	},
-	//autoOnline: function(){
-	//	return !this.status.get("o");
-	//},
+	autoOnline: function(){
+		return !this.status.get("o");
+	},
 	_initEvents: function(){
 		var self = this, status = self.status, setting = self.setting, history = self.history, buddy = self.buddy;
 
@@ -1576,10 +1576,10 @@ extend( webim, {
 */
 model("setting",{
 	data: {
-		//play_sound: true,
-		//buddy_sticky: true,
-		//minimize_layout: true,
-		//msg_auto_pop: true,
+		play_sound: true,
+		buddy_sticky: true,
+		minimize_layout: true,
+		msg_auto_pop: true,
 		blocked_rooms: []
 	}
 },{
