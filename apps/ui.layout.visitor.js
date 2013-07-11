@@ -1,3 +1,8 @@
+
+webimUI.chat.defaults.template = '<table border="0" collapse="0" cellSpacing="0" class="webim-chat-wrap"><tr><td>' 
+	+ webimUI.chat.defaults.template
+	+ '</td><td id=":board" class="ui-widget-content webim-chat-board"></td></tr></table>';
+
 app("layout.visitor", function( options ) {
 	options = options || {};
 	var ui = this

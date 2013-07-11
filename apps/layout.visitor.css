@@ -6,3 +6,21 @@
 	width: 17em;
 }
 
+
+.webim-layout .webim-panels .webim-window-window {
+	width: 31.4em;
+}
+
+
+.webim .webim-chat-content {
+	height: 16em;
+}
+
+.webim-chat {
+	width: 20em;
+}
+
+.webim-chat-board {
+	border-width: 0;
+	border-left-width: 1px;
+}
