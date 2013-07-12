@@ -29,11 +29,14 @@ app("room", function( options ) {
 	layout.addWidget( roomUI, {
 		container: "tab",
 		title: i18n( "room" ),
-		icon: "room"
+		icon: "room",
+		sticky: im.setting.get("buddy_sticky"),
+		onlyIcon: true,
+		isMinimize: true
 	} );
 	//
-	im.setting.bind("update",function(key, val){
-		//if(key == "buddy_sticky")roomUI.window.option("sticky", val);
+	im.setting.bind("update",function(e, key, val){
+		if(key == "buddy_sticky")roomUI.window.options.sticky = val;
 	});
 	room.bind("join",function( e, info){
 		updateRoom(info);
