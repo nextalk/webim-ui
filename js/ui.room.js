@@ -131,7 +131,7 @@ widget("room",{
 			var a = el.firstChild;
 			addEvent(a, "click",function(e){
 				preventDefault(e);
-				self.d("select", [info]);
+				self.trigger("select", [info]);
 				this.blur();
 			});
 			ul.appendChild(el);
