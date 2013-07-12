@@ -1,7 +1,7 @@
 WebIM UI
 =========================
 
-WebIM uer interface base on [WebIM JS][webim_js].
+WebIM user interface base on [WebIM JS][webim_js].
 
 
 ###ui
