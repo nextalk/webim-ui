@@ -29,11 +29,11 @@ UI_MIN_JS = ${DIST_DIR}/webim.${PRODUCT_NAME}.min.js
 all: min copy i18n
 	@@echo "WebIM UI build complete."
 ${IM_SRC}:
-	@@git submodule update --init im
+	##@@git submodule update --init im
 
 ${IM}: ${IM_SRC}
 	@@echo "Build webim..."
-	$(MAKE) webim -C ${PREFIX}/im
+	##$(MAKE) webim -C ${PREFIX}/im
 
 ui: ${UI_CSS} ${UI_JS}
 min: ${UI_MIN_CSS} ${UI_MIN_JS}
@@ -89,7 +89,7 @@ ${DIST_DIR}/i18n: ${DIST_DIR}
 	@@${UNICODE} ${I18N_SRC_DIR}/webim-en.js > ${DIST_DIR}/i18n/webim-en.js
 
 clean:
-	$(MAKE) clean -C ${PREFIX}/im
+	##$(MAKE) clean -C ${PREFIX}/im
 	@@echo "Removing Distribution directory:" ${DIST_DIR}
 	@@rm -rf ${DIST_DIR}
 
