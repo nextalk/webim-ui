@@ -3,12 +3,9 @@
 *
 */
 app("login", function( options ) {
-	console.log( 111 );
 	options = options || {};
 	var ui = this, im = ui.im;
 	var loginUI = new webimUI.login(null, options);
-	console.log(options.container );
-	console.log(loginUI.element );
 	options.container && options.container.appendChild( loginUI.element );
 	loginUI.bind( "login", function( e, params ){
 		im.online( params );
