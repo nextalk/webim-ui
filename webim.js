@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Fri Jul 12 12:05:05 2013 +0800
- * Commit: 76d496992ba0217b1302a8958b7a5cef6a61fb17
+ * Date: Fri Jul 12 14:49:11 2013 +0800
+ * Commit: 2e8690b81bb330426e415e49bd86643a11bd5055
  */
 (function(window, document, undefined){
 
@@ -1113,11 +1113,13 @@ function socket( url, options ) {
 	ws.onmessage = function ( e ) { 
 		var data = e.data;
 
-		data = data ?
-			( window.JSON && window.JSON.parse ?
-			window.JSON.parse( data ) :
-			(new Function("return " + data))() ) :
-			data;
+		try{
+			data = data ?
+				( window.JSON && window.JSON.parse ?
+				window.JSON.parse( data ) :
+				(new Function("return " + data))() ) :
+				data;
+		}catch(e){};
 
 		self.trigger( 'message', [ data ] );
 	}; 
