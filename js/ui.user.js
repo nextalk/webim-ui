@@ -8,18 +8,18 @@ app( "user", function( options ) {
 	var userUI = new webimUI.user();
 	hide( userUI.element );
 	options.container && options.container.appendChild( userUI.element );
-	userUI.a("online", function( e, params ) {
+	userUI.bind("online", function( e, params ) {
 		im.online( params );
-	}).a("offline", function(){
+	}).bind("offline", function(){
 		im.offline();
-	}).a("presence", function( e, params ) {
+	}).bind("presence", function( e, params ) {
 		im.sendPresence( params );
 	} );
 	userUI.update( im.data.user );
-	im.a( "online", function() {
+	im.bind( "online", function() {
 		show( userUI.element );
 		userUI.update( im.data.user );
-	}).a( "offline", function( e, type ) {
+	}).bind( "offline", function( e, type ) {
 		userUI.show( "unavailable" );
 	});
 	return userUI;
@@ -85,15 +85,15 @@ widget("user",{
 			//offline
 			if(type != "unavailable"){
 				//self.show(type);
-				self.d("online", [{show: type}]);
+				self.trigger("online", [{show: type}]);
 			}
 		}else if(info.show != type) {
 			if(type == "unavailable"){
-				self.d( "offline", [] );
+				self.trigger( "offline", [] );
 			}else if( info.show == "unavailable" ) {
-				self.d("online", [{show: type}]);
+				self.trigger("online", [{show: type}]);
 			}else{
-				self.d("presence", [{show: type, status: info.status}]);
+				self.trigger("presence", [{show: type, status: info.status}]);
 			}
 		}
 	},

@@ -4,7 +4,6 @@
 	padding: 0 1em;
 }
 .webim .webim-login p{
-	overflow: hidden;
 	margin: 1em 0;
 }
 .webim .webim-login form label{
@@ -31,7 +30,13 @@
 }
 
 .webim .webim-login-logo{
+	/*
 	background: url("../images/logo128.png") no-repeat center;
 	padding: 2em;
 	height: 128px;
+	*/
+	background: url("../images/logo.png") no-repeat center;
+	height: 80px;
 }
+
+

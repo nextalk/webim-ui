@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Thu Jul 11 10:14:53 2013 +0800
- * Commit: 2219d0c68dcbc473357dd8d352e995f0059e28fc
+ * Date: Fri Jul 12 12:05:05 2013 +0800
+ * Commit: 76d496992ba0217b1302a8958b7a5cef6a61fb17
  */
 (function(window, document, undefined){
 
@@ -1100,11 +1100,12 @@ ClassEvent.on( comet );
  */
 
 
-function socket( url ) {
-	var self = this;
+function socket( url, options ) {
+	var self = this, options = options || {};
 	var ws = self.ws = new WebSocket( url );
 	ws.onopen = function ( e ) { 
 		self.trigger( 'open', 'success' );
+		ws.send("subscribe " + options.domain + " " + options.ticket );
 	}; 
 	ws.onclose = function ( e ) { 
 		self.trigger( 'close', [ e.data ] );
@@ -1282,10 +1283,10 @@ extend(webim.prototype, {
 	_createConnect: function() {
 		var self = this;
 		var url = self.data.connection;
-		url = url.server + ( /\?/.test( url ) ? "&" : "?" ) + ajax.param( { ticket: url.ticket, domain: url.domain } );
 
-		self.connection = url.ws && socket.enable ? 
-			new socket( url.ws ) : new comet( url );
+		self.connection = self.options.connectionType != "jsonpd" 
+			&& url.websocket && socket.enable ? 
+			new socket( url.websocket, url ) : new comet( url.server + ( /\?/.test( url ) ? "&" : "?" ) + ajax.param( { ticket: url.ticket, domain: url.domain } ) );
 
 		self.connection.bind( "connect",function( e, data ) {
 		}).bind( "message", function( e, data ) {

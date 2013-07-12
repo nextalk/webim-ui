@@ -41,6 +41,24 @@ app("buddy", function( options ){
 		ui.layout.addChat("buddy", info.id);
 		ui.layout.focusChat("buddy", info.id);
 	});
+	var userUI;
+	if(!options.disable_user) {
+		userUI = ui.addApp( "user", options.userOptions );
+		if( options.is_login ) {
+			buddyUI.window.subHeader( userUI.element );
+			userUI = null;
+		}
+	}
+	if( !options.is_login && !options.disable_login ) {
+		ui.addApp("login", extend( { container: buddyUI.$.content }, options.loginOptions ) );
+	}
+	//buddy events
+
+	im.setting.bind("update",function(key, val){
+		if(key == "buddy_sticky") buddyUI.window.option.sticky = val;
+	});
+
+	//Bug... 如果用户还没登录，点击， status.set 会清理掉正在聊天的session
 	buddyUI.window && buddyUI.window.bind("displayStateChange",function(type){
 		if(type != "minimize"){
 			buddy.options.active = true;
@@ -73,6 +91,7 @@ app("buddy", function( options ){
 	im.bind( "beforeOnline", function(){
 		buddyUI.online();
 	}).bind("online", function() {
+		userUI && buddyUI.window.subHeader( userUI.element );
 		buddyUI.titleCount();
 	}).bind( "offline", function( type, msg ) {
 		buddyUI.offline();

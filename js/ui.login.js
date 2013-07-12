@@ -3,16 +3,19 @@
 *
 */
 app("login", function( options ) {
+	console.log( 111 );
 	options = options || {};
 	var ui = this, im = ui.im;
 	var loginUI = new webimUI.login(null, options);
+	console.log(options.container );
+	console.log(loginUI.element );
 	options.container && options.container.appendChild( loginUI.element );
-	loginUI.a( "login", function( e, params ){
+	loginUI.bind( "login", function( e, params ){
 		im.online( params );
 	});
-	im.a("online", function() {
+	im.bind("online", function() {
 		loginUI.hide();
-	}).a("offline", function( e, type, msg ) {
+	}).bind("offline", function( e, type, msg ) {
 		type == "online" && loginUI.showError( msg );
 	});
 	return loginUI;
@@ -57,7 +60,7 @@ widget("login", {
 		hoverClass( $.submit, "ui-state-hover" );
 		addEvent( $.form, "submit", function( e ) {
 			preventDefault( e );
-			self.d( "login", [{ username: $.username.value,  password: $.password.value, question: $.question.value, answer: $.answer.value }] );
+			self.trigger( "login", [{ username: $.username.value,  password: $.password.value, question: $.question.value, answer: $.answer.value }] );
 		} );
 	},
 	hide: function() {
