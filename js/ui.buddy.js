@@ -59,7 +59,7 @@ app("buddy", function( options ){
 	});
 
 	//Bug... 如果用户还没登录，点击， status.set 会清理掉正在聊天的session
-	buddyUI.window && buddyUI.window.bind("displayStateChange",function(type){
+	buddyUI.window && buddyUI.window.bind("displayStateChange",function(e, type){
 		if(type != "minimize"){
 			buddy.options.active = true;
 			im.status.set("b", 1);
