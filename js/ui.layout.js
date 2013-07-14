@@ -38,7 +38,7 @@ app("layout", function( options ) {
 	  , buddyUI = self.buddy
 	  , room = im.room;
 
-	var layout = new webimUI.layout( null,extend({
+	var layout = ui.layout = new webimUI.layout( null,extend({
 		chatAutoPop: im.setting.get("msg_auto_pop")
 	}, options, {
 		ui: ui
