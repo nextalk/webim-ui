@@ -262,7 +262,8 @@ widget("layout",{
 	</div>\
 	<em class="webim-icon" style="background-image:url(<%=icon%>)"></em>\
 	</a>\
-	</div>'
+	</div>',
+	chatApp: "chat"
 },{
 	_init: function(element, options){
 		var self = this, options = self.options;
@@ -613,7 +614,7 @@ widget("layout",{
 		var self = this;
 		if(self.chat(type, id))return;
 
-		var widget = self.options.ui.addApp("chat", extend({
+		var widget = self.options.ui.addApp(self.options.chatApp, extend({
 			id: id, 
 			type: type, 
 			nick: nick, 
