@@ -15,6 +15,12 @@ body {
 	-webkit-text-size-adjust: none;
 }
 
+.webim, .webim *,.webim *:before, .webim *:after {
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+	box-sizing: content-box; 
+}
+
 /* some sites removes and neutralizes the inconsistent default styling of HTML elements. */
 .webim, .webim *{ 
         margin:0;
