@@ -44,9 +44,7 @@
 			layout: "layout.visitor",
 			layoutOptions: {
 				unscalable: true,
-				buddies: [
-					{"id":"1","nick":"技术支持","group":"friend","url":"http:\/\/www.gravatar.com\/136e370cbf1cf500cbbf791e56dac614","pic_url":"http:\/\/www.gravatar.com\/avatar\/136e370cbf1cf500cbbf791e56dac614?s=50","presence":"online","show":"available","status":"", "desc": "售后技术支持"}
-				]
+				buddies: [{"id":"1","nick":"\u6280\u672f\u652f\u6301","desc":"shouhou jishu zhichi ","presence":"online","show":"available","pic_url":"http:\/\/www.gravatar.com\/avatar\/e08894cc7de84fed191944a8be9f6ad6?s=50"},{"id":"2","nick":"\u5546\u52a1\u652f\u6301","desc":"shouqian ","presence":"online","show":"available","pic_url":"http:\/\/www.gravatar.com\/avatar\/e08894cc7de84fed191944a8be9f6ad6?s=50"}]
 			},
 			buddyChatOptions: {
 				simple: true

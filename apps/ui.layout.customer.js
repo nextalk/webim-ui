@@ -130,7 +130,7 @@ widget("layout.customer",{
 			nick: nick, 
 			winOptions: winOptions,
 			clearHistory: false,
-			downloadHistory: false,
+			downloadHistory: false
 		}, chatOptions ));
 
 		widget.__id = _id_with_type(type, id);

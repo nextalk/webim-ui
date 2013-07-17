@@ -259,25 +259,8 @@ app("buddy.visitor", function( options ){
 		}
 	});
 
-	var mapId = function(a){ return isObject(a) ? a.id : a };
-	var grepVisible = function(a){ return a.show != "invisible" && a.presence == "online"};
-	var grepInvisible = function(a){ return a.show == "invisible"; };
-	//some buddies online.
-	buddy.bind("online", function( e, data){
-		buddyUI.add(grep(data, grepVisible));
-	});
-	//some buddies offline.
-	buddy.bind("offline", function( e, data){
-		buddyUI.remove(map(data, mapId));
-	});
-	//some information has been modified.
-	buddy.bind( "update", function( e, data){
-		buddyUI.add(grep(data, grepVisible));
-		buddyUI.update(grep(data, grepVisible));
-		buddyUI.remove(map(grep(data, grepInvisible), mapId));
-	} );
-
 	buddyUI.online();
+	buddyUI.add(options.buddies);
 	buddyUI.titleCount();
 	return buddyUI;
 });
