@@ -1,7 +1,24 @@
 
-webimUI.chat.defaults.template = '<table border="0" collapse="0" cellSpacing="0" class="webim-chat-wrap"><tr><td>' 
-	+ webimUI.chat.defaults.template
-	+ '</td><td id=":board" class="ui-widget-content webim-chat-board"></td></tr></table>';
+/**
+ * layout
+ *
+ */
+
+var __groups = {}
+  , __rgroups = {};
+
+function trid(id) {
+	return __groups[id] && __groups[id]["id"] || id;
+}
+
+function rtrid(id) {
+	return __rgroups[id] && __rgroups[id]["name"] || id;
+}
+
+function rtridfor( obj ) {
+	obj.to = rtrid( obj.to );
+	return obj;
+}
 
 app("layout.visitor", function( options ) {
 	options = options || {};
@@ -15,8 +32,9 @@ app("layout.visitor", function( options ) {
 	  , buddyUI = self.buddy
 	  , room = im.room;
 
-	var layout = new webimUI.layout( null,extend({
-		chatAutoPop: im.setting.get("msg_auto_pop")
+	var layout = ui.layout = new webimUI.layout( null,extend({
+		chatAutoPop: im.setting.get("msg_auto_pop"),
+		chatApp: "chat.visitor"
 	}, options, {
 		ui: ui
 	}) );
@@ -78,7 +96,7 @@ app("layout.visitor", function( options ) {
 			l = data.length, d, uid = im.data.user.id, id, c, count = "+1";
 		for(var i = 0; i < l; i++){
 			d = data[i];
-			id = d["id"], type = d["type"];
+			id = trid( d["id"] ), type = d["type"];
 			c = layout.chat(type, id);
 			c && c.status("");//clear status
 			if(!c){	
@@ -105,7 +123,7 @@ app("layout.visitor", function( options ) {
 	im.bind("status",function(e, data){
 		each(data,function(n,msg){
 			var userId = im.data.user.id;
-			var id = msg['from'];
+			var id = trid( msg['from'] );
 			if (userId != msg.to && userId != msg.from) {
 				id = msg.to; //群消息
 				var nick = msg.nick;
@@ -117,23 +135,37 @@ app("layout.visitor", function( options ) {
 	});
 
 	history.bind("unicast", function( e, id, data){
-		var c = layout.chat("unicast", id), count = "+" + data.length;
+		var c = layout.chat("unicast", trid(id) ), count = "+" + data.length;
 		if(c){
 			c.history.add(data);
 		}
 		//(c ? c.history.add(data) : im.addChat(id));
 	});
 	history.bind("multicast", function(e, id, data){
-		var c = layout.chat("multicast", id), count = "+" + data.length;
+		var c = layout.chat("multicast", trid(id)), count = "+" + data.length;
 		if(c){
 			c.history.add(data);
 		}
 		//(c ? c.history.add(data) : im.addChat(id));
 	});
 	history.bind("clear", function(e, type, id){
-		var c = layout.chat(type, id);
+		var c = layout.chat(type, trid( id ) );
 		c && c.history.clear();
 	});
+
+
+	var buddies = options.buddies || [];
+	if( buddies.length != 1 ) {
+		ui.addApp("buddy.visitor", {
+			title: webim.ui.i18n("online support"),
+			buddies: options.buddies,
+			disable_group: true
+		} );
+	}
+	buddy.presence( options.buddies );
+	if( buddies.length == 1 ) {
+		layout.addChat("buddy", buddies[0].id, {}, { isMinimize: true, closeable: false });
+	}
 
 	return layout;
 
@@ -181,5 +213,210 @@ app("layout.visitor", function( options ) {
 		status.set(d);
 	}
 });
+
+/**
+ *
+ * buddy app
+ *
+ */
+app("buddy.visitor", function( options ){
+	options = options || {};
+	var ui = this, im = ui.im, buddy = im.buddy, layout = ui.layout;
+	var buddyUI = new webimUI.buddy(null, extend({
+		title: i18n("buddy")
+	}, options ) );
+
+	layout.addWidget( buddyUI, {
+		className: "webim-buddy-window",
+		title: i18n( "buddy" ),
+		titleVisibleLength: 19,
+		sticky: im.setting.get("buddy_sticky"),
+		isMinimize: !im.status.get("b"),
+		icon: "buddy"
+	} );
+
+	//select a buddy
+	buddyUI.bind("select", function(e, info){
+		ui.layout.addChat("buddy", info.id);
+		ui.layout.focusChat("buddy", info.id);
+	});
+
+	//buddy events
+
+	im.setting.bind("update",function(key, val){
+		if(key == "buddy_sticky") buddyUI.window.option.sticky = val;
+	});
+
+	//Bug... 如果用户还没登录，点击， status.set 会清理掉正在聊天的session
+	buddyUI.window && buddyUI.window.bind("displayStateChange",function(e, type){
+		if(type != "minimize"){
+			buddy.options.active = true;
+			im.status.set("b", 1);
+			buddy.complete();
+		}else{
+			im.status.set("b", 0);
+			buddy.options.active = false;
+		}
+	});
+
+	var mapId = function(a){ return isObject(a) ? a.id : a };
+	var grepVisible = function(a){ return a.show != "invisible" && a.presence == "online"};
+	var grepInvisible = function(a){ return a.show == "invisible"; };
+	//some buddies online.
+	buddy.bind("online", function( e, data){
+		buddyUI.add(grep(data, grepVisible));
+	});
+	//some buddies offline.
+	buddy.bind("offline", function( e, data){
+		buddyUI.remove(map(data, mapId));
+	});
+	//some information has been modified.
+	buddy.bind( "update", function( e, data){
+		buddyUI.add(grep(data, grepVisible));
+		buddyUI.update(grep(data, grepVisible));
+		buddyUI.remove(map(grep(data, grepInvisible), mapId));
+	} );
+
+	buddyUI.online();
+	buddyUI.titleCount();
+	return buddyUI;
+});
+
+/**
+ *
+ * chat app
+ *
+ */
+
+var _chatTemplate = '<div><table border="0" collapse="0" cellSpacing="0" class="webim-chat-wrap"><tr><td id=":wrap">' 
+	+ webimUI.chat.defaults.template
+	+ '</td><td id=":board" class="ui-widget-content webim-chat-board"></td></tr></table></div>';
+app( "chat.visitor", function( options ) {
+	options = options || {};
+	var ui = this, 
+		im = ui.im,
+		buddy = im.buddy,
+		room = im.room,
+		history = im.history,
+		id = options.id,
+		type = options.type,
+		win = options.window;
+
+	var info = im.buddy.get(id) || {
+		id: id,
+		nick: options.nick || id
+	};
+
+	options = extend( {
+		info: info,
+		user: im.data.user
+	}, ui.options.buddyChatOptions, { 
+		template: _chatTemplate,
+		history: [], 
+		block: false, 
+		emot: true, 
+		clearHistory: true, 
+		member: false, 
+		msgType: "unicast"
+	}, options );
+
+	var chatUI = new webimUI.chat( null, options );
+
+	// Set board content
+	chatUI.$.board && (chatUI.$.board.innerHTML = info.desc);
+
+	if ( win.isMinimize() ) {
+		win.bind("displayStateChange",function(e, type){
+			if(type != "minimize"){
+				check();
+			}
+		});
+	} else {
+		check();
+	}
+
+	//im.buddy.set([{id: info.id, nick: info.nick + "-A" }]);
+
+	chatUI.bind("sendMessage", function( e, msg ) {
+		im.sendMessage( rtridfor( msg ) );
+		history.set( msg );
+	}).bind("sendStatus", function( e, msg ) {
+		im.sendStatus( rtridfor( msg ) );
+	}).bind("clearHistory", function( e, info ){
+		history.clear( "unicast", info.id );
+	}).bind("downloadHistory", function( e, info ) {
+		history.download( "unicast", info.id );
+	});
+
+	//Comment...
+	var commentUI = ui.addApp("comment", {
+		notice: "当前客服不在线，如有问题请留言。"
+	});
+
+	commentUI.bind("comment", function(){
+		alert( "留言成功");
+		win.minimize();
+	});
+
+	im.bind("offline", showComment);
+
+	return chatUI;
+
+	function showComment() {
+		chatUI.setWindow( win );
+		html( chatUI.$.wrap, commentUI.element );
+	}
+
+	var checked = false;
+	function check(){
+		if( checked )
+			return;
+		checked = true;
+		win.html('<div class="webim-loading"></div>');
+		//
+		if( im.state === webim.OFFLINE ) {
+			im.bind("online", function(){
+				checkCustomer();
+			});
+			im.online();
+		} else {
+				checkCustomer();
+		}
+	}
+	function checkCustomer(){
+		chatUI.setWindow( win );
+		chatUI.update();
+		ajax({
+			type:"get",
+			dataType: "jsonp",
+			cache: false,
+			url: route( "openchat" ),
+			data: {
+				group_id: info.id
+			  , nick: im.data.user.nick
+			  , ticket: im.data.connection.ticket
+			},
+			success: function( data ){
+				if( data && data[0] ) {
+					data = data[0];
+					//match group for buddy
+					__groups[ data.name ] = info;
+					__rgroups[ info.id ] = data;
+
+					var h = history.get( "unicast", data.name );
+					if( !h )
+						history.load( "unicast", data.name );
+
+
+				} else {
+					showComment();
+				}
+			},
+			error: function( data ){
+				showComment();
+			}
+		});
+	}
+} );
 
 

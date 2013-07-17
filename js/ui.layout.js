@@ -614,34 +614,34 @@ widget("layout",{
 		var self = this;
 		if(self.chat(type, id))return;
 
-		var widget = self.options.ui.addApp(self.options.chatApp, extend({
-			id: id, 
-			type: type, 
-			nick: nick, 
-			winOptions: winOptions
-		}, chatOptions ));
-
 		var  panels 	= self.panels;
-		id = _id_with_type(type, id);
-		panels[id] = widget;
+		var panelId = _id_with_type(type, id);
 
-		var win = self.tabs[id] = new webimUI.window(null, extend({
+		var win = self.tabs[panelId] = new webimUI.window(null, extend({
 			isMinimize: self.activeTabId || !self.options.chatAutoPop,
 			tabWidth: self.tabWidth -2,
 			titleVisibleLength: 9
 		}, winOptions))
 			.bind("close", function(){ 
-				self._onChatClose(id)
+				self._onChatClose(panelId)
 			})
 			.bind("displayStateChange", function(e, state){ 
-				self._onChatChange(id,state)
+				self._onChatChange(panelId,state)
 			});
-		self.tabIds.push(id);
+
+		var widget = self.options.ui.addApp(self.options.chatApp, extend({
+			id: id, 
+			type: type, 
+			nick: nick, 
+			window: win
+		}, chatOptions ));
+
+		panels[panelId] = widget;
+		self.tabIds.push(panelId);
 		self.$.tabs.insertBefore(win.element, self.$.tabs.firstChild);
-		widget.setWindow( win );
-		!win.isMinimize() && self._changeActive(id);
+		!win.isMinimize() && self._changeActive(panelId);
 		self._fitUI();
-		//else self.focusChat(id);
+		//else self.focusChat(panelId);
 	},
 	removeChat: function(type, id){
 		//ids = idsArray(ids);

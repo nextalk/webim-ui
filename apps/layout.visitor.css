@@ -20,7 +20,22 @@
 	width: 20em;
 }
 
+.webim-chat-wrap{
+	width: 100%;
+}
+
 .webim-chat-board {
 	border-width: 0;
 	border-left-width: 1px;
+	text-align: left;
+	vertical-align: top;
+	padding: 5px;
+	width: 10.3em;
 }
+
+.webim-loading{
+	background: url("../images/loading.gif") no-repeat center;
+	height: 200px;
+}
+
+

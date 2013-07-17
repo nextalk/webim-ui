@@ -74,11 +74,16 @@ widget("window", {
 },
 {
 	html: function(obj){
-		return this.$.content.appendChild(obj);
+		this.$.content.innerHTML = "";
+		return typeof obj === "string" ?
+			(this.$.content.innerHTML = obj) 
+			: this.$.content.appendChild(obj);
 	},
 	subHeader: function(obj){
 		this.$.subHeader.innerHTML = "";
-		return this.$.subHeader.appendChild(obj);
+		return typeof obj === "string" ?
+			(this.$.subHeader.innerHTML = obj) 
+			: this.$.subHeader.appendChild(obj);
 	},
 	_init: function(element, options){
 		var self = this, options = self.options, $ = self.$;

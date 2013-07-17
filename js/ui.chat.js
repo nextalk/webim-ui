@@ -127,7 +127,7 @@ widget("chat",{
 	<a id=":userPic" class="webim-user-pic ui-corner-all ui-state-active" href="#id"><img width="50" height="50" src="" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" class="ui-corner-all"></a> \
 	<span id=":userStatus" title="" class="webim-user-status">&nbsp;</span> \
 	</div></div>',
-	template:'<div class="webim-chat webim-box webim-flex"> \
+	template:'<div id=":container" class="webim-chat webim-box webim-flex"> \
 	<div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"></div></div> \
 	<div id=":content" class="webim-chat-content webim-flex webim-box-h"> \
 	<div id=":sidebar" class="webim-chat-sidebar webim-box"></div><div class="webim-flex webim-box"><div id=":main" class="webim-chat-main webim-flex"><div id=":status" class="webim-chat-status webim-gray"></div></div></div> \
@@ -174,11 +174,11 @@ widget("chat",{
 			self._adjustContent();
 		},0);
 	},
-	setWindow: function( win ) {
+	setWindow: function( win, notInsert ) {
 		var self = this;
 		self.window = win;
 		win.subHeader( self.header );
-		win.html( self.element );
+		!notInsert && win.html( self.element );
 		win.title( self.options.info.nick );
 		self._bindWindow();
 	},

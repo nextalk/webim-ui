@@ -120,6 +120,12 @@ function hide(obj){
 function remove(obj){
 	obj && obj.parentNode && (obj.parentNode.removeChild(obj));
 }
+function html(obj, obj2){
+	obj.innerHTML = "";
+	typeof obj2 === "string" ?
+		(obj.innerHTML = obj2) :
+		obj.appendChild( obj2 );
+}
 function addEvent( obj, type, fn ) {
 	if ( obj.addEventListener ) {
 		obj.addEventListener( type, fn, false );

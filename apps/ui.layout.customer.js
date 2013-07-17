@@ -134,8 +134,7 @@ widget("layout.customer",{
 		}, chatOptions ));
 
 		widget.__id = _id_with_type(type, id);
-
-		widget.setWindow( self.win );
+		widget.setWindow( self.win, true );
 		self.$.content.appendChild( widget.element );
 	}
 });

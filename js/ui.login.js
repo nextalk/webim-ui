@@ -21,8 +21,7 @@ app("login", function( options ) {
 widget("login", {
 	questions: null,
 	notice: "",
-	template: '<div>  \
-		<div id=":login" class="webim-login"> \
+	template: '<div id=":login" class="webim-login"> \
 			<div class="webim-login-logo" id=":logo"></div>\
 			<div class="webim-login-notice" id=":notice"></div>\
 			<div class="ui-state-error webim-login-error ui-corner-all" style="display: none;" id=":error"></div>\
