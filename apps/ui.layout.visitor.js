@@ -8,7 +8,7 @@ var __groups = {}
   , __rgroups = {};
 
 function trid(id) {
-	return __groups[id] && __groups[id]["id"] || id;
+	return __groups[id] && __groups[id]["id"];
 }
 
 function rtrid(id) {
@@ -97,6 +97,7 @@ app("layout.visitor", function( options ) {
 		for(var i = 0; i < l; i++){
 			d = data[i];
 			id = trid( d["id"] ), type = d["type"];
+			if( !id )continue;
 			c = layout.chat(type, id);
 			c && c.status("");//clear status
 			if(!c){	
@@ -124,6 +125,7 @@ app("layout.visitor", function( options ) {
 		each(data,function(n,msg){
 			var userId = im.data.user.id;
 			var id = trid( msg['from'] );
+			if( !id )return;
 			if (userId != msg.to && userId != msg.from) {
 				id = msg.to; //群消息
 				var nick = msg.nick;
@@ -163,6 +165,9 @@ app("layout.visitor", function( options ) {
 		} );
 	}
 	buddy.presence( options.buddies );
+	im.bind("offline", function(){
+		buddy.presence( options.buddies );
+	});
 	if( buddies.length == 1 ) {
 		layout.addChat("buddy", buddies[0].id, {}, { isMinimize: true, closeable: false });
 	}
