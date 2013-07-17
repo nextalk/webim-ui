@@ -17,7 +17,7 @@
 }
 
 .webim-chat {
-	width: 20em;
+	width: auto;
 }
 
 .webim-chat-wrap{
@@ -32,7 +32,7 @@
 	text-align: left;
 	vertical-align: top;
 	padding: 5px;
-	width: 10.3em;
+	width: 123px;
 }
 
 .webim-loading{
