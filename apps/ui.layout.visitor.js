@@ -157,7 +157,7 @@ app("layout.visitor", function( options ) {
 	var buddies = options.buddies || [];
 	if( buddies.length != 1 ) {
 		ui.addApp("buddy.visitor", {
-			title: webim.ui.i18n("online support"),
+			title: webim.ui.i18n(options.buddyTitle || "online support"),
 			buddies: options.buddies,
 			disable_group: true
 		} );
