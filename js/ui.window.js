@@ -74,16 +74,10 @@ widget("window", {
 },
 {
 	html: function(obj){
-		this.$.content.innerHTML = "";
-		return typeof obj === "string" ?
-			(this.$.content.innerHTML = obj) 
-			: this.$.content.appendChild(obj);
+		html( this.$.content, obj );
 	},
 	subHeader: function(obj){
-		this.$.subHeader.innerHTML = "";
-		return typeof obj === "string" ?
-			(this.$.subHeader.innerHTML = obj) 
-			: this.$.subHeader.appendChild(obj);
+		html( this.$.subHeader, obj );
 	},
 	_init: function(element, options){
 		var self = this, options = self.options, $ = self.$;

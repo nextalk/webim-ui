@@ -204,7 +204,9 @@ widget("chat",{
 		//this.$.input.focus();
 		//fix firefox
 		var item = this.$.input;
-		window.setTimeout(function(){item.focus()},0);
+		window.setTimeout(function(){
+			try{item.focus()}catch(e){};
+		},0);
 	},
 	_noticeTime: null,
 	_noticeTxt:"",
@@ -235,7 +237,8 @@ widget("chat",{
 		var main = this.$.main;
 		//Don't auto scroll when user view history.
 		//if ( main.scrollHeight - main.scrollTop - main.clientHeight < 200 )
-		main.scrollTop = main.scrollHeight;
+		if( main.scrollTop != main.scrollHeight)
+			main.scrollTop = main.scrollHeight;
 	},
 	_fitUI: function(e){
 		var self = this, win = self.window, $ = self.$;
@@ -347,7 +350,7 @@ widget("chat",{
 		$.userPic.firstChild.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
 		setTimeout(function(){
 			if(info.pic_url || info.default_pic_url) {
-				$.userPic.firstChild.setAttribute("src", info.pic_url || info.default_pic_url);
+				try{$.userPic.firstChild.setAttribute("src", info.pic_url || info.default_pic_url);}catch(e){};
 			}
 		},100);
 		$.userStatus.innerHTML = stripHTML(info.status) || "&nbsp";

@@ -121,7 +121,10 @@ function remove(obj){
 	obj && obj.parentNode && (obj.parentNode.removeChild(obj));
 }
 function html(obj, obj2){
-	obj.innerHTML = "";
+	var childs = obj.childNodes;
+	for( i=0;i<childs.length;i++ ) {
+		obj.removeChild(childs[i]);
+	}
 	typeof obj2 === "string" ?
 		(obj.innerHTML = obj2) :
 		obj.appendChild( obj2 );
