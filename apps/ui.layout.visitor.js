@@ -331,9 +331,9 @@ app( "chat.visitor", function( options ) {
 	}).bind("sendStatus", function( e, msg ) {
 		im.sendStatus( rtridfor( msg ) );
 	}).bind("clearHistory", function( e, info ){
-		history.clear( "unicast", info.id );
+		history.clear( "unicast", rtrid( info.id ) );
 	}).bind("downloadHistory", function( e, info ) {
-		history.download( "unicast", info.id );
+		history.download( "unicast", rtrid( info.id ) );
 	});
 
 	//Comment...
