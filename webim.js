@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Wed Jul 17 09:26:28 2013 +0800
- * Commit: b4aed19858153b449a93243128d0f4f9be9bb18a
+ * Date: Thu Jul 18 11:02:30 2013 +0800
+ * Commit: d9331f38d0d9a9de2a33ba1e3bb4206952ba9f65
  */
 (function(window, document, undefined){
 
@@ -1376,7 +1376,7 @@ extend(webim.prototype, {
 				if( type == "unicast" && !v["new"] ) {
 					var msg = { id: id, presence: "online" };
 					//update nick.
-					if( v.nick ) msg.nick = v.nick;
+					if( v.nick && v.to == uid ) msg.nick = v.nick;
 					online_buddies.push( msg );
 				}
 			}
