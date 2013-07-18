@@ -93,7 +93,7 @@ widget("layout.customer",{
 			minimizable: false,
 			title: webim.ui.i18n("online support")
 		});
-		self.$.layout.insertBefore( win.element );
+		self.$.layout.insertBefore( win.element, null );
 		win.html( content );
 	},
 	buildUI: function(e){
