@@ -341,9 +341,21 @@ app( "chat.visitor", function( options ) {
 		notice: "当前客服不在线，如有问题请留言。"
 	});
 
-	commentUI.bind("comment", function(){
-		alert( "留言成功");
-		win.minimize();
+	commentUI.bind("comment", function(e, data){
+		ajax({
+			type:"get",
+			dataType: "jsonp",
+			cache: false,
+			url: route( "comment" ),
+			data: data,
+			"success": function(body){
+				alert( "留言成功");
+				win.minimize();
+			},
+			"error": function(){
+				alert( "留言失败");
+			}
+		});
 	});
 
 	im.bind("offline", showComment);

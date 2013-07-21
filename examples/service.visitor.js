@@ -2,7 +2,7 @@
 	webim.ui.ready(function(){
 		var log = webim.log;
 		var _path = "http://p.com/webim/service/";
-		_path = "http://shopim1.webim20.cn/";
+		//_path = "http://shopim1.webim20.cn/";
 		webim.extend( webim.setting.defaults.data, {
 			play_sound: true,
 			minimize_layout: true,
@@ -28,6 +28,7 @@
 			logmsg: _path + "im.php?webim_action=logmsg",	
 			openchat: _path + "im.php?webim_action=openchat",	
 			closechat: _path + "im.php?webim_action=closechat"
+		  , comment: _path + "comment.php"
 		} );
 
 		webim.ui.emot.init({"dir": _path + "static/images/emot/default"});
