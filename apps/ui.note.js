@@ -3,27 +3,27 @@ webim.ui.i18n.store('zh-CN',{
 	"name": "称呼"
   , "contact": "联系方式"
   , "content": "留言内容"
-  , "comment": "留言"
+  , "note": "留言"
 });
 
-app("comment", function( options ) {
+app("note", function( options ) {
 	options = options || {};
 	var ui = this, im = ui.im;
-	var commentUI = new webimUI.comment(null, options);
-	options.container && options.container.appendChild( commentUI.element );
-	return commentUI;
+	var noteUI = new webimUI.note(null, options);
+	options.container && options.container.appendChild( noteUI.element );
+	return noteUI;
 });
 
-widget("comment", {
+widget("note", {
 	notice: "",
-	template: '<div id=":comment" class="webim-comment"> \
-			<div class="webim-comment-notice" id=":notice"></div>\
-			<div class="ui-state-error webim-comment-error ui-corner-all" style="display: none;" id=":error"></div>\
+	template: '<div id=":note" class="webim-note"> \
+			<div class="webim-note-notice" id=":notice"></div>\
+			<div class="ui-state-error webim-note-error ui-corner-all" style="display: none;" id=":error"></div>\
 			<form id=":form">\
 				<p class="ui-helper-clearfix"><label for=":name"><%=name%></label><input name="name" id=":name" type="text" /></p>\
 				<p class="ui-helper-clearfix"><label for=":contact"><%=contact%></label><input name="contact" id=":contact" type="text" /></p>\
 				<p class="ui-helper-clearfix"><label for=":content"><%=content%></label><textarea name="content" id=":content"></textarea></p>\
-				<p class="ui-helper-clearfix"><input name="submit" id=":submit" class="ui-state-default ui-corner-all webim-comment-submit" value="<%=comment%>" type="submit" /></p>\
+				<p class="ui-helper-clearfix"><input name="submit" id=":submit" class="ui-state-default ui-corner-all webim-note-submit" value="<%=note%>" type="submit" /></p>\
 			</form>\
 		</div>'
 },{
@@ -36,7 +36,7 @@ widget("comment", {
 		hoverClass( $.submit, "ui-state-hover" );
 		addEvent( $.form, "submit", function( e ) {
 			preventDefault( e );
-			self.trigger( "comment", [{ 
+			self.trigger( "note", [{ 
 				name: $.name.value
 			  , contact: $.contact.value 
 			  , content: $.content.value 

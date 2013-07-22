@@ -337,16 +337,16 @@ app( "chat.visitor", function( options ) {
 	});
 
 	//Comment...
-	var commentUI = ui.addApp("comment", {
+	var noteUI = ui.addApp("note", {
 		notice: "当前客服不在线，如有问题请留言。"
 	});
 
-	commentUI.bind("comment", function(e, data){
+	noteUI.bind("note", function(e, data){
 		ajax({
 			type:"get",
 			dataType: "jsonp",
 			cache: false,
-			url: route( "comment" ),
+			url: route( "note" ),
 			data: data,
 			"success": function(body){
 				alert( "留言成功");
@@ -364,7 +364,7 @@ app( "chat.visitor", function( options ) {
 
 	function showComment() {
 		chatUI.setWindow( win );
-		html( chatUI.$.wrap, commentUI.element );
+		html( chatUI.$.wrap, noteUI.element );
 	}
 
 	var checked = false;

@@ -28,7 +28,7 @@
 			logmsg: _path + "im.php?webim_action=logmsg",	
 			openchat: _path + "im.php?webim_action=openchat",	
 			closechat: _path + "im.php?webim_action=closechat"
-		  , comment: _path + "comment.php"
+		  , note: _path + "note.php"
 		} );
 
 		webim.ui.emot.init({"dir": _path + "static/images/emot/default"});
