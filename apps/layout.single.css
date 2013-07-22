@@ -1,0 +1,78 @@
+
+* html  .webim-customer, .webim-customer{
+	position: static; 
+	bottom: auto;
+	right: auto;
+	left: auto;
+	top:auto;
+	-webkit-box-shadow:none;
+	-moz-box-shadow:none;
+	box-shadow:none;
+	height:;
+}
+
+.webim-customer .webim-window-window{
+	position: relative;
+	bottom: auto;
+	z-index: 5;
+	right: auto;
+	width: 500px;
+}
+
+.webim-customer .webim-window{
+	float: none;
+}
+
+.webim-customer .webim-window-tab-wrap {
+	float: none;
+	display: none;
+}
+
+.webim-customer-content{
+}
+
+.webim-customer .webim-customer-l{
+	float: left;
+	margin: -1px 0 -1px -1px;
+	width: 117px;
+	height: 350px;
+}
+
+.webim-customer .webim-chat{
+	float: left;
+	width: 380px;
+	height: 350px;
+}
+
+.webim-customer .webim-chat-input{
+	height: 6em;
+}
+
+.webim-customer .webim-chat-main
+, .webim-customer .webim-chat-content{
+	height: 20.5em;
+}
+
+.webim-buddy .webim-window-tab-count{
+	top: auto;
+	margin-left: 75px;
+	right: auto;
+}
+
+#webim-buddy ul li a img{
+	display:none;
+}
+
+#webim-buddy ul li a{
+	margin-left: 0.5em;
+}
+
+#webim-buddy ul li a span{
+}
+
+
+
+
+
+
+
