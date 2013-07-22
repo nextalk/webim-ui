@@ -2,7 +2,7 @@
 	webim.ui.ready(function(){
 		var log = webim.log;
 		var _path = "http://p1.com/webim/service/";
-		//_path = "http://blog.webim20.cn/webim/";
+		_path = "http://shopim.webim20.cn/";
 		webim.extend( webim.setting.defaults.data, {
 			play_sound: true,
 			minimize_layout: true,
@@ -10,7 +10,7 @@
 		} );
 
 		webim.route( {
-			online: _path + "im.php?webim_action=online&domain=webim20.cn",	
+			online: _path + "im.php?webim_action=online",	
 			offline: _path + "im.php?webim_action=offline",	
 			deactivate: _path + "im.php?webim_action=refresh",	
 			message: _path + "im.php?webim_action=message",	
@@ -51,7 +51,7 @@
 
 		ui.addApp("buddy", {
 			is_login: true,
-			title: webim.ui.i18n("online support"),
+			title: "访客" || webim.ui.i18n("online support"),
 			disable_user: true,
 			disable_group: true
 		} );

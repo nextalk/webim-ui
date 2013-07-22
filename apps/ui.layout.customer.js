@@ -8,7 +8,6 @@ app("layout.customer", function( options ) {
 	  , history = im.history
 	  , status = im.status
 	  , setting = im.setting
-	  , buddyUI = self.buddy
 	  , room = im.room;
 
 	var layout = new webimUI["layout.customer"]( null,extend({
@@ -79,7 +78,7 @@ widget("layout.customer",{
 	<div id="webim-flashlib-c">\
 	</div>\
 	</div>\
-	<div id=":layout" class="webim-layout webim-customer"></div>\
+	<div id=":layout" class="webim-layout webim-customer ui-helper-clearfix"><div id=":left" class="webim-customer-left"></div><div id=":right" class="webim-customer-right"></div></div>\
 	</div>'
 },{
 	_init: function(element, options){
@@ -87,23 +86,20 @@ widget("layout.customer",{
 		extend(self,{
 			widgets: {}
 		});
-		var content = self.$.content = createElement("<div class='webim-customer-content ui-helper-clearfix'><div class='webim-customer-l ui-widget-content'></div></div>");
-		var win = self.win = new webimUI.window(null, {
-			closeable: false,
-			minimizable: false,
-			title: webim.ui.i18n("online support")
-		});
-		self.$.layout.insertBefore( win.element, null );
-		win.html( content );
 	},
 	buildUI: function(e){
 	},
 	widget:function(name){
 		return this.widgets[name];
 	},
-	addWidget: function(widget, options, before, container){
-		this.$.content.firstChild.appendChild( widget.element );
-		widget.window = this.win;
+	addWidget: function(widget, options){
+		var win = self.win = new webimUI.window(null, extend({
+			closeable: false,
+			minimizable: false
+		}, options));
+		widget.window = win;
+		win.html( widget.element );
+		this.$.left.appendChild( win.element );
 		this.widgets[widget.name] = widget;
 	},
 	focusChat: function(type, id){
@@ -122,7 +118,13 @@ widget("layout.customer",{
 		type = _tr_type(type);
 		var self = this;
 		if ( self.__chat )
-			remove( self.__chat.element );
+			remove( self.__chat.window.element );
+
+		var win = self.win = new webimUI.window(null, extend({
+			closeable: false,
+			minimizable: false
+		}, winOptions ));
+
 
 		var widget = self.__chat = self.options.ui.addApp("chat", extend({
 			id: id, 
@@ -134,8 +136,8 @@ widget("layout.customer",{
 		}, chatOptions ));
 
 		widget.__id = _id_with_type(type, id);
-		widget.setWindow( self.win, true );
-		self.$.content.appendChild( widget.element );
+		widget.setWindow( win );
+		self.$.right.appendChild( win.element );
 	}
 });
 
