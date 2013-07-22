@@ -24,12 +24,12 @@ app("buddy", function( options ){
 	options = options || {};
 	var ui = this, im = ui.im, buddy = im.buddy, layout = ui.layout;
 	var buddyUI = new webimUI.buddy(null, extend({
-		title: i18n("buddy")
+		title: options.title || i18n("buddy")
 	}, options ) );
 
 	layout.addWidget( buddyUI, {
 		className: "webim-buddy-window",
-		title: i18n( "buddy" ),
+		title: options.title || i18n( "buddy" ),
 		titleVisibleLength: 19,
 		sticky: im.setting.get("buddy_sticky"),
 		isMinimize: !im.status.get("b"),
