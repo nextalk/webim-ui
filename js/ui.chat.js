@@ -562,3 +562,5 @@ plugin.add("chat","downloadHistory",{
 function ieCacheSelection(e){
 	document.selection && (this.caretPos = document.selection.createRange());
 }
+
+

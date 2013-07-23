@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Upload file</title>
+		<!-- webim ui start -->
+		<script type="text/javascript" src="../js/upload.js" ></script>
+	</head>
+	<body style="width: 600px; margin: 0 auto;">
+		<h1>文件上传</h1>
+		<div id="content">
+			<form id="upload" action="http://p1.com/webim/ui/images/upload.php" method="POST" enctype="multipart/form-data" encoding="multipart/form-data">
+				<input type="file" name="files" />
+				<input type="submit" value="Upload" />
+			</form>
+		</div>
+		<div id="res">
+		</div>
+		<script type="text/javascript">
+			upload( document.getElementById("upload"), function( obj ){
+				window.console && window.console.log( obj );
+				obj = obj && obj[0];
+				document.getElementById("res").innerHTML = obj && obj.url ? obj.url : (obj && obj.error || "error");
+
+			} );
+		</script>
+	</body>
+</html>
