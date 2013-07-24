@@ -99,8 +99,10 @@ widget("history", {
 
 var autoLinkUrls = (function(){
 	var attrStr;
-	function filterUrl(a, b, c){
-		return '<a href="' + (b=='www.' ? ('http://' + a) : a) + '"' + attrStr + '>' + a + '</a>'
+	function filterUrl(a, b, c, d, e, z, f){
+		if( b )
+			return '<a href="' + (b=='www.' ? ('http://' + a) : a) + '"' + attrStr + '>' + a + '</a>'
+		return '<a href="'+e+'"'+attrStr+'><img src="'+(f || e)+'" alt="'+(d || e)+'"/></a>';
 	}
 		function serialize(key, val){
 			attrStr += ' ' + key + '="' + val + '"';
@@ -108,7 +110,7 @@ var autoLinkUrls = (function(){
 		return function(str, attrs){
 			attrStr = "";
 			attrs && isObject(attrs) && each(attrs, serialize);
-			return str.replace(/(https?:\/\/|www\.)([^\s<]+)/ig, filterUrl);
+			return str.replace(/(https?:\/\/|www\.)([^\s<]+)|\!\[([^\]]*)\]\(([^\)]+)\)(\(([^\)]+)\))?/ig, filterUrl);
 		};
 })();
 
