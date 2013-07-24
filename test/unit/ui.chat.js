@@ -1,6 +1,6 @@
 module("ui.chat");
 
-test("webim.ui.chat autoLinkUrls", 3, function() {
+test("webim.ui.chat autoLinkUrls", 4, function() {
 	var msg = "Hello world.![EVE](https://github.com/zzdhidden/EVE/raw/master/eve.png)(https://secure.gravatar.com/avatar/a128ed994fdba3004a713314a840204c?s=140)..";
 	var out = autoLinkUrls(msg, {target:"_blank"});
 	ok( out == 'Hello world.<a href="https://github.com/zzdhidden/EVE/raw/master/eve.png" target="_blank"><img src="https://secure.gravatar.com/avatar/a128ed994fdba3004a713314a840204c?s=140" alt="EVE"/></a>..', "Img with thumbnail");
@@ -29,6 +29,10 @@ test("webim.ui.chat autoLinkUrls", 3, function() {
 		//console.log( a );
 		//console.log( arguments );
 	} );
+
+	msg = "Hello world.[EVE](https://github.com/zzdhidden/EVE/raw/master/eve.png)..";
+	out = autoLinkUrls(msg, {target:"_blank"});
+	ok( out == 'Hello world.<a href="https://github.com/zzdhidden/EVE/raw/master/eve.png" target="_blank">EVE</a>..', "File");
 
 });
 

@@ -99,19 +99,21 @@ widget("history", {
 
 var autoLinkUrls = (function(){
 	var attrStr;
-	function filterUrl(a, b, c, d, e, z, f){
+	function filterUrl(a, b, c, _x, d, e, _z, f){
 		if( b )
 			return '<a href="' + (b=='www.' ? ('http://' + a) : a) + '"' + attrStr + '>' + a + '</a>'
-		return '<a href="'+e+'"'+attrStr+'><img src="'+(f || e)+'" alt="'+(d || e)+'"/></a>';
+		if( _x )
+			return '<a href="'+e+'"'+attrStr+'><img src="'+(f || e)+'" alt="'+(d || e)+'"/></a>';
+		return '<a href="'+e+'"'+attrStr+'>'+(d || e)+'</a>';
 	}
-		function serialize(key, val){
-			attrStr += ' ' + key + '="' + val + '"';
-		}
-		return function(str, attrs){
-			attrStr = "";
-			attrs && isObject(attrs) && each(attrs, serialize);
-			return str.replace(/(https?:\/\/|www\.)([^\s<]+)|\!\[([^\]]*)\]\(([^\)]+)\)(\(([^\)]+)\))?/ig, filterUrl);
-		};
+	function serialize(key, val){
+		attrStr += ' ' + key + '="' + val + '"';
+	}
+	return function(str, attrs){
+		attrStr = "";
+		attrs && isObject(attrs) && each(attrs, serialize);
+		return str.replace(/(https?:\/\/|www\.)([^\s<]+)|(\!?)\[([^\]]*)\]\(([^\)]+)\)(\(([^\)]+)\))?/ig, filterUrl);
+	};
 })();
 
 webimUI.history.defaults.parseMsg = true;
