@@ -25,6 +25,7 @@
 			leave: _path + "im.php?webim_action=leave",	
 			buddies: _path + "im.php?webim_action=buddies",	
 			notifications: _path + "im.php?webim_action=notifications",
+			upload: "../images/upload.php",
 			logmsg: _path + "im.php?webim_action=logmsg"	
 		} );
 

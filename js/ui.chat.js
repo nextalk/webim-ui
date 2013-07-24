@@ -266,7 +266,7 @@ widget("chat",{
 			if(h> 32 && h < 100) el.height(h + scrollTop);
 		}
 	},
-	_sendMessage: function(val){
+	sendMessage: function(val){
 		var self = this, options = self.options, info = options.info;
 		var msg = {
 			type: options.type == "room" ? "multicast" : "unicast",
@@ -292,7 +292,7 @@ widget("chat",{
 				var el = target(e), val = el.value;
 				// "0" will false
 				if (trim(val).length) {
-					self._sendMessage( val );
+					self.sendMessage( val );
 					el.value = "";
 					preventDefault(e);
 				}
@@ -475,6 +475,27 @@ plugin.add("chat","emot",{
 	send:function(e, ui){
 	}
 });
+
+webimUI.chat.defaults.image = true;
+plugin.add("chat","image",{
+	init:function(e, ui){
+		var chat = ui.self;
+		var upload = new webimUI.upload();
+		upload.bind("upload",function( e, markup ){
+			chat.sendMessage( markup );
+		});
+		var trigger = createElement(tpl('<a href="#chat-upload" title="<%=upload%>"><em class="webim-icon webim-icon-upload"></em></a>'));
+		addEvent(trigger,"click",function(e){
+			preventDefault(e);
+			upload.toggle();
+		});
+		ui.$.toolContent.appendChild(upload.element);
+		ui.$.tools.appendChild(trigger);
+	},
+	send:function(e, ui){
+	}
+});
+
 
 webimUI.chat.defaults.clearHistory = true;
 plugin.add("chat","clearHistory",{

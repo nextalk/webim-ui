@@ -93,6 +93,7 @@ webim.ui.i18n.store('zh-TW',{
 	"question": "問題",        
 	"answer": "答案",
 	"login": "登錄",
+	"upload": "上傳",
 	"exit": "退出"
 });
 

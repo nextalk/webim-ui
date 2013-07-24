@@ -103,8 +103,8 @@ var autoLinkUrls = (function(){
 		if( b )
 			return '<a href="' + (b=='www.' ? ('http://' + a) : a) + '"' + attrStr + '>' + a + '</a>'
 		if( _x )
-			return '<a href="'+e+'"'+attrStr+'><img src="'+(f || e)+'" alt="'+(d || e)+'"/></a>';
-		return '<a href="'+e+'"'+attrStr+'>'+(d || e)+'</a>';
+			return '<a class="webim-img" href="'+e+'"'+attrStr+'><img src="'+(f || e)+'" alt="'+(d || e)+'"/></a>';
+		return '<a class="webim-file" href="'+e+'"'+attrStr+'>'+(d || e)+'</a>';
 	}
 	function serialize(key, val){
 		attrStr += ' ' + key + '="' + val + '"';

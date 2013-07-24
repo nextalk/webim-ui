@@ -93,6 +93,7 @@ webim.ui.i18n.store('zh-CN',{
 	"question": "问题",
 	"answer": "答案",
 	"login": "登录",
+	"upload": "上传",
 	"exit": "退出"
 });
 
