@@ -93,10 +93,11 @@ widget("layout.customer",{
 		return this.widgets[name];
 	},
 	addWidget: function(widget, options){
-		var win = self.win = new webimUI.window(null, extend({
+		var win = self.win = new webimUI.window(null, extend(options, {
 			closeable: false,
-			minimizable: false
-		}, options));
+			minimizable: false,
+			isMinimize: false
+		}));
 		widget.window = win;
 		win.html( widget.element );
 		this.$.left.appendChild( win.element );

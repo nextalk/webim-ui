@@ -75,5 +75,12 @@
 #webim-buddy ul li a span{
 }
 
+.webim-window-window {
+	/*-moz-box-shadow:0 20px 40px rgba(0, 0, 0, 0.4);*/
+	/*
+	-moz-box-shadow:0 10px 20px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow:0 10px 20px rgba(0, 0, 0, 0.4);
+	 */
+}
 
 
