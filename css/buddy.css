@@ -46,7 +46,10 @@
 }
 
 #webim-buddy .webim-buddy-content{
-        padding: .2em .5em 1.2em;
+        padding: .2em 0 1.2em;
+	/*
+	padding: 0;
+	*/
         overflow-y: auto;
         position:relative;
 }
@@ -73,7 +76,7 @@
 	*/
 }
 #webim-buddy .webim-buddy-empty{
-        padding: 0 0 1em;
+        padding: .5em .5em 1em;
 }
 
 #webim-buddy .webim-buddy-offline a{
@@ -88,12 +91,14 @@
         border-bottom-width: 1px;
         padding: .2em .5em 0;
 }
+
 #webim-buddy ul li{
 }
+
 #webim-buddy ul li a{
         display:block;
         margin-left:3em;
-        padding: .3em 0;
+        padding: .3em .5em;
 }
 
 #webim-buddy ul li .webim-icon{

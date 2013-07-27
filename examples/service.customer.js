@@ -2,7 +2,7 @@
 	webim.ui.ready(function(){
 		var log = webim.log;
 		var _path = "http://p1.com/webim/service/";
-		_path = "http://shopim.webim20.cn/";
+		//_path = "http://shopim.webim20.cn/";
 		webim.extend( webim.setting.defaults.data, {
 			play_sound: true,
 			minimize_layout: true,
@@ -53,6 +53,7 @@
 		ui.addApp("buddy", {
 			is_login: true,
 			title: "访客" || webim.ui.i18n("online support"),
+			highlightable: true,
 			disable_user: true,
 			disable_group: true
 		} );
