@@ -257,6 +257,7 @@ self.trigger("offline");
 			//self._updateInfo(el, info);
 			var a = el.firstChild;
 			addEvent(a, "click",function(e){
+				self.active( id );
 				preventDefault(e);
 				self.showCount( id, 0 );
 				self.trigger("select", [info]);
@@ -334,6 +335,22 @@ self.trigger("offline");
 		var self = this, el = self.li[id];
 		el && el.firstChild.click();
 		return el;
+	},
+	active: function(id){
+		var self = this; 
+		if( !self.options.highlightable )
+			return;
+		if( !id ){
+			self._actived = null;
+			return;
+		}
+		var el = self.li[id];
+		if( el ) {
+			if ( self._actived )
+				removeClass( self._actived, "ui-state-default ui-state-highlight" );
+			addClass( el.firstChild,  "ui-state-default ui-state-highlight" );
+			self._actived = el;
+		}
 	},
 	destroy: function(){
 	}
