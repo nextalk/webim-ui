@@ -1731,6 +1731,12 @@ model( "buddy", {
 	get: function( id ) {
 		return this.dataHash[ id ];
 	},
+	all: function( onlyVisible ){
+		if( onlyVisible )
+			return grep(this.data, function(a){ return a.show != "invisible" && a.presence == "online"});
+		else
+			return this.data;
+	},
 	complete: function() {
 		var self = this, data = self.dataHash, ids = [], v;
 		for( var key in data ) {
