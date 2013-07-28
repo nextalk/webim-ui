@@ -1,7 +1,7 @@
 (function(webim){
 	webim.ui.ready(function(){
 		var log = webim.log;
-		var _path = "http://p1.com/webim/service/";
+		var _path = "http://p.com/webim/service/";
 		//_path = "http://shopim.webim20.cn/";
 		webim.extend( webim.setting.defaults.data, {
 			play_sound: true,

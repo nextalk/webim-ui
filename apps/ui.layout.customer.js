@@ -15,9 +15,24 @@ app("layout.customer", function( options ) {
 		ui: ui
 	}) );
 
+	im.bind("beforeOnline",function(e, params){
+		extend(params, {
+			buddy_ids: status.get("_cacheBuddy"),
+			room_ids: "",
+			show: "available"
+		});
+	});
+
 	im.bind("online",function(e, data){
 		layout.options.user = data.user;
 	});
+
+	var mapper = function(a){ return a && a.id };
+	var cacheBuddy = function(e){
+		var data = map( buddy.all(true), mapper );
+		status.set("_cacheBuddy", data.join(","));
+	}
+	buddy.bind("online", cacheBuddy).bind("offline", cacheBuddy);
 
 	history.bind("unicast", function( e, id, data){
 		var c = layout.chat("unicast", id), count = "+" + data.length;
