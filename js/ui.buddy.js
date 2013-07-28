@@ -347,7 +347,7 @@ self.trigger("offline");
 		var el = self.li[id];
 		if( el ) {
 			if ( self._actived )
-				removeClass( self._actived, "ui-state-default ui-state-highlight" );
+				removeClass( self._actived.firstChild, "ui-state-default ui-state-highlight" );
 			addClass( el.firstChild,  "ui-state-default ui-state-highlight" );
 			self._actived = el;
 		}
