@@ -31,7 +31,8 @@ app("layout.customer", function( options ) {
 	var cacheBuddy = function(e){
 		var data = map( buddy.all(true), mapper );
 		status.set("_cacheBuddy", data.join(","));
-	}
+		layout.updateAllChat();
+	};
 	buddy.bind("online", cacheBuddy).bind("offline", cacheBuddy);
 
 	history.bind("unicast", function( e, id, data){
@@ -122,13 +123,15 @@ widget("layout.customer",{
 		id = _id_with_type(type, id);
 	},
 	chat:function(type, id){
-		if( this.__chat && 
-			this.__chat.__id == _id_with_type(type, id) )
-		return this.__chat;
+		if( !type || ( this.__chat && this.__chat.__id == _id_with_type(type, id) ) )
+			return this.__chat;
+		return null;
 	},
 	updateChat: function(type, data){
 	},
 	updateAllChat:function(){
+		var chat = this.chat();
+		chat && chat.update();
 	},
 	addChat: function(type, id, chatOptions, winOptions, nick){
 		type = _tr_type(type);

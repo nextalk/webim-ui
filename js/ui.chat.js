@@ -128,7 +128,7 @@ widget("chat",{
 	<span id=":userStatus" title="" class="webim-user-status">&nbsp;</span> \
 	</div></div>',
 	template:'<div id=":container" class="webim-chat webim-box webim-flex"> \
-	<div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"></div></div> \
+	<div class="webim-chat-notice-wrap1"><div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"></div></div> </div>\
 	<div id=":content" class="webim-chat-content webim-flex webim-box-h"> \
 	<div id=":sidebar" class="webim-chat-sidebar webim-box"></div><div class="webim-flex webim-box"><div id=":main" class="webim-chat-main webim-flex"><div id=":status" class="webim-chat-status webim-gray"></div></div></div> \
 	</div> \

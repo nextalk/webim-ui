@@ -84,6 +84,15 @@
 #webim-buddy ul li a span{
 }
 
+.webim .webim-chat .webim-chat-notice-wrap1{
+	position: relative;
+}
+
+.webim .webim-chat .webim-chat-notice-wrap{
+	position: absolute;
+	width: 100%;
+}
+
 .webim-window-window {
 	/*-moz-box-shadow:0 20px 40px rgba(0, 0, 0, 0.4);*/
 	-moz-box-shadow:0 10px 20px rgba(0, 0, 0, 0.4);
