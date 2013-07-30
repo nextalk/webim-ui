@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Thu Jul 18 11:02:30 2013 +0800
- * Commit: d9331f38d0d9a9de2a33ba1e3bb4206952ba9f65
+ * Date: Tue Jul 30 17:28:42 2013 +0800
+ * Commit: fc4b8738b8fa995595eb23ee8af80e3582bb5385
  */
 (function(window, document, undefined){
 
@@ -1018,7 +1018,10 @@ comet.prototype = {
 	_onClose: function( m ) {
 		var self = this;
 		self._setting();
-		self.trigger( 'close', [ m ] );
+		//Delay trigger event when reflesh web site
+		setTimeout( function(){
+			self.trigger( 'close', [ m ] );
+		}, 1000 );
 	},
 	_onData: function(data) {
 		var self = this;
@@ -1027,7 +1030,10 @@ comet.prototype = {
 	_onError: function( text ) {
 		var self = this;
 		self._setting();
-		self.trigger( 'error', [ text ] );
+		//Delay trigger event when reflesh web site
+		setTimeout( function(){
+			self.trigger( 'error', [ text ] );
+		}, 1000 );
 	},
 	_startPolling: function() {
 		var self = this;
