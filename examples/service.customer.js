@@ -36,7 +36,8 @@
 		};
 		var ui = new webim.ui(document.getElementById("content"), {
 			imOptions: {
-				jsonp: true
+				jsonp: true,
+				"connectionType": "jsonpd"
 			},
 			soundUrls: soundUrls,
 			layout: "layout.customer",
