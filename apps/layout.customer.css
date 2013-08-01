@@ -66,6 +66,10 @@
 	height: 343px;
 }
 
+#webim-buddy .webim-buddy-content{
+        padding: .2em 0 1.5em;
+}
+
 #webim-buddy ul li a img{
 	display:none;
 }
