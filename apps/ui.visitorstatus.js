@@ -57,6 +57,8 @@ app("visitorstatus", function( options ){
 	})
 		.bind( "beforeOnline", function(e, param) {
 			param.visitorstatus = visitorstatus;
+			param.visitor_loc = current_location;
+			param.visitor_from = current_from ? current_from : "";
 		});
 });
 
