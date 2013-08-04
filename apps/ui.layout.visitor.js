@@ -12,7 +12,7 @@ function trid(id) {
 }
 
 function rtrid(id) {
-	return __rgroups[id] && __rgroups[id]["name"] || id;
+	return __rgroups[id] && __rgroups[id]["name"];
 }
 
 function rtridfor( obj ) {
@@ -322,6 +322,9 @@ app( "chat.visitor", function( options ) {
 	} else {
 		check();
 	}
+	win.bind("close", function(){
+		closeChat();
+	});
 
 	//im.buddy.set([{id: info.id, nick: info.nick + "-A" }]);
 
@@ -383,6 +386,24 @@ app( "chat.visitor", function( options ) {
 				checkCustomer();
 		}
 	}
+
+	function closeChat(){
+		var bid = rtrid( info.id );
+		if( bid ) {
+			ajax({
+				type:"get",
+				dataType: "jsonp",
+				cache: false,
+				url: route( "closechat" ),
+				data: {
+					group_id: info.id
+				  , buddy_id: bid
+				  , ticket: im.data.connection.ticket
+				}
+			});
+		}
+	}
+
 	function checkCustomer(){
 		chatUI.setWindow( win );
 		chatUI.update();
