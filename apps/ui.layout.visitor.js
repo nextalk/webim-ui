@@ -16,6 +16,7 @@ function rtrid(id) {
 }
 
 function rtridfor( obj ) {
+	obj.to_nick = __rgroups[obj.to] && __rgroups[obj.to]["nick"];
 	obj.to = rtrid( obj.to );
 	return obj;
 }
