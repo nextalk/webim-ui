@@ -273,6 +273,7 @@ widget("chat",{
 			to: info.id,
 			from: options.user.id,
 			nick: options.user.nick,
+			to_nick: info.nick,
 			//stype: '',
 			offline: info.presence != "online",
 			timestamp: (new Date()).getTime(),
