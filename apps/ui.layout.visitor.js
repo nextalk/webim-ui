@@ -346,6 +346,7 @@ app( "chat.visitor", function( options ) {
 	});
 
 	noteUI.bind("note", function(e, data){
+		data.group_id = info.id;
 		ajax({
 			type:"get",
 			dataType: "jsonp",
