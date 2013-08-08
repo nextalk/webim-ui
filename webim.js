@@ -1412,7 +1412,7 @@ extend(webim.prototype, {
 		data.presences && data.presences.length && self.trigger( "presence", [ data.presences ] );
 		data.statuses && data.statuses.length && self.trigger( "status", [ data.statuses ] );
 	},
-	sendMessage: function( msg ) {
+	sendMessage: function( msg, callback ) {
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
 		self.trigger( "sendMessage", [ msg ] );
@@ -1421,10 +1421,12 @@ extend(webim.prototype, {
 			dataType: "jsonp",
 			cache: false,
 			url: route( "message" ),
-			data: msg
+			data: msg,
+			success: callback,
+			error: callback
 		});
 	},
-	sendStatus: function(msg){
+	sendStatus: function( msg, callback ){
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
 		self.trigger( "sendStatus", [ msg ] );
@@ -1433,10 +1435,12 @@ extend(webim.prototype, {
 			dataType: "jsonp",
 			cache: false,
 			url: route( "status" ),			
-			data: msg
+			data: msg,
+			success: callback,
+			error: callback
 		});
 	},
-	sendPresence: function(msg){
+	sendPresence: function( msg, callback ){
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
 		//save show status
@@ -1448,7 +1452,9 @@ extend(webim.prototype, {
 			dataType: "jsonp",
 			cache: false,
 			url: route( "presence" ),			
-			data: msg
+			data: msg,
+			success: callback,
+			error: callback
 		} );
 	},
 	//setStranger: function(ids){
