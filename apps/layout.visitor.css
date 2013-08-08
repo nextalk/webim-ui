@@ -40,4 +40,13 @@
 	height: 200px;
 }
 
+.webim-chat-switch{
+	text-align: center;
+}
+
+.webim-chat-switch a{
+	display: inline-block;
+	padding: 5px 20px;
+	margin: 50px 30px;
+}
 

@@ -4,6 +4,11 @@
  *
  */
 
+webim.ui.i18n.store('zh-CN',{
+	"customer offline notice": "当前客服不在线，您可以选择留言或者咨询在线机器人"
+  , "robot": "机器人"
+});
+
 var __groups = {}
   , __rgroups = {};
 
@@ -16,8 +21,8 @@ function rtrid(id) {
 }
 
 function rtridfor( obj ) {
-	obj.to_nick = __rgroups[obj.to] && __rgroups[obj.to]["nick"];
-	obj.to = rtrid( obj.to );
+	obj.to_nick = __rgroups[obj.to] && __rgroups[obj.to]["nick"] || "机器人";
+	obj.to = rtrid( obj.to ) || "";
 	return obj;
 }
 
@@ -138,21 +143,21 @@ app("layout.visitor", function( options ) {
 	});
 
 	history.bind("unicast", function( e, id, data){
-		var c = layout.chat("unicast", trid(id) ), count = "+" + data.length;
+		var c = layout.chat("unicast", trid(id) || id ), count = "+" + data.length;
 		if(c){
 			c.history.add(data);
 		}
 		//(c ? c.history.add(data) : im.addChat(id));
 	});
 	history.bind("multicast", function(e, id, data){
-		var c = layout.chat("multicast", trid(id)), count = "+" + data.length;
+		var c = layout.chat("multicast", trid(id) || id), count = "+" + data.length;
 		if(c){
 			c.history.add(data);
 		}
 		//(c ? c.history.add(data) : im.addChat(id));
 	});
 	history.bind("clear", function(e, type, id){
-		var c = layout.chat(type, trid( id ) );
+		var c = layout.chat(type, trid( id ) || id );
 		c && c.history.clear();
 	});
 
@@ -291,6 +296,18 @@ app( "chat.visitor", function( options ) {
 		type = options.type,
 		win = options.window;
 
+	var $el = createElement(tpl('<div class="webim-chat-switch"><div class="webim-chat-notice-wrap1"><div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"><%=customer offline notice%></div></div> </div><p><a id=":note" class="ui-state-default ui-corner-all" href="javascript:void(0);"><%=note%></a><a id=":robot" class="ui-state-default ui-corner-all" href="javascript:void(0);"><%=robot%></a></p></div>'))
+	  , $ = mapElements( $el );
+
+	addEvent( $.note, "click", function(e){
+		showComment();
+		preventDefault(e);
+	} );
+	addEvent( $.robot, "click", function(e){
+		showRobot();
+		preventDefault(e);
+	} );
+
 	var info = im.buddy.get(id) || {
 		id: id,
 		nick: options.nick || id
@@ -330,14 +347,29 @@ app( "chat.visitor", function( options ) {
 	//im.buddy.set([{id: info.id, nick: info.nick + "-A" }]);
 
 	chatUI.bind("sendMessage", function( e, msg ) {
-		im.sendMessage( rtridfor( msg ) );
+		msg.group_id = msg.to;
+		im.sendMessage( rtridfor( msg ), function(data){
+			if( isArray( data ) ) {
+				history.set( data );
+			}
+		});
+		msg.to = msg.to || msg.group_id;
 		history.set( msg );
 	}).bind("sendStatus", function( e, msg ) {
-		im.sendStatus( rtridfor( msg ) );
+		msg = rtridfor( msg );
+		msg.to && im.sendStatus( msg );
 	}).bind("clearHistory", function( e, info ){
-		history.clear( "unicast", rtrid( info.id ) );
+		var id = rtrid( info.id );
+		if( id )
+			history.clear( "unicast", id );
+		else
+			history.clear( "unicast", info.id );
 	}).bind("downloadHistory", function( e, info ) {
-		history.download( "unicast", rtrid( info.id ) );
+		var id = rtrid( info.id );
+		if( id )
+			history.download( "unicast", id );
+		else
+			alert("机器人无纪录");
 	});
 
 	//Comment...
@@ -355,7 +387,8 @@ app( "chat.visitor", function( options ) {
 			data: data,
 			"success": function(body){
 				alert( "留言成功");
-				win.minimize();
+				commentOrRobot();
+				//win.minimize();
 			},
 			"error": function(){
 				alert( "留言失败");
@@ -363,13 +396,23 @@ app( "chat.visitor", function( options ) {
 		});
 	});
 
-	im.bind("offline", showComment);
+	im.bind("offline", commentOrRobot);
 
 	return chatUI;
 
 	function showComment() {
 		chatUI.setWindow( win );
 		html( chatUI.$.wrap, noteUI.element );
+	}
+
+	function showRobot() {
+		history.load( "unicast", info.id );
+		chatUI.setWindow( win );
+		html( chatUI.$.wrap, chatUI.$.container );
+	}
+
+	function commentOrRobot() {
+		win.html( $el );
 	}
 
 	var checked = false;
@@ -407,8 +450,6 @@ app( "chat.visitor", function( options ) {
 	}
 
 	function checkCustomer(){
-		chatUI.setWindow( win );
-		chatUI.update();
 		ajax({
 			type:"get",
 			dataType: "jsonp",
@@ -421,6 +462,8 @@ app( "chat.visitor", function( options ) {
 			},
 			success: function( data ){
 				if( data && data[0] ) {
+					chatUI.setWindow( win );
+					chatUI.update();
 					data = data[0];
 					//match group for buddy
 					__groups[ data.name ] = info;
@@ -432,11 +475,11 @@ app( "chat.visitor", function( options ) {
 
 
 				} else {
-					showComment();
+					commentOrRobot();
 				}
 			},
 			error: function( data ){
-				showComment();
+				commentOrRobot();
 			}
 		});
 	}
