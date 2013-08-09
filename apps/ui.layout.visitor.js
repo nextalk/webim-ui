@@ -435,7 +435,7 @@ app( "chat.visitor", function( options ) {
 				cache: false,
 				url: route( "eval" ),
 				data: {
-					suggest: text,
+					suggestion: text,
 					grade: grade,
 					group_id: info.id,
 					buddy_id: bid
