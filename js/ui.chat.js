@@ -459,7 +459,7 @@ webimUI.chat.defaults.emot = true;
 plugin.add("chat","emot",{
 	init:function(e, ui){
 		var chat = ui.self;
-		var emot = new webimUI.emot();
+		var emot = chat.emot = new webimUI.emot();
 		emot.bind("select",function( e, alt){
 
 			chat.focus();
@@ -467,6 +467,7 @@ plugin.add("chat","emot",{
 		});
 		var trigger = createElement(tpl('<a href="#chat-emot" title="<%=emot%>"><em class="webim-icon webim-icon-emot"></em></a>'));
 		addEvent(trigger,"click",function(e){
+			chat.upload && removeClass( chat.upload.element, "webim-upload-show" );
 			preventDefault(e);
 			emot.toggle();
 		});
@@ -481,12 +482,13 @@ webimUI.chat.defaults.image = true;
 plugin.add("chat","image",{
 	init:function(e, ui){
 		var chat = ui.self;
-		var upload = new webimUI.upload();
+		var upload  = chat.upload = new webimUI.upload();
 		upload.bind("upload",function( e, markup ){
 			chat.sendMessage( markup );
 		});
 		var trigger = createElement(tpl('<a href="#chat-upload" title="<%=upload%>"><em class="webim-icon webim-icon-upload"></em></a>'));
 		addEvent(trigger,"click",function(e){
+			chat.emot && removeClass( chat.emot.element, "webim-emot-show" );
 			preventDefault(e);
 			upload.toggle();
 		});
