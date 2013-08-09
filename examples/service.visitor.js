@@ -29,6 +29,7 @@
 			openchat: _path + "im.php?webim_action=openchat",	
 			closechat: _path + "im.php?webim_action=closechat"
 		  , note: _path + "note.php"
+		  , "eval": _path + "eval.php"
 		} );
 
 		webim.ui.emot.init({"dir": _path + "static/images/emot/default"});

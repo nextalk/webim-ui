@@ -50,3 +50,37 @@
 	margin: 50px 30px;
 }
 
+/*evaluate*/
+
+.webim-chat-eval{
+	position: absolute;
+	z-index: 2;
+	left: 10px;
+	width: 357px;
+	top: 20px;
+}
+
+.webim-chat-eval p{
+	margin: 1em 0;
+}
+
+.webim-chat-eval .webim-window-content{
+	padding: 1px 1em 1em;
+}
+
+.webim-chat-eval textarea{
+	width: 310px;
+	height: 60px;
+}
+
+.webim-chat-eval-actions {
+	text-align: center;
+}
+
+.webim-chat-eval-actions input{
+	padding: 5px 20px;
+	margin: 0 10px;
+}
+
+
+

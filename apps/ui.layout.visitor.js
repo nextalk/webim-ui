@@ -296,14 +296,25 @@ app( "chat.visitor", function( options ) {
 		type = options.type,
 		win = options.window;
 
-	var $el = createElement(tpl('<div class="webim-chat-switch"><div class="webim-chat-notice-wrap1"><div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"><%=customer offline notice%></div></div> </div><p><a id=":note" class="ui-state-default ui-corner-all" href="javascript:void(0);"><%=note%></a><a id=":robot" class="ui-state-default ui-corner-all" href="javascript:void(0);"><%=robot%></a></p></div>'))
-	  , $ = mapElements( $el );
+	var $switch = createElement(tpl('<div class="webim-chat-switch"><div class="webim-chat-notice-wrap1"><div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"><%=customer offline notice%></div></div> </div><p><a id=":note" class="ui-state-default ui-corner-all" href="javascript:void(0);"><%=note%></a><a id=":robot" class="ui-state-default ui-corner-all" href="javascript:void(0);"><%=robot%></a></p></div>'))
+	  , $switches = mapElements( $switch )
+	  , $eval = createElement( tpl('<div class="webim-chat-eval"><div id=":header" class="webim-window-header ui-widget-header ui-corner-top"><h4 id=":headerTitle">评价</h4></div><div id=":content" class="webim-window-content ui-widget-content"><p>您对客服人员满意吗？</p><p id=":grade">\
+	<label for="webim-eval1"><input id="webim-eval1" type="radio" value="1" name="eval" />&nbsp;非常不满意</label>\
+	<label for="webim-eval2"><input id="webim-eval2" type="radio" value="2" name="eval" />&nbsp;不满意</label>\
+	<label for="webim-eval3"><input id="webim-eval3" type="radio" value="3" name="eval" />&nbsp;基本满意</label>\
+	<label for="webim-eval4"><input id="webim-eval4" type="radio" value="4" name="eval" checked="checked"/>&nbsp;满意</label>\
+	<label for="webim-eval5"><input id="webim-eval5" type="radio" value="5" name="eval" />&nbsp;非常满意</label>\
+	</p><p>你对客服人员有什么建议吗？<textarea id=":note" name="note"></textarea></p><p class="webim-chat-eval-actions">\
+	<input id=":cancel" type="button" value="取消" class="ui-state-default ui-corner-all" />\
+	<input id=":submit" type="button" value="提交" class="ui-state-default ui-corner-all" />\
+	</p></div></div>') )
+	  , $evals = mapElements( $eval );
 
-	addEvent( $.note, "click", function(e){
+	addEvent( $switches.note, "click", function(e){
 		showComment();
 		preventDefault(e);
 	} );
-	addEvent( $.robot, "click", function(e){
+	addEvent( $switches.robot, "click", function(e){
 		showRobot();
 		preventDefault(e);
 	} );
@@ -398,7 +409,49 @@ app( "chat.visitor", function( options ) {
 
 	im.bind("offline", commentOrRobot);
 
+	//evaluate events
+	win.$.close.disabled = true;
+	win.$.tabClose.disabled = true;
+	addEvent( win.$.close, "click", evaluate);
+	addEvent( win.$.tabClose, "click", evaluate);
+	addEvent( $evals.cancel, "click", function(){
+		win.close();
+	});
+	addEvent( $evals.submit, "click", function(){
+		var text = $evals.note.value
+		  ,	elements = $evals.grade.getElementsByTagName("input")
+		  , el
+		  , grade = 4;
+		for(var i = elements.length - 1; i > -1; i--){
+			if(  elements[i].checked )
+				grade = elements[i].value;
+		}
+		win.close();
+		var bid = rtrid( info.id );
+		if( bid ) {
+			ajax({
+				type:"get",
+				dataType: "jsonp",
+				cache: false,
+				url: route( "eval" ),
+				data: {
+					suggest: text,
+					grade: grade,
+					group_id: info.id,
+					buddy_id: bid
+				}
+			});
+		}
+	});
 	return chatUI;
+
+	function evaluate(){
+		if( rtrid( info.id ) ) {
+			win.$.window.appendChild( $eval );
+		} else {
+			win.close();
+		}
+	}
 
 	function showComment() {
 		chatUI.setWindow( win );
@@ -412,7 +465,7 @@ app( "chat.visitor", function( options ) {
 	}
 
 	function commentOrRobot() {
-		win.html( $el );
+		win.html( $switch );
 	}
 
 	var checked = false;
