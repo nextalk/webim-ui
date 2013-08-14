@@ -140,10 +140,13 @@ widget("layout.customer",{
 			remove( self.__chat.window.element );
 
 		var win = self.win = new webimUI.window(null, extend({
-			closeable: false,
+			//closeable: false,
 			minimizable: false
-		}, winOptions ));
-
+		}, winOptions )).bind("close", function(){
+			//Remove chat
+			self.__chat = null;
+			self.widgets["buddy"] && self.widgets["buddy"].active();
+		});
 
 		var widget = self.__chat = self.options.ui.addApp("chat", extend({
 			id: id, 
