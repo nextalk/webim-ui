@@ -340,14 +340,14 @@ self.trigger("offline");
 		var self = this; 
 		if( !self.options.highlightable )
 			return;
+		if ( self._actived )
+			removeClass( self._actived.firstChild, "ui-state-default ui-state-highlight" );
 		if( !id ){
 			self._actived = null;
 			return;
 		}
 		var el = self.li[id];
 		if( el ) {
-			if ( self._actived )
-				removeClass( self._actived.firstChild, "ui-state-default ui-state-highlight" );
 			addClass( el.firstChild,  "ui-state-default ui-state-highlight" );
 			self._actived = el;
 		}
