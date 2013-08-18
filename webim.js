@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Tue Jul 30 17:28:42 2013 +0800
- * Commit: fc4b8738b8fa995595eb23ee8af80e3582bb5385
+ * Date: Mon Aug 19 00:05:48 2013 +0800
+ * Commit: 744317cb00a57ed590f1542ea3d130237e00c0a3
  */
 (function(window, document, undefined){
 
@@ -1512,7 +1512,7 @@ extend(webim.prototype, {
 		if ( self.state === webim.OFFLINE ) {
 			return;
 		}
-		//self.status.set("o", true);
+		self.status.set("o", true);
 		self.connection.close();
 		self._stop("offline", "offline");
 		ajax({

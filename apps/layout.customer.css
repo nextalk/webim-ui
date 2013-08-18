@@ -53,7 +53,7 @@
 
 .webim-customer .webim-chat-main
 , .webim-customer .webim-chat-content{
-	height: 20.8em;
+	height: 24.5em;
 }
 
 .webim-buddy .webim-window-tab-count{
@@ -97,10 +97,14 @@
 	width: 100%;
 }
 
+/*user icon*/
+.webim-user-show-dnd, .webim-user-show-away, .webim-user-show-invisible{
+	display: none !important;
+}
+
 .webim-window-window {
 	/*-moz-box-shadow:0 20px 40px rgba(0, 0, 0, 0.4);*/
 	-moz-box-shadow:0 10px 20px rgba(0, 0, 0, 0.4);
 	-webkit-box-shadow:0 10px 20px rgba(0, 0, 0, 0.4);
 }
-
 

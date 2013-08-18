@@ -49,18 +49,19 @@
 			}
 		}), im = ui.im;
 
-		//im.setUser( {"id":"51c8450e9bc15","nick":"guest8276","visitor":"true","pic_url":"http:\/\/www.gravatar.com\/avatar\/?s=50","default_pic_url":"http:\/\/www.gravatar.com\/avatar\/?s=50","show":"unavailable","status":null,"url":"http:\/\/www.gravatar.com\/"} );
+		im.setUser({"id":"admin","uid":"admin","nick":"\u7ba1\u7406\u5458","group_id":"1","pic_url":"http:\/\/www.gravatar.com\/avatar\/?s=50","default_pic_url":"http:\/\/www.gravatar.com\/avatar\/?s=50","show":"unavailable","status":null,"url":"http:\/\/www.gravatar.com\/"});
 
 		ui.addApp("buddy", {
 			is_login: true,
 			title: "访客" || webim.ui.i18n("online support"),
 			highlightable: true,
-			disable_user: true,
+			disable_user: false,
+			userOptions: {show: true},
 			disable_group: true
 		} );
 
 		ui.render();
-		im.online();
+		im.autoOnline() && im.online();
 	});
 })(webim);
 
