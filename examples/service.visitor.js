@@ -58,6 +58,9 @@
 
 		ui.addApp("visitorstatus");
 		ui.addApp("logmsg");
+		ui.addApp("setting", {"data": {
+			play_sound: webim.setting.defaults.data.play_sound
+		}});
 
 		ui.render();
 		//im.online();
