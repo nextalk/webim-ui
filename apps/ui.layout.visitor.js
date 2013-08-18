@@ -459,7 +459,7 @@ app( "chat.visitor", function( options ) {
 	}
 
 	function showRobot() {
-		history.load( "unicast", info.id );
+		//history.load( "unicast", info.id );
 		chatUI.setWindow( win );
 		html( chatUI.$.wrap, chatUI.$.container );
 	}
@@ -521,10 +521,12 @@ app( "chat.visitor", function( options ) {
 					//match group for buddy
 					__groups[ data.name ] = info;
 					__rgroups[ info.id ] = data;
-
 					var h = history.get( "unicast", data.name );
 					if( !h )
 						history.load( "unicast", data.name );
+					else {
+						chatUI.history.add( h );
+					}
 
 
 				} else {
