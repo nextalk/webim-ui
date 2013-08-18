@@ -82,5 +82,7 @@
 	margin: 0 10px;
 }
 
-
+#webim-buddy ul li .webim-icon {
+	display: none;
+}
 
