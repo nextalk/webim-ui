@@ -1,4 +1,4 @@
-app("layout.customer", function( options ) {
+app("layout.popup", function( options ) {
 
 	options = options || {};
 	var ui = this
@@ -10,7 +10,7 @@ app("layout.customer", function( options ) {
 	  , setting = im.setting
 	  , room = im.room;
 
-	var layout = new webimUI["layout.customer"]( null,extend({
+	var layout = new webimUI["layout.popup"]( null,extend({
 	}, options, {
 		ui: ui
 	}) );
@@ -88,13 +88,13 @@ app("layout.customer", function( options ) {
 
 });
 
-widget("layout.customer",{
+widget("layout.popup",{
 	template: '<div id="webim" class="webim webim-state-ready">\
 	<div class="webim-preload ui-helper-hidden-accessible">\
 	<div id="webim-flashlib-c">\
 	</div>\
 	</div>\
-	<div id=":layout" class="webim-layout webim-customer ui-helper-clearfix"><div id=":left" class="webim-customer-left"></div><div id=":right" class="webim-customer-right"></div></div>\
+	<div id=":layout" class="webim-layout webim-popup ui-helper-clearfix"><div id=":left" class="webim-popup-left"></div><div id=":right" class="webim-popup-right"></div></div>\
 	</div>'
 },{
 	_init: function(element, options){

@@ -1,5 +1,5 @@
 
-* html  .webim-customer, .webim-customer{
+* html  .webim-popup, .webim-popup{
 	position: static; 
 	bottom: auto;
 	right: auto;
@@ -15,7 +15,7 @@
 	margin: 3px 0;
 }
 
-.webim-customer .webim-window-window{
+.webim-popup .webim-window-window{
 	position: relative;
 	bottom: auto;
 	z-index: 5;
@@ -23,36 +23,36 @@
 	width: 100%;
 }
 
-.webim-customer-left{
+.webim-popup-left{
 	width: 200px;
 	margin-left: -220px;
 	float: left;
 }
 
-.webim-customer-right{
+.webim-popup-right{
 }
 
-.webim-customer .webim-window{
+.webim-popup .webim-window{
 	float: none;
 }
 
-.webim-customer .webim-window-tab-wrap {
+.webim-popup .webim-window-tab-wrap {
 	float: none;
 	display: none;
 }
 
-.webim-customer .webim-chat{
+.webim-popup .webim-chat{
 }
 
-.webim-customer .webim-chat-input{
+.webim-popup .webim-chat-input{
 	height: 6em;
 }
-.webim-customer .webim-chat-input-wrap{
+.webim-popup .webim-chat-input-wrap{
 	height: 6.5em;
 }
 
-.webim-customer .webim-chat-main
-, .webim-customer .webim-chat-content{
+.webim-popup .webim-chat-main
+, .webim-popup .webim-chat-content{
 	height: 24.5em;
 }
 
@@ -98,9 +98,11 @@
 }
 
 /*user icon*/
+/*
 .webim-user-show-dnd, .webim-user-show-away, .webim-user-show-invisible{
 	display: none !important;
 }
+ */
 
 .webim-window-window {
 	/*-moz-box-shadow:0 20px 40px rgba(0, 0, 0, 0.4);*/

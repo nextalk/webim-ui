@@ -40,7 +40,7 @@
 				"connectionType": "jsonpd"
 			},
 			soundUrls: soundUrls,
-			layout: "layout.customer",
+			layout: "layout.popup",
 			layoutOptions: {
 				unscalable: true
 			},
