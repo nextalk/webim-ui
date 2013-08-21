@@ -11,7 +11,7 @@
 	margin-left: 220px;
 }
 
-.webim-layout .webim-window-header h4{
+.webim-popup .webim-window-header h4{
 	margin: 3px 0;
 }
 
@@ -56,55 +56,55 @@
 	height: 24.5em;
 }
 
-.webim-buddy .webim-window-tab-count{
+.webim-popup .webim-buddy .webim-window-tab-count{
 	top: auto;
 	margin-left: 0;
 	right: 3px;
 }
 
-#webim-buddy{
+.webim-popup #webim-buddy{
 	height: 343px;
 }
 
-#webim-buddy .webim-buddy-content{
+.webim-popup #webim-buddy .webim-buddy-content{
         padding: .2em 0 1.5em;
 }
 
-#webim-buddy ul li a img{
+.webim-popup #webim-buddy ul li a img{
 	display:none;
 }
 
-#webim-buddy ul li a{
+.webim-popup #webim-buddy ul li a{
 	margin-left: 0;
 	margin-right: 0;
 	border-left: 0px;
 	border-right: 0px;
 	position: relative;
 }
-#webim-buddy ul li a.ui-state-highlight{
+.webim-popup #webim-buddy ul li a.ui-state-highlight{
 	padding:.2em .5em;
 }
 
-#webim-buddy ul li a span{
+.webim-popup #webim-buddy ul li a span{
 }
 
-.webim .webim-chat .webim-chat-notice-wrap1{
+.webim-popup .webim-chat .webim-chat-notice-wrap1{
 	position: relative;
 }
 
-.webim .webim-chat .webim-chat-notice-wrap{
+.webim-popup .webim-chat .webim-chat-notice-wrap{
 	position: absolute;
 	width: 100%;
 }
 
 /*user icon*/
 /*
-.webim-user-show-dnd, .webim-user-show-away, .webim-user-show-invisible{
+.webim-popup .webim-user-show-dnd,.webim-popup  .webim-user-show-away,.webim-popup  .webim-user-show-invisible{
 	display: none !important;
 }
  */
 
-.webim-window-window {
+.webim-popup .webim-window-window {
 	/*-moz-box-shadow:0 20px 40px rgba(0, 0, 0, 0.4);*/
 	-moz-box-shadow:0 10px 20px rgba(0, 0, 0, 0.4);
 	-webkit-box-shadow:0 10px 20px rgba(0, 0, 0, 0.4);
