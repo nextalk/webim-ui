@@ -325,14 +325,14 @@ app( "chat.visitor", function( options ) {
 	};
 
 	options = extend( {
-		info: info,
-		user: im.data.user
-	}, ui.options.buddyChatOptions, { 
+		clearHistory: true, 
 		template: _chatTemplate,
+		emot: true 
+	}, ui.options.buddyChatOptions, { 
+		info: info,
+		user: im.data.user,
 		history: [], 
 		block: false, 
-		emot: true, 
-		clearHistory: true, 
 		member: false, 
 		msgType: "unicast"
 	}, options );

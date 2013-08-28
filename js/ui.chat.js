@@ -41,16 +41,16 @@ app( "chat", function( options ) {
 		info.presence = "online";
 
 		options = extend( {
-			info: info,
-			user: im.data.user
-		}, ui.options.roomChatOptions, { 
-			history: h, 
-			block: true, 
 			emot: true, 
 			clearHistory: false, 
 			member: true, 
-			type: type, 
+			block: true, 
 			downloadHistory: false 
+		}, ui.options.roomChatOptions, { 
+			info: info,
+			user: im.data.user,
+			history: h, 
+			type: type 
 		}, options );
 
 		var chatUI = new webimUI.chat( null, options );
@@ -92,13 +92,13 @@ app( "chat", function( options ) {
 		};
 
 		options = extend( {
-			info: info,
-			user: im.data.user
+			emot: true, 
+			clearHistory: true 
 		}, ui.options.buddyChatOptions, { 
+			info: info,
+			user: im.data.user,
 			history: h, 
 			block: false, 
-			emot: true, 
-			clearHistory: true, 
 			member: false, 
 			msgType: "unicast"
 		}, options );
@@ -478,8 +478,8 @@ plugin.add("chat","emot",{
 	}
 });
 
-webimUI.chat.defaults.image = true;
-plugin.add("chat","image",{
+webimUI.chat.defaults.upload = false;
+plugin.add("chat","upload",{
 	init:function(e, ui){
 		var chat = ui.self;
 		var upload  = chat.upload = new webimUI.upload();

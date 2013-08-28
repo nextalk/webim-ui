@@ -148,14 +148,15 @@ widget("layout.popup",{
 			self.widgets["buddy"] && self.widgets["buddy"].active();
 		});
 
-		var widget = self.__chat = self.options.ui.addApp("chat", extend({
-			id: id, 
-			type: type, 
-			nick: nick, 
-			winOptions: winOptions,
-			clearHistory: false,
-			downloadHistory: false
-		}, chatOptions ));
+		var widget = self.__chat = self.options.ui.addApp("chat", extend(
+			{
+				clearHistory: true
+			}, self.options.ui.options.buddyChatOptions, {
+				id: id, 
+				type: type, 
+				nick: nick, 
+				winOptions: winOptions
+			}, chatOptions ));
 
 		widget.__id = _id_with_type(type, id);
 		widget.setWindow( win );
