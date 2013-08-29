@@ -79,7 +79,12 @@ app("buddy", function( options ){
 	});
 	//some buddies offline.
 	buddy.bind("offline", function( e, data){
-		buddyUI.remove(map(data, mapId));
+		if ( options.showUnavailable ) {
+			buddyUI.add(data);
+			buddyUI.update(data);
+		} else {
+			buddyUI.remove(map(data, mapId));
+		}
 	});
 	//some information has been modified.
 	buddy.bind( "update", function( e, data){

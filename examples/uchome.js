@@ -14,6 +14,9 @@ webim.ui.ready(function(){
 		soundUrls: {
 			lib: _path + "assets/sound.swf",
 			msg: _path + "assets/sound/msg.mp3"
+		},
+		imOptions: {
+			connectionType: "jsonpd"
 		}
 	}), im = ui.im;
 	//im.user({"uid":"1","id":"admin","nick":"admin","pic_url":"http:\/\/test.com\/project\/uc\/discuzX\/uc_server\/avatar.php?uid=0&size=small","url":"home.php?mod=space&uid=1"});
@@ -22,6 +25,7 @@ webim.ui.ready(function(){
 	var is_login = false;
 	ui.addApp("buddy", {
 		is_login: is_login
+	  , showUnavailable: true
 	});
 	ui.addApp("room");
 	ui.addApp("notification");
