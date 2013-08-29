@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Mon Aug 19 00:05:48 2013 +0800
- * Commit: 744317cb00a57ed590f1542ea3d130237e00c0a3
+ * Date: Thu Aug 29 08:55:27 2013 +0800
+ * Commit: 3a0ce5d39cc5e3b322c8aa8e57b79e975ee109b3
  */
 (function(window, document, undefined){
 
@@ -1753,8 +1753,8 @@ model( "buddy", {
 		var self = this, data = self.dataHash, ids = [], v;
 		for( var key in data ) {
 			v = data[ key ];
-			//if( v.incomplete && v.presence == 'online' ) {
 			//Will load offline info for show unavailable buddy.
+			//if( v.incomplete && v.presence == 'online' ) {
 			if( v.incomplete ) {
 				//Don't load repeat. 
 				v.incomplete = false;
