@@ -60,7 +60,8 @@
 }
 
 #webim-buddy.webim-buddy-scroll .webim-buddy-content{
-        /* height: 25em; */
+	/* height: 25em; */
+	height: 25em;
 }
 #webim-buddy.webim-buddy-scroll .webim-buddy-search{
         display: block;
