@@ -1,6 +1,6 @@
 
 webim.ui.ready(function(){
-	var path = "http://p.com/uc/discuz/source/plugin/webim/";
+	var path = "http://"+document.domain+"/uc/discuz/source/plugin/webim/";
 	var webim = window.webim;
 	webim.extend(webim.setting.defaults.data, {} );
 	webim.route( {
