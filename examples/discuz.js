@@ -41,6 +41,7 @@ webim.ui.ready(function(){
 	ui.addApp("buddy", {
 		is_login: is_login
 	  , showUnavailable: true
+	  //,	userOptions: { show: true }
 	});
 	ui.addApp("room");
 	ui.addApp("notification");

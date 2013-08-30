@@ -46,6 +46,7 @@ app("buddy", function( options ){
 		userUI = ui.addApp( "user", options.userOptions );
 		if( options.is_login ) {
 			buddyUI.window.subHeader( userUI.element );
+			show( userUI.element );
 			userUI = null;
 		}
 	}
