@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Fri Aug 30 02:32:52 2013 +0800
- * Commit: 00cc8d018e1edb750e19a1eecda5973972a8c71b
+ * Date: Fri Aug 30 18:09:39 2013 +0800
+ * Commit: 571a5ef5ad8faf5780602a8dd2b8721d23b48afb
  */
 (function(window, document, undefined){
 
@@ -1369,7 +1369,12 @@ extend(webim.prototype, {
 		return !this.status.get("o");
 	},
 	_initEvents: function(){
-		var self = this, status = self.status, setting = self.setting, history = self.history, buddy = self.buddy;
+		var self = this
+		  , status = self.status
+		  , setting = self.setting
+		  , history = self.history
+		  , buddy = self.buddy
+		  , room = self.room;
 
 		self.bind( "message", function( e, data ) {
 			var online_buddies = [], l = data.length, uid = self.data.user.id, v, id, type;
@@ -1393,6 +1398,23 @@ extend(webim.prototype, {
 			}
 			history.set( data );
 		});
+
+		self.bind("presence",function( e, data ) {
+			buddy.presence( map( grep( data, grepPresence ), mapFrom ) );
+			data = grep( data, grepRoomPresence );
+			for (var i = data.length - 1; i >= 0; i--) {
+				var dd = data[i];
+				if( dd.type == "leave" ) {
+					room.removeMember(dd.to || dd.status, dd.from);
+				} else {
+					room.addMember(dd.to || dd.status, {
+						id: dd.from
+					  , nick: dd.nick
+					});
+				}
+			};
+		});
+
 		function mapFrom( a ) { 
 			var d = { id: a.from, presence: a.type }; 
 			if( a.show ) d.show = a.show;
@@ -1401,13 +1423,12 @@ extend(webim.prototype, {
 			return d;
 		}
 
-		function grepPresence( a){
+		function grepPresence( a ){
 			return a.type == "online" || a.type == "offline";
 		}
-
-		self.bind("presence",function( e, data ) {
-			buddy.presence( map( grep( data, grepPresence ), mapFrom ) );
-		});
+		function grepRoomPresence( a ){
+			return a.type == "join" || a.type == "leave";
+		}
 	},
 	handle: function(data){
 		var self = this;
@@ -1866,11 +1887,10 @@ model( "buddy", {
 		block: function(id) {
 			var self = this, d = self.dataHash[id];
 			if(d && !d.blocked){
-				if( !d.temporary )
-					d.blocked = true;
+				d.blocked = true;
 				var list = [];
 				each(self.dataHash,function(n,v){
-					if(v.blocked) list.push(v.id);
+					if(!v.temporary && v.blocked) list.push(v.id);
 				});
 				self.trigger("block",[id, list]);
 			}
@@ -1878,11 +1898,10 @@ model( "buddy", {
 		unblock: function(id) {
 			var self = this, d = self.dataHash[id];
 			if(d && d.blocked){
-				if( !d.temporary )
-					d.blocked = false;
+				d.blocked = false;
 				var list = [];
 				each(self.dataHash,function(n,v){
-					if(v.blocked) list.push(v.id);
+					if(!v.temporary && v.blocked) list.push(v.id);
 				});
 				self.trigger("unblock",[id, list]);
 			}
@@ -1930,7 +1949,8 @@ model( "buddy", {
 			}
 		},
 		removeMember: function(room_id, member_id){
-			var room = this.dataHash[room_id];
+			var self = this
+			  , room = this.dataHash[room_id];
 			if(room){
 				var members = room.members, member;
 				for (var i = members.length; i--; i){

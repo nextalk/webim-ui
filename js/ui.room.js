@@ -127,17 +127,17 @@ app("room", function( options ) {
 		updateRoom(info);
 		room.join(id, info && info.nick);
 	}).bind("addMember", function( e, room_id, info){
-		updateRoom(room.get(room_id));
+		updateRoom(room.get(room_id), true);
 	}).bind("removeMember", function( e, room_id, info){
-		updateRoom(room.get(room_id));
+		updateRoom(room.get(room_id), true);
 	});
 	//room
-	function updateRoom(info){
+	function updateRoom(info, ignore){
 		var nick = info.nick;
 		info = extend({},info,{group:"group", nick: nick + "(" + (parseInt(info.count) + "/"+ parseInt(info.all_count || info.count)) + ")"});
 		layout.updateChat(info);
 		info.blocked && (info.nick = nick + "(" + i18n("blocked") + ")");
-		roomUI.li[info.id] ? roomUI.update(info) : roomUI.add(info);
+		roomUI.li[info.id] ? roomUI.update(info) : ( !ignore && roomUI.add(info) );
 	}
 });
 widget("room",{
