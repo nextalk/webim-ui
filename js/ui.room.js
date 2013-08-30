@@ -323,7 +323,7 @@ widget("room",{
 		if( li[id] ){
 			_countDisplay( li[id].firstChild.nextSibling.firstChild, count );
 		}
-	},
+	}
 });
 
 
