@@ -223,10 +223,14 @@ widget("room",{
 			var el = li[id] = createElement(tpl(self.options.tpl_li, info));
 			//self._updateInfo(el, info);
 			var a = el.firstChild;
-			addEvent(a, "click",function(e){
-				preventDefault(e);
-				self.updateDiscussion( info );
-			});
+			if( info.temporary ) {
+				addEvent(a, "click",function(e){
+					preventDefault(e);
+					self.updateDiscussion( info );
+				});
+			} else {
+				hide( a );
+			}
 			addEvent(a.nextSibling, "click",function(e){
 				preventDefault(e);
 				self.trigger("select", [info]);
