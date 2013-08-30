@@ -52,14 +52,19 @@
 }
 
 .webim-popup .webim-chat-main
-, .webim-popup .webim-chat-content{
+, .webim-popup .webim-chat-content
+, .webim-popup .webim-member{
 	height: 24.5em;
 }
 
-.webim-popup .webim-buddy .webim-window-tab-count{
-	top: auto;
-	margin-left: 0;
-	right: 3px;
+.webim-popup .webim-chat-sidebar {
+	right: 0;
+}
+
+.webim-popup .webim-member{
+	left: 0em;
+	-moz-border-radius-topleft: 0; -webkit-border-top-left-radius: 0; border-top-left-radius: 0; -moz-border-radius-bottomleft: 0; -webkit-border-bottom-left-radius: 0; border-bottom-left-radius: 0;
+	-moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px; border-top-right-radius: 4px; -moz-border-radius-bottomright: 4px; -webkit-border-bottom-right-radius: 4px; border-bottom-right-radius: 4px;
 }
 
 .webim-popup #webim-buddy{
@@ -68,6 +73,10 @@
 
 .webim-popup #webim-buddy.webim-buddy-scroll .webim-buddy-content{
 	/* height: 25em; */
+	height: 24em;
+}
+
+.webim-popup #webim-room.webim-room-scroll .webim-room-content {
 	height: 24em;
 }
 
@@ -84,7 +93,6 @@
 	margin-right: 0;
 	border-left: 0px;
 	border-right: 0px;
-	position: relative;
 }
 .webim-popup #webim-buddy ul li a.ui-state-highlight{
 	padding:.2em .5em;

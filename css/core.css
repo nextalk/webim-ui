@@ -90,3 +90,10 @@ a .webim-icon, a .ui-icon{
 .webim-hide{
 	display: none !important;
 }
+
+.webim-button{
+	display: inline-block;
+	padding: 3px 8px;
+}
+
+

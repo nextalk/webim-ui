@@ -100,6 +100,13 @@
         display:block;
         margin-left:3em;
         padding: .3em .5em;
+	position: relative;
+}
+
+#webim-buddy .webim-window-tab-count{
+	top: auto;
+	margin-left: 0;
+	right: 3px;
 }
 
 #webim-buddy ul li .webim-icon{

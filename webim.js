@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Thu Aug 29 08:55:27 2013 +0800
- * Commit: 3a0ce5d39cc5e3b322c8aa8e57b79e975ee109b3
+ * Date: Fri Aug 30 02:12:14 2013 +0800
+ * Commit: e2465ea1d58cf7d8df045a52dd4932813c480bae
  */
 (function(window, document, undefined){
 
@@ -1408,7 +1408,22 @@ extend(webim.prototype, {
 	},
 	handle: function(data){
 		var self = this;
-		data.messages && data.messages.length && self.trigger( "message", [ data.messages ] );
+		if( data.messages && data.messages.length ){
+			var origin = data.messages
+			  , msgs = []
+			  , events = [];
+			for (var i = 0; i < origin.length; i++) {
+				var msg = origin[i];
+				if( msg.body && msg.body.indexOf("webim-event:") == 0 ){
+					msg.event = msg.body.replace("webim-event:", "").split("|,|");
+					events.push( msg );
+				} else {
+					msgs.push( msg );
+				}
+			};
+			msgs.length && self.trigger( "message", [ msgs ] );
+			events.length && self.trigger( "event", [ events ] );
+		}
 		data.presences && data.presences.length && self.trigger( "presence", [ data.presences ] );
 		data.statuses && data.statuses.length && self.trigger( "status", [ data.statuses ] );
 	},
@@ -1613,6 +1628,7 @@ model("setting",{
 		buddy_sticky: true,
 		minimize_layout: true,
 		msg_auto_pop: true,
+		temporary_rooms: [],
 		blocked_rooms: []
 	}
 },{
@@ -1838,10 +1854,17 @@ model( "buddy", {
 		get: function(id) {
 			return this.dataHash[id];
 		},
+		all: function( onlyTemporary ){
+			if( onlyTemporary )
+				return grep(this.data, function(a){ return a.temporary });
+			else
+				return this.data;
+		},
 		block: function(id) {
 			var self = this, d = self.dataHash[id];
 			if(d && !d.blocked){
-				d.blocked = true;
+				if( !d.temporary )
+					d.blocked = true;
 				var list = [];
 				each(self.dataHash,function(n,v){
 					if(v.blocked) list.push(v.id);
@@ -1852,7 +1875,8 @@ model( "buddy", {
 		unblock: function(id) {
 			var self = this, d = self.dataHash[id];
 			if(d && d.blocked){
-				d.blocked = false;
+				if( !d.temporary )
+					d.blocked = false;
 				var list = [];
 				each(self.dataHash,function(n,v){
 					if(v.blocked) list.push(v.id);
@@ -1939,7 +1963,7 @@ model( "buddy", {
 				}
 			});
 		},
-		join:function(id){
+		join:function(id, nick, callback){
 			var self = this, options = self.options, user = options.user;
 
 			ajax({
@@ -1950,12 +1974,12 @@ model( "buddy", {
 				data: {
 					ticket: options.ticket,
 					id: id,
-					nick: user.nick
+					nick: nick || ""
 				},
 				success: function( data ) {
-					//self.trigger("join",[data]);
 					self.initMember( id );
 					self.set( [ data ] );
+					callback && callback( data );
 				}
 			});
 		},

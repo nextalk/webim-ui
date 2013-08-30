@@ -94,6 +94,13 @@ webim.ui.i18n.store('zh-TW',{
 	"answer": "答案",
 	"login": "登錄",
 	"upload": "上傳",
+	"discussion": "討論組",
+	"discussion name": "討論組名稱",
+	"create discussion": "創建討論組",
+	"select discussion buddies": "選擇加入討論組的好友",
+	"confirm": "確定",
+	"cancel": "取消",
+	"invite": "邀请",
 	"exit": "退出"
 });
 

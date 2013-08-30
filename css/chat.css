@@ -11,6 +11,7 @@
 
 .webim .webim-chat-content{
 	height: 16em;
+	position: relative;
 }
 
 .webim .webim-chat-main{

@@ -74,13 +74,30 @@
         border-bottom-width: 1px;
         padding: .2em .5em 0;
 }
+
 #webim-room ul li{
 }
+
 #webim-room ul li a{
         display:block;
         margin-left:3em;
         padding: .3em 0;
+	position: relative;
 }
+
+#webim-room .webim-window-tab-count{
+	top: auto;
+	margin-left: 0;
+	right: 3px;
+	z-index: 5;
+}
+
+#webim-room ul li .webim-button{
+	float: right;
+	position: relative;
+	z-index: 2;
+}
+
 #webim-room ul li a img{
         display:block;
         float:left;
@@ -97,4 +114,41 @@
 #webim-room ul li a span{
         display: block;
 }
+
+#webim-room .webim-room-actions{
+	margin: 5px 10px;
+}
+
+#webim-room .webim-room-discussion{
+	padding: 10px;
+}
+
+#webim-room .webim-room-discussion p{
+	margin: 8px 0 0;
+}
+
+#webim-room .webim-room-discussion .webim-button{
+	margin-right: 10px;
+}
+
+#webim-room .webim-room-discussion-name{
+	width: 150px;
+}
+
+#webim-room .webim-room-discussion-list{
+	height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	margin-bottom: 10px;
+}
+
+#webim-room .webim-room-discussion-list li{
+	padding: 5px 10px;
+}
+
+#webim-room .webim-room-discussion-list li input{
+	margin-right: 10px;
+}
+
+
 
