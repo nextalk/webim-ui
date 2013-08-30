@@ -63,8 +63,8 @@ app("room", function( options ) {
 			if( event && event[0] == "invite" ) {
 				var id = event[1];
 				room.join( id, event[2], function(){
-					layout.addChat("room", id);
-				}  );
+					//layout.addChat("room", id);
+				} );
 			}
 		};
 	});
