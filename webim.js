@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Fri Aug 30 02:12:14 2013 +0800
- * Commit: e2465ea1d58cf7d8df045a52dd4932813c480bae
+ * Date: Fri Aug 30 02:32:52 2013 +0800
+ * Commit: 00cc8d018e1edb750e19a1eecda5973972a8c71b
  */
 (function(window, document, undefined){
 
@@ -1401,9 +1401,12 @@ extend(webim.prototype, {
 			return d;
 		}
 
+		function grepPresence( a){
+			return a.type == "online" || a.type == "offline";
+		}
+
 		self.bind("presence",function( e, data ) {
-			buddy.presence( map( data, mapFrom ) );
-			//online.length && buddyUI.notice("buddyOnline", online.pop()["nick"]);
+			buddy.presence( map( grep( data, grepPresence ), mapFrom ) );
 		});
 	},
 	handle: function(data){
