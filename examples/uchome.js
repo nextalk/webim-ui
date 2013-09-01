@@ -16,7 +16,7 @@ webim.ui.ready(function(){
 			msg: _path + "assets/sound/msg.mp3"
 		},
 		imOptions: {
-			connectionType: "jsonpd"
+			//connectionType: "jsonpd"
 		}
 	}), im = ui.im;
 	//im.user({"uid":"1","id":"admin","nick":"admin","pic_url":"http:\/\/test.com\/project\/uc\/discuzX\/uc_server\/avatar.php?uid=0&size=small","url":"home.php?mod=space&uid=1"});

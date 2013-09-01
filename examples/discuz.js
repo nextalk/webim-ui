@@ -1,10 +1,9 @@
 
 webim.ui.ready(function(){
 	var path = "http://"+document.domain+"/uc/discuz/source/plugin/webim/";
-	var webim = window.webim;
 	webim.extend(webim.setting.defaults.data, {} );
 	webim.route( {
-		online: path + "im.php?webim_action=online&domain=webim20.cn",
+		online: path + "im.php?webim_action=online",
 		offline: path + "im.php?webim_action=offline",
 		deactivate: path + "im.php?webim_action=refresh",
 		message: path + "im.php?webim_action=message",

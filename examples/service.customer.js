@@ -46,7 +46,6 @@
 			},
 			buddyChatOptions: {
 				upload: true,
-				simple: true,
 				clearHistory: false,
 				downloadHistory: false
 			}
@@ -58,10 +57,14 @@
 			is_login: true,
 			title: "访客" || webim.ui.i18n("online support"),
 			highlightable: true,
-			disable_user: false,
+			simple: true,
 			userOptions: {show: true},
 			disable_group: true
 		} );
+
+		ui.addApp("setting", {"data": {
+			play_sound: webim.setting.defaults.data.play_sound
+		}});
 
 		ui.render();
 		im.autoOnline() && im.online();

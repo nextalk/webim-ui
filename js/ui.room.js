@@ -69,7 +69,6 @@ app("room", function( options ) {
 		};
 	});
 	layout.addWidget( roomUI, {
-		container: "tab",
 		title: i18n( "room" ),
 		icon: "room",
 		sticky: im.setting.get("buddy_sticky"),
@@ -232,7 +231,9 @@ widget("room",{
 				hide( a );
 			}
 			addEvent(a.nextSibling, "click",function(e){
+				self.active( id );
 				preventDefault(e);
+				self.showCount( id, 0 );
 				self.trigger("select", [info]);
 				this.blur();
 			});
@@ -326,6 +327,22 @@ widget("room",{
 		var li = this.li;
 		if( li[id] ){
 			_countDisplay( li[id].firstChild.nextSibling.firstChild, count );
+		}
+	},
+	active: function(id){
+		var self = this; 
+		if( !self.options.highlightable )
+			return;
+		if ( self._actived )
+			removeClass( self._actived.firstChild.nextSibling, "ui-state-default ui-state-highlight" );
+		if( !id ){
+			self._actived = null;
+			return;
+		}
+		var el = self.li[id];
+		if( el ) {
+			addClass( el.firstChild.nextSibling,  "ui-state-default ui-state-highlight" );
+			self._actived = el;
 		}
 	}
 });
