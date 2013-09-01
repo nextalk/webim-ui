@@ -98,9 +98,15 @@
 
 #webim-buddy ul li a{
         display:block;
-        margin-left:3em;
-        padding: .3em .5em;
+	padding: 5px .5em 5px 3.5em;
 	position: relative;
+}
+
+#webim-buddy ul li a.ui-state-highlight{
+	padding-top: 4px;
+	padding-bottom: 4px;
+	border-right-width: 0;
+	border-left-width: 0;
 }
 
 #webim-buddy .webim-window-tab-count{
@@ -145,7 +151,7 @@
 }
 
 #webim-buddy.webim-buddy-simple ul li a{
-	margin-left: .3em;
+	padding-left: .3em;
 }
 #webim-buddy.webim-buddy-simple ul li a strong{
 	display: inline;
