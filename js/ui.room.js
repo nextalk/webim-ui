@@ -231,7 +231,6 @@ widget("room",{
 				hide( a );
 			}
 			addEvent(a.nextSibling, "click",function(e){
-				self.active( id );
 				preventDefault(e);
 				self.showCount( id, 0 );
 				self.trigger("select", [info]);

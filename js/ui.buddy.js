@@ -264,7 +264,6 @@ self.trigger("offline");
 			//self._updateInfo(el, info);
 			var a = el.firstChild;
 			addEvent(a, "click",function(e){
-				self.active( id );
 				preventDefault(e);
 				self.showCount( id, 0 );
 				self.trigger("select", [info]);

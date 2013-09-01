@@ -258,6 +258,7 @@ widget("layout.popup",{
 		widget && widget.active(null);
 
 		widget = self.widget( type );
+		widget && widget.active(id);
 
 		var win = new webimUI.window(null, extend({
 			//closeable: false,
