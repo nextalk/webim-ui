@@ -75,13 +75,7 @@ app("layout", function( options ) {
 	}).bind("update", function(e, data){
 		layout.updateChat("buddy", data);
 	});
-	room.bind("addMember", function(e, room_id, info){
-		var c = layout.chat("room", room_id);
-		c && c.addMember(info.id, info.nick, info.id == im.data.user.id);
-	}).bind("removeMember", function(e, room_id, info){
-		var c = layout.chat("room", room_id);
-		c && c.removeMember(info.id, info.nick);
-	});
+
 	layout.bind("collapse", function(){
 		setting.set("minimize_layout", true);
 	});
@@ -93,6 +87,17 @@ app("layout", function( options ) {
 	layout.bind("displayUpdate", function(e){
 		_updateStatus(); //save status
 	});
+
+	(function(){
+		//room  events
+		room.bind("addMember", function(e, room_id, info){
+			var c = layout.chat("room", room_id);
+			c && c.addMember(info.id, info.nick, info.id == im.data.user.id);
+		}).bind("removeMember", function(e, room_id, info){
+			var c = layout.chat("room", room_id);
+			c && c.removeMember(info.id, info.nick);
+		});
+	})();
 
 	//all ready.
 	//message
@@ -139,24 +144,27 @@ app("layout", function( options ) {
 		});
 	});
 
-	history.bind("unicast", function( e, id, data){
-		var c = layout.chat("unicast", id), count = "+" + data.length;
-		if(c){
-			c.history.add(data);
-		}
-		//(c ? c.history.add(data) : im.addChat(id));
-	});
-	history.bind("multicast", function(e, id, data){
-		var c = layout.chat("multicast", id), count = "+" + data.length;
-		if(c){
-			c.history.add(data);
-		}
-		//(c ? c.history.add(data) : im.addChat(id));
-	});
-	history.bind("clear", function(e, type, id){
-		var c = layout.chat(type, id);
-		c && c.history.clear();
-	});
+	(function(){
+		//history events
+		history.bind("unicast", function( e, id, data){
+			var c = layout.chat("unicast", id), count = "+" + data.length;
+			if(c){
+				c.history.add(data);
+			}
+			//(c ? c.history.add(data) : im.addChat(id));
+		});
+		history.bind("multicast", function(e, id, data){
+			var c = layout.chat("multicast", id), count = "+" + data.length;
+			if(c){
+				c.history.add(data);
+			}
+			//(c ? c.history.add(data) : im.addChat(id));
+		});
+		history.bind("clear", function(e, type, id){
+			var c = layout.chat(type, id);
+			c && c.history.clear();
+		});
+	})();
 
 	return layout;
 
