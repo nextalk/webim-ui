@@ -37,12 +37,17 @@
 				unscalable: true
 			},
 			buddyChatOptions: {
+				upload: true
+			},
+			roomChatOptions: {
+				upload: true
 			}
 		}), im = ui.im;
 
 		ui.addApp("buddy", {
 			is_login: true,
 			title: "好友",
+			showUnavailable: true,
 		    simple: false
 		} );
 

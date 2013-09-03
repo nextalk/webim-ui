@@ -276,7 +276,7 @@ widget("chat",{
 			to_nick: info.nick,
 			//stype: '',
 			offline: info.presence != "online",
-			timestamp: (new Date()).getTime(),
+			timestamp: (new Date()).getTime() - date.timeSkew,
 			body: val
 		};
 		plugin.call(self, "send", [null, self.ui({msg: msg})]);
