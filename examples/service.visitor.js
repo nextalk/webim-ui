@@ -50,6 +50,7 @@
 				buddies: [{"id":"1","nick":"\u6280\u672f\u652f\u6301","desc":"shouhou jishu zhichi ","presence":"online","show":"available","pic_url":"http:\/\/www.gravatar.com\/avatar\/e08894cc7de84fed191944a8be9f6ad6?s=50"},{"id":"2","nick":"\u5546\u52a1\u652f\u6301","desc":"shouqian ","presence":"online","show":"available","pic_url":"http:\/\/www.gravatar.com\/avatar\/e08894cc7de84fed191944a8be9f6ad6?s=50"}]
 			},
 			buddyChatOptions: {
+				upload: true,
 				simple: true
 			}
 		}), im = ui.im;
