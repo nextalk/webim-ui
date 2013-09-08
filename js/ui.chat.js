@@ -563,7 +563,7 @@ plugin.add( "chat", "member", {
 	init:function(e, ui){
 		var chat = ui.self, $ = ui.$;
 		chat.memberLi = {};
-		var member = createElement(tpl('<div class="webim-box webim-flex  webim-member ui-widget-content ui-corner-left"><iframe id=":bgiframe" class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><h4><%=room member%>(<span id=":memberCount">0</span>)</h4><ul id=":ul" class="webim-flex"></ul></div>')), els = mapElements(member);
+		var member = createElement(tpl('<div class="webim-box webim-flex  webim-member ui-widget-content ui-corner-left"><iframe id=":bgiframe" class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><h4><%=room member%>:<span id=":memberCount">0</span></h4><ul id=":ul" class="webim-flex"></ul></div>')), els = mapElements(member);
 		$.member = els.ul;
 		$.memberCount = els.memberCount;
 		$.sidebar.appendChild( member );
