@@ -105,6 +105,10 @@
         padding: .2em 0 1.5em;
 }
 
+.webim-popup #webim-buddy.webim-buddy-simple ul li a span{
+	display: block;
+}
+
 .webim-popup .webim-chat .webim-chat-notice-wrap1{
 	position: relative;
 	z-index: 3;
