@@ -30,6 +30,12 @@ body {
 .webim img{
         border:0;
 }
+
+.webim label{
+	font-size: 1em;
+	display: inline;
+}
+
 #webim, .webim, .webim h1, .webim h2, .webim h3, .webim h4, .webim h5, .webim h6{
         font-size: 10px;
         line-height: 1.5;
