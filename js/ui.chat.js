@@ -30,9 +30,9 @@ app( "chat", function( options ) {
 		type = options.type;
 	if( type == "room" ) {
 
-		var h = history.get( "multicast", id );
+		var h = history.get( "grpchat", id );
 		if( !h )
-			history.load( "multicast", id );
+			history.load( "grpchat", id );
 
 		var info = im.room.get(id) || {
 			id: id,
@@ -59,7 +59,7 @@ app( "chat", function( options ) {
 			im.sendMessage( msg );
 			history.set( msg );
 		}).bind("downloadHistory", function( e, info ){
-			history.download( "multicast", info.id );
+			history.download( "grpchat", info.id );
 		}).bind("select", function( e, info ) {
 			info.presence = "online";
 			buddy.presence( info );//online
@@ -82,9 +82,9 @@ app( "chat", function( options ) {
 		} );
 
 	} else {
-		var h = history.get( "unicast", id );
+		var h = history.get( "chat", id );
 		if( !h )
-			history.load( "unicast", id );
+			history.load( "chat", id );
 
 		var info = im.buddy.get(id) || {
 			id: id,
@@ -100,7 +100,7 @@ app( "chat", function( options ) {
 			history: h, 
 			block: false, 
 			member: false, 
-			msgType: "unicast"
+			msgType: "chat"
 		}, options );
 
 		var chatUI = new webimUI.chat( null, options );
@@ -114,9 +114,9 @@ app( "chat", function( options ) {
 		}).bind("sendStatus", function( e, msg ) {
 			im.sendStatus( msg );
 		}).bind("clearHistory", function( e, info ){
-			history.clear( "unicast", info.id );
+			history.clear( "chat", info.id );
 		}).bind("downloadHistory", function( e, info ) {
-			history.download( "unicast", info.id );
+			history.download( "chat", info.id );
 		});
 	}
 	return chatUI;
@@ -269,7 +269,7 @@ widget("chat",{
 	sendMessage: function(val){
 		var self = this, options = self.options, info = options.info;
 		var msg = {
-			type: options.type == "room" ? "multicast" : "unicast",
+			type: options.type == "room" ? "grpchat" : "chat",
 			to: info.id,
 			from: options.user.id,
 			nick: options.user.nick,

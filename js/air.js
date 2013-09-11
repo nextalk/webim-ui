@@ -176,7 +176,7 @@ extend(widget.prototype, {
 });
 
 function _tr_type(type){
-	return type == "b" || type == "buddy" || type == "unicast" ? "buddy" : "room";
+	return type == "b" || type == "buddy" || type == "chat" ? "buddy" : "room";
 }
 
 function app( name, init ) {

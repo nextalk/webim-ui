@@ -1328,12 +1328,12 @@ extend(webim.prototype, {
 		history.options.userInfo = data.user;
 		var ids = [];
 		each( data.buddies, function(n, v) {
-			history.init( "unicast", v.id, v.history );
+			history.init( "chat", v.id, v.history );
 		});
 		buddy.set( data.buddies );
 		//rooms
 		each( data.rooms, function(n, v) {
-			history.init( "multicast", v.id, v.history );
+			history.init( "grpchat", v.id, v.history );
 		});
 		//blocked rooms
 		var b = self.setting.get("blocked_rooms"), roomData = data.rooms;
@@ -1382,9 +1382,9 @@ extend(webim.prototype, {
 			for(var i = 0; i < l; i++){
 				v = data[i];
 				type = v["type"];
-				id = type == "unicast" ? (v.to == uid ? v.from : v.to) : v.to;
+				id = type == "chat" ? (v.to == uid ? v.from : v.to) : v.to;
 				v["id"] = id;
-				if( type == "unicast" && !v["new"] ) {
+				if( type == "chat" && !v["new"] ) {
 					var msg = { id: id, presence: "online" };
 					//update nick.
 					if( v.nick && v.to == uid ) msg.nick = v.nick;
@@ -2029,7 +2029,7 @@ model( "buddy", {
 	} );
 } )();
 /*
-history // 消息历史记录 Support unicast and multicast
+history // 消息历史记录 Support chat and grpchat
 */
 
 model("history", {
@@ -2037,14 +2037,14 @@ model("history", {
 	_init:function(){
 		var self = this;
 		self.data = self.data || {};
-		self.data.unicast = self.data.unicast || {};
-		self.data.multicast = self.data.multicast || {};
+		self.data.chat = self.data.chat || {};
+		self.data.grpchat = self.data.grpchat || {};
 	},
 	get: function( type, id ) {
 		return this.data[type][id];
 	},
 	set:function( addData ) {
-		var self = this, data = self.data, cache = {"unicast": {}, "multicast": {}};
+		var self = this, data = self.data, cache = {"chat": {}, "grpchat": {}};
 		addData = makeArray(addData);
 		var l = addData.length , v, id, userId = self.options.userInfo.id;
 		if(!l)return;
@@ -2052,7 +2052,7 @@ model("history", {
 			//for(var i in addData){
 			v = addData[i];
 			type = v.type;
-			id = type == "unicast" ? (v.to == userId ? v.from : v.to) : v.to;
+			id = type == "chat" ? (v.to == userId ? v.from : v.to) : v.to;
 			if(id && type){
 				cache[type][id] = cache[type][id] || [];
 				cache[type][id].push(v);

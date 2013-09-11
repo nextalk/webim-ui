@@ -107,7 +107,7 @@ app("layout.visitor", function( options ) {
 			c = layout.chat(type, id);
 			c && c.status("");//clear status
 			if(!c){	
-				if (d.type === "unicast"){
+				if (d.type === "chat"){
 					layout.addChat(type, id, null, null, d.nick);
 				}else{
 					layout.addChat(type, id);  
@@ -142,15 +142,15 @@ app("layout.visitor", function( options ) {
 		});
 	});
 
-	history.bind("unicast", function( e, id, data){
-		var c = layout.chat("unicast", trid(id) || id ), count = "+" + data.length;
+	history.bind("chat", function( e, id, data){
+		var c = layout.chat("chat", trid(id) || id ), count = "+" + data.length;
 		if(c){
 			c.history.add(data);
 		}
 		//(c ? c.history.add(data) : im.addChat(id));
 	});
-	history.bind("multicast", function(e, id, data){
-		var c = layout.chat("multicast", trid(id) || id), count = "+" + data.length;
+	history.bind("grpchat", function(e, id, data){
+		var c = layout.chat("grpchat", trid(id) || id), count = "+" + data.length;
 		if(c){
 			c.history.add(data);
 		}
@@ -334,7 +334,7 @@ app( "chat.visitor", function( options ) {
 		history: [], 
 		block: false, 
 		member: false, 
-		msgType: "unicast"
+		msgType: "chat"
 	}, options );
 
 	var chatUI = new webimUI.chat( null, options );
@@ -372,13 +372,13 @@ app( "chat.visitor", function( options ) {
 	}).bind("clearHistory", function( e, info ){
 		var id = rtrid( info.id );
 		if( id )
-			history.clear( "unicast", id );
+			history.clear( "chat", id );
 		else
-			history.clear( "unicast", info.id );
+			history.clear( "chat", info.id );
 	}).bind("downloadHistory", function( e, info ) {
 		var id = rtrid( info.id );
 		if( id )
-			history.download( "unicast", id );
+			history.download( "chat", id );
 		else
 			alert("机器人无纪录");
 	});
@@ -459,7 +459,7 @@ app( "chat.visitor", function( options ) {
 	}
 
 	function showRobot() {
-		//history.load( "unicast", info.id );
+		//history.load( "chat", info.id );
 		chatUI.setWindow( win );
 		html( chatUI.$.wrap, chatUI.$.container );
 	}
@@ -521,9 +521,9 @@ app( "chat.visitor", function( options ) {
 					//match group for buddy
 					__groups[ data.name ] = info;
 					__rgroups[ info.id ] = data;
-					var h = history.get( "unicast", data.name );
+					var h = history.get( "chat", data.name );
 					if( !h )
-						history.load( "unicast", data.name );
+						history.load( "chat", data.name );
 					else {
 						chatUI.history.add( h );
 					}

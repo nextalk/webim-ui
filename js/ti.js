@@ -43,7 +43,7 @@ extend(webimUI.prototype, objectExtend, {
 				c = layout.chat( type, id );
 				c && c.status("");//clear status
 				if(!c){	
-					if (d.type === "unicast"){
+					if (d.type === "chat"){
 						self.addChat( type, id, d.nick );
 					}else{
 						self.addChat( type, id );  
@@ -78,15 +78,15 @@ extend(webimUI.prototype, objectExtend, {
 			});
 		});
 		//for test
-		history.bind("unicast", function( e, id, data){
-			var c = layout.chat("unicast", id), count = "+" + data.length;
+		history.bind("chat", function( e, id, data){
+			var c = layout.chat("chat", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
 			}
 			//(c ? c.history.add(data) : im.addChat(id));
 		});
-		history.bind("multicast", function(e, id, data){
-			var c = layout.chat("multicast", id), count = "+" + data.length;
+		history.bind("grpchat", function(e, id, data){
+			var c = layout.chat("grpchat", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
 			}
@@ -260,7 +260,7 @@ extend(widget.prototype, {
 });
 
 function _tr_type(type){
-	return type == "b" || type == "buddy" || type == "unicast" ? "buddy" : "room";
+	return type == "b" || type == "buddy" || type == "chat" ? "buddy" : "room";
 }
 
 function app( name, init ) {

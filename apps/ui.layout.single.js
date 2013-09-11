@@ -20,8 +20,8 @@ app("layout.customer", function( options ) {
 		layout.options.user = data.user;
 	});
 
-	history.bind("unicast", function( e, id, data){
-		var c = layout.chat("unicast", id), count = "+" + data.length;
+	history.bind("chat", function( e, id, data){
+		var c = layout.chat("chat", id), count = "+" + data.length;
 		if(c){
 			c.history.add(data);
 		}

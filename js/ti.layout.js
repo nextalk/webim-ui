@@ -156,5 +156,5 @@ widget("layout", {
 });
 
 function _id_with_type(type, id){
-	return id ? (type == "b" || type == "buddy" || type == "unicast" ? ("b_" + id) : ("r_" + id)) : type;
+	return id ? (type == "b" || type == "buddy" || type == "chat" ? ("b_" + id) : ("r_" + id)) : type;
 }

@@ -60,14 +60,14 @@ app("layout.popup", function( options ) {
 
 	(function(){
 		//history events
-		history.bind("unicast", function( e, id, data){
-			var c = layout.chat("unicast", id), count = "+" + data.length;
+		history.bind("chat", function( e, id, data){
+			var c = layout.chat("chat", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
 			}
 		});
-		history.bind("multicast", function(e, id, data){
-			var c = layout.chat("multicast", id), count = "+" + data.length;
+		history.bind("grpchat", function(e, id, data){
+			var c = layout.chat("grpchat", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
 			}
@@ -85,7 +85,7 @@ app("layout.popup", function( options ) {
 			l = data.length, d, uid = im.data.user.id, id, c, count = "+1";
 		for(var i = 0; i < l; i++){
 			d = data[i];
-			id = d["id"], type = d["type"] === "unicast" ? "buddy" : "room";
+			id = d["id"], type = d["type"] === "chat" ? "buddy" : "room";
 			c = layout.chat(type, id);
 			c && c.status("");//clear status
 			if(!c){	

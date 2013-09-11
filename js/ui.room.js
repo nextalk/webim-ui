@@ -42,7 +42,7 @@ app("room", function( options ) {
 		for (var i = 0; i < buddies.length; i++) {
 			var id = buddies[i];
 			var msg = {
-				type: "unicast"
+				type: "chat"
 			  , to: id
 			  , from: im.data.user.id
 			  , nick: im.data.user.nick

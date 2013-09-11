@@ -110,7 +110,7 @@ app("layout", function( options ) {
 			c = layout.chat(type, id);
 			c && c.status("");//clear status
 			if(!c){	
-				if (d.type === "unicast"){
+				if (d.type === "chat"){
 					layout.addChat(type, id, null, null, d.nick);
 				}else{
 					layout.addChat(type, id);  
@@ -146,15 +146,15 @@ app("layout", function( options ) {
 
 	(function(){
 		//history events
-		history.bind("unicast", function( e, id, data){
-			var c = layout.chat("unicast", id), count = "+" + data.length;
+		history.bind("chat", function( e, id, data){
+			var c = layout.chat("chat", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
 			}
 			//(c ? c.history.add(data) : im.addChat(id));
 		});
-		history.bind("multicast", function(e, id, data){
-			var c = layout.chat("multicast", id), count = "+" + data.length;
+		history.bind("grpchat", function(e, id, data){
+			var c = layout.chat("grpchat", id), count = "+" + data.length;
 			if(c){
 				c.history.add(data);
 			}
@@ -688,11 +688,11 @@ function windowWidth(){
 	return document.compatMode === "CSS1Compat" && document.documentElement.clientWidth || document.body.clientWidth;
 }
 function _id_with_type(type, id){
-	return id ? (type == "b" || type == "buddy" || type == "unicast" ? ("b_" + id) : ("r_" + id)) : type;
+	return id ? (type == "b" || type == "buddy" || type == "chat" ? ("b_" + id) : ("r_" + id)) : type;
 }
 
 function _tr_type(type){
-	return type == "b" || type == "buddy" || type == "unicast" ? "buddy" : "room";
+	return type == "b" || type == "buddy" || type == "chat" ? "buddy" : "room";
 }
 
 

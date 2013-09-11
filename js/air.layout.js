@@ -38,7 +38,7 @@ app( "layout", function( options ) {
 			c = layoutUI.chat( type, id );
 			c && c.status("");//clear status
 			if(!c){	
-				if (d.type === "unicast"){
+				if (d.type === "chat"){
 					ui.addChat( type, id, d.nick );
 				}else{
 					ui.addChat( type, id );  
@@ -69,14 +69,14 @@ app( "layout", function( options ) {
 		});
 	});
 	//for test
-	history.a("unicast", function(  e, id, data ){
-		var c = layoutUI.chat("unicast", id), count = "+" + data.length;
+	history.a("chat", function(  e, id, data ){
+		var c = layoutUI.chat("chat", id), count = "+" + data.length;
 		if(c){
 			c.history.add(data);
 		}
 		//(c ? c.history.add(data) : im.addChat(id));
-	}).a("multicast", function( e, id, data ){
-		var c = layoutUI.chat("multicast", id), count = "+" + data.length;
+	}).a("grpchat", function( e, id, data ){
+		var c = layoutUI.chat("grpchat", id), count = "+" + data.length;
 		if(c){
 			c.history.add(data);
 		}
@@ -275,5 +275,5 @@ widget("layout", {
 } );
 
 function _id_with_type(type, id){
-	return id ? (type == "b" || type == "buddy" || type == "unicast" ? ("b_" + id) : ("r_" + id)) : type;
+	return id ? (type == "b" || type == "buddy" || type == "chat" ? ("b_" + id) : ("r_" + id)) : type;
 }
