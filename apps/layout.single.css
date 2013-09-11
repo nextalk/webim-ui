@@ -55,11 +55,20 @@
 
 .webim-buddy .webim-window-tab-count{
 	top: auto;
-	margin-left: 48px;
+	margin-left: 75px;
 	right: auto;
 }
 
+#webim-buddy ul li a img{
+	display:none;
+}
 
+#webim-buddy ul li a{
+	margin-left: 0.5em;
+}
+
+#webim-buddy ul li a span{
+}
 
 
 

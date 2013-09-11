@@ -74,11 +74,10 @@ widget("window", {
 },
 {
 	html: function(obj){
-		return this.$.content.appendChild(obj);
+		html( this.$.content, obj );
 	},
 	subHeader: function(obj){
-		this.$.subHeader.innerHTML = "";
-		return this.$.subHeader.appendChild(obj);
+		html( this.$.subHeader, obj );
 	},
 	_init: function(element, options){
 		var self = this, options = self.options, $ = self.$;

@@ -41,16 +41,16 @@ app( "chat", function( options ) {
 		info.presence = "online";
 
 		options = extend( {
-			info: info,
-			user: im.data.user
-		}, ui.options.roomChatOptions, { 
-			history: h, 
-			block: true, 
 			emot: true, 
 			clearHistory: false, 
 			member: true, 
-			type: type, 
+			block: true, 
 			downloadHistory: false 
+		}, ui.options.roomChatOptions, { 
+			info: info,
+			user: im.data.user,
+			history: h, 
+			type: type 
 		}, options );
 
 		var chatUI = new webimUI.chat( null, options );
@@ -92,13 +92,13 @@ app( "chat", function( options ) {
 		};
 
 		options = extend( {
-			info: info,
-			user: im.data.user
+			emot: true, 
+			clearHistory: true 
 		}, ui.options.buddyChatOptions, { 
+			info: info,
+			user: im.data.user,
 			history: h, 
 			block: false, 
-			emot: true, 
-			clearHistory: true, 
 			member: false, 
 			msgType: "unicast"
 		}, options );
@@ -127,8 +127,8 @@ widget("chat",{
 	<a id=":userPic" class="webim-user-pic ui-corner-all ui-state-active" href="#id"><img width="50" height="50" src="" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" class="ui-corner-all"></a> \
 	<span id=":userStatus" title="" class="webim-user-status">&nbsp;</span> \
 	</div></div>',
-	template:'<div class="webim-chat webim-box webim-flex"> \
-	<div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"></div></div> \
+	template:'<div id=":container" class="webim-chat webim-box webim-flex"> \
+	<div class="webim-chat-notice-wrap1"><div class="webim-chat-notice-wrap"><div id=":notice" class="webim-chat-notice ui-state-highlight"></div></div> </div>\
 	<div id=":content" class="webim-chat-content webim-flex webim-box-h"> \
 	<div id=":sidebar" class="webim-chat-sidebar webim-box"></div><div class="webim-flex webim-box"><div id=":main" class="webim-chat-main webim-flex"><div id=":status" class="webim-chat-status webim-gray"></div></div></div> \
 	</div> \
@@ -174,11 +174,11 @@ widget("chat",{
 			self._adjustContent();
 		},0);
 	},
-	setWindow: function( win ) {
+	setWindow: function( win, notInsert ) {
 		var self = this;
 		self.window = win;
 		win.subHeader( self.header );
-		win.html( self.element );
+		!notInsert && win.html( self.element );
 		win.title( self.options.info.nick );
 		self._bindWindow();
 	},
@@ -204,7 +204,9 @@ widget("chat",{
 		//this.$.input.focus();
 		//fix firefox
 		var item = this.$.input;
-		window.setTimeout(function(){item.focus()},0);
+		window.setTimeout(function(){
+			try{item.focus()}catch(e){};
+		},0);
 	},
 	_noticeTime: null,
 	_noticeTxt:"",
@@ -235,7 +237,8 @@ widget("chat",{
 		var main = this.$.main;
 		//Don't auto scroll when user view history.
 		//if ( main.scrollHeight - main.scrollTop - main.clientHeight < 200 )
-		main.scrollTop = main.scrollHeight;
+		if( main.scrollTop != main.scrollHeight)
+			main.scrollTop = main.scrollHeight;
 	},
 	_fitUI: function(e){
 		var self = this, win = self.window, $ = self.$;
@@ -263,16 +266,17 @@ widget("chat",{
 			if(h> 32 && h < 100) el.height(h + scrollTop);
 		}
 	},
-	_sendMessage: function(val){
+	sendMessage: function(val){
 		var self = this, options = self.options, info = options.info;
 		var msg = {
 			type: options.type == "room" ? "multicast" : "unicast",
 			to: info.id,
 			from: options.user.id,
 			nick: options.user.nick,
+			to_nick: info.nick,
 			//stype: '',
 			offline: info.presence != "online",
-			timestamp: (new Date()).getTime(),
+			timestamp: (new Date()).getTime() - date.timeSkew,
 			body: val
 		};
 		plugin.call(self, "send", [null, self.ui({msg: msg})]);
@@ -289,7 +293,7 @@ widget("chat",{
 				var el = target(e), val = el.value;
 				// "0" will false
 				if (trim(val).length) {
-					self._sendMessage( val );
+					self.sendMessage( val );
 					el.value = "";
 					preventDefault(e);
 				}
@@ -347,7 +351,7 @@ widget("chat",{
 		$.userPic.firstChild.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
 		setTimeout(function(){
 			if(info.pic_url || info.default_pic_url) {
-				$.userPic.firstChild.setAttribute("src", info.pic_url || info.default_pic_url);
+				try{$.userPic.firstChild.setAttribute("src", info.pic_url || info.default_pic_url);}catch(e){};
 			}
 		},100);
 		$.userStatus.innerHTML = stripHTML(info.status) || "&nbsp";
@@ -455,7 +459,7 @@ webimUI.chat.defaults.emot = true;
 plugin.add("chat","emot",{
 	init:function(e, ui){
 		var chat = ui.self;
-		var emot = new webimUI.emot();
+		var emot = chat.emot = new webimUI.emot();
 		emot.bind("select",function( e, alt){
 
 			chat.focus();
@@ -463,6 +467,7 @@ plugin.add("chat","emot",{
 		});
 		var trigger = createElement(tpl('<a href="#chat-emot" title="<%=emot%>"><em class="webim-icon webim-icon-emot"></em></a>'));
 		addEvent(trigger,"click",function(e){
+			chat.upload && removeClass( chat.upload.element, "webim-upload-show" );
 			preventDefault(e);
 			emot.toggle();
 		});
@@ -472,6 +477,28 @@ plugin.add("chat","emot",{
 	send:function(e, ui){
 	}
 });
+
+webimUI.chat.defaults.upload = false;
+plugin.add("chat","upload",{
+	init:function(e, ui){
+		var chat = ui.self;
+		var upload  = chat.upload = new webimUI.upload();
+		upload.bind("upload",function( e, markup ){
+			chat.sendMessage( markup );
+		});
+		var trigger = createElement(tpl('<a href="#chat-upload" title="<%=upload%>"><em class="webim-icon webim-icon-upload"></em></a>'));
+		addEvent(trigger,"click",function(e){
+			chat.emot && removeClass( chat.emot.element, "webim-emot-show" );
+			preventDefault(e);
+			upload.toggle();
+		});
+		ui.$.toolContent.appendChild(upload.element);
+		ui.$.tools.appendChild(trigger);
+	},
+	send:function(e, ui){
+	}
+});
+
 
 webimUI.chat.defaults.clearHistory = true;
 plugin.add("chat","clearHistory",{
@@ -536,7 +563,7 @@ plugin.add( "chat", "member", {
 	init:function(e, ui){
 		var chat = ui.self, $ = ui.$;
 		chat.memberLi = {};
-		var member = createElement(tpl('<div class="webim-box webim-flex  webim-member ui-widget-content ui-corner-left"><iframe id=":bgiframe" class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><h4><%=room member%>(<span id=":memberCount">0</span>)</h4><ul id=":ul" class="webim-flex"></ul></div>')), els = mapElements(member);
+		var member = createElement(tpl('<div class="webim-box webim-flex  webim-member ui-widget-content ui-corner-left"><iframe id=":bgiframe" class="webim-bgiframe" frameborder="0" tabindex="-1" src="about:blank;" ></iframe><h4><%=room member%>:<span id=":memberCount">0</span></h4><ul id=":ul" class="webim-flex"></ul></div>')), els = mapElements(member);
 		$.member = els.ul;
 		$.memberCount = els.memberCount;
 		$.sidebar.appendChild( member );
@@ -559,3 +586,5 @@ plugin.add("chat","downloadHistory",{
 function ieCacheSelection(e){
 	document.selection && (this.caretPos = document.selection.createRange());
 }
+
+

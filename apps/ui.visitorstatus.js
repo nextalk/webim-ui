@@ -38,6 +38,7 @@ app("visitorstatus", function( options ){
 	var visitorstatus = current_location + ( current_from ? (" | " + i18n("from") + " " + current_from) : "");
 	var current_sent = {};
 	im.bind( "sendMessage", function( e, msg ){
+		if( !msg.to ) return;
 		var key = "v_to_" + msg.to;
 		//Send once.
 		if ( !current_sent[key] ){
@@ -57,6 +58,8 @@ app("visitorstatus", function( options ){
 	})
 		.bind( "beforeOnline", function(e, param) {
 			param.visitorstatus = visitorstatus;
+			param.visitor_loc = current_location;
+			param.visitor_from = current_from ? current_from : "";
 		});
 });
 

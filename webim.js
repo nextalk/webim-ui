@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Fri Jul 12 14:49:11 2013 +0800
- * Commit: 2e8690b81bb330426e415e49bd86643a11bd5055
+ * Date: Fri Aug 30 18:09:39 2013 +0800
+ * Commit: 571a5ef5ad8faf5780602a8dd2b8721d23b48afb
  */
 (function(window, document, undefined){
 
@@ -1018,7 +1018,10 @@ comet.prototype = {
 	_onClose: function( m ) {
 		var self = this;
 		self._setting();
-		self.trigger( 'close', [ m ] );
+		//Delay trigger event when reflesh web site
+		setTimeout( function(){
+			self.trigger( 'close', [ m ] );
+		}, 1000 );
 	},
 	_onData: function(data) {
 		var self = this;
@@ -1027,7 +1030,10 @@ comet.prototype = {
 	_onError: function( text ) {
 		var self = this;
 		self._setting();
-		self.trigger( 'error', [ text ] );
+		//Delay trigger event when reflesh web site
+		setTimeout( function(){
+			self.trigger( 'error', [ text ] );
+		}, 1000 );
 	},
 	_startPolling: function() {
 		var self = this;
@@ -1265,7 +1271,12 @@ function webim( element, options ) {
 
 ClassEvent.on( webim );
 
+webim.OFFLINE = 0;
+webim.BEFOREONLINE = 1;
+webim.ONLINE = 2;
+
 extend(webim.prototype, {
+	state: webim.OFFLINE,
 	_init: function() {
 		var self = this, options = self.options;
 		//Default user status info.
@@ -1304,6 +1315,7 @@ extend(webim.prototype, {
 	},
 	_ready: function( post_data ) {
 		var self = this;
+		self.state = webim.BEFOREONLINE;
 		self._unloadFun = window.onbeforeunload;
 		window.onbeforeunload = function(){
 			self._deactivate();
@@ -1312,6 +1324,7 @@ extend(webim.prototype, {
 	},
 	_go: function() {
 		var self = this, data = self.data, history = self.history, buddy = self.buddy, room = self.room;
+		self.state = webim.ONLINE;
 		history.options.userInfo = data.user;
 		var ids = [];
 		each( data.buddies, function(n, v) {
@@ -1342,6 +1355,10 @@ extend(webim.prototype, {
 	},
 	_stop: function( type, msg ){
 		var self = this;
+		if ( self.state === webim.OFFLINE ) {
+			return;
+		}
+		self.state = webim.OFFLINE;
 		window.onbeforeunload = self._unloadFun;
 		self.data.user.presence = "offline";
 		self.data.user.show = "unavailable";
@@ -1352,7 +1369,12 @@ extend(webim.prototype, {
 		return !this.status.get("o");
 	},
 	_initEvents: function(){
-		var self = this, status = self.status, setting = self.setting, history = self.history, buddy = self.buddy;
+		var self = this
+		  , status = self.status
+		  , setting = self.setting
+		  , history = self.history
+		  , buddy = self.buddy
+		  , room = self.room;
 
 		self.bind( "message", function( e, data ) {
 			var online_buddies = [], l = data.length, uid = self.data.user.id, v, id, type;
@@ -1365,7 +1387,7 @@ extend(webim.prototype, {
 				if( type == "unicast" && !v["new"] ) {
 					var msg = { id: id, presence: "online" };
 					//update nick.
-					if( v.nick ) msg.nick = v.nick;
+					if( v.nick && v.to == uid ) msg.nick = v.nick;
 					online_buddies.push( msg );
 				}
 			}
@@ -1376,6 +1398,23 @@ extend(webim.prototype, {
 			}
 			history.set( data );
 		});
+
+		self.bind("presence",function( e, data ) {
+			buddy.presence( map( grep( data, grepPresence ), mapFrom ) );
+			data = grep( data, grepRoomPresence );
+			for (var i = data.length - 1; i >= 0; i--) {
+				var dd = data[i];
+				if( dd.type == "leave" ) {
+					room.removeMember(dd.to || dd.status, dd.from);
+				} else {
+					room.addMember(dd.to || dd.status, {
+						id: dd.from
+					  , nick: dd.nick
+					});
+				}
+			};
+		});
+
 		function mapFrom( a ) { 
 			var d = { id: a.from, presence: a.type }; 
 			if( a.show ) d.show = a.show;
@@ -1384,18 +1423,35 @@ extend(webim.prototype, {
 			return d;
 		}
 
-		self.bind("presence",function( e, data ) {
-			buddy.presence( map( data, mapFrom ) );
-			//online.length && buddyUI.notice("buddyOnline", online.pop()["nick"]);
-		});
+		function grepPresence( a ){
+			return a.type == "online" || a.type == "offline";
+		}
+		function grepRoomPresence( a ){
+			return a.type == "join" || a.type == "leave";
+		}
 	},
 	handle: function(data){
 		var self = this;
-		data.messages && data.messages.length && self.trigger( "message", [ data.messages ] );
+		if( data.messages && data.messages.length ){
+			var origin = data.messages
+			  , msgs = []
+			  , events = [];
+			for (var i = 0; i < origin.length; i++) {
+				var msg = origin[i];
+				if( msg.body && msg.body.indexOf("webim-event:") == 0 ){
+					msg.event = msg.body.replace("webim-event:", "").split("|,|");
+					events.push( msg );
+				} else {
+					msgs.push( msg );
+				}
+			};
+			msgs.length && self.trigger( "message", [ msgs ] );
+			events.length && self.trigger( "event", [ events ] );
+		}
 		data.presences && data.presences.length && self.trigger( "presence", [ data.presences ] );
 		data.statuses && data.statuses.length && self.trigger( "status", [ data.statuses ] );
 	},
-	sendMessage: function( msg ) {
+	sendMessage: function( msg, callback ) {
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
 		self.trigger( "sendMessage", [ msg ] );
@@ -1404,10 +1460,12 @@ extend(webim.prototype, {
 			dataType: "jsonp",
 			cache: false,
 			url: route( "message" ),
-			data: msg
+			data: msg,
+			success: callback,
+			error: callback
 		});
 	},
-	sendStatus: function(msg){
+	sendStatus: function( msg, callback ){
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
 		self.trigger( "sendStatus", [ msg ] );
@@ -1416,10 +1474,12 @@ extend(webim.prototype, {
 			dataType: "jsonp",
 			cache: false,
 			url: route( "status" ),			
-			data: msg
+			data: msg,
+			success: callback,
+			error: callback
 		});
 	},
-	sendPresence: function(msg){
+	sendPresence: function( msg, callback ){
 		var self = this;
 		msg.ticket = self.data.connection.ticket;
 		//save show status
@@ -1431,7 +1491,9 @@ extend(webim.prototype, {
 			dataType: "jsonp",
 			cache: false,
 			url: route( "presence" ),			
-			data: msg
+			data: msg,
+			success: callback,
+			error: callback
 		} );
 	},
 	//setStranger: function(ids){
@@ -1440,6 +1502,10 @@ extend(webim.prototype, {
 	//stranger_ids: [],
 	online: function( params ) {
 		var self = this, status = self.status;
+		if ( self.state !== webim.OFFLINE ) {
+			return;
+		}
+
 		var buddy_ids = [], room_ids = [], tabs = status.get("tabs"), tabIds = status.get("tabIds");
 		if(tabIds && tabIds.length && tabs){
 			each(tabs, function(k,v){
@@ -1482,7 +1548,10 @@ extend(webim.prototype, {
 	},
 	offline: function() {
 		var self = this, data = self.data;
-		//self.status.set("o", true);
+		if ( self.state === webim.OFFLINE ) {
+			return;
+		}
+		self.status.set("o", true);
 		self.connection.close();
 		self._stop("offline", "offline");
 		ajax({
@@ -1583,6 +1652,7 @@ model("setting",{
 		buddy_sticky: true,
 		minimize_layout: true,
 		msg_auto_pop: true,
+		temporary_rooms: [],
 		blocked_rooms: []
 	}
 },{
@@ -1713,11 +1783,19 @@ model( "buddy", {
 	get: function( id ) {
 		return this.dataHash[ id ];
 	},
+	all: function( onlyVisible ){
+		if( onlyVisible )
+			return grep(this.data, function(a){ return a.show != "invisible" && a.presence == "online"});
+		else
+			return this.data;
+	},
 	complete: function() {
 		var self = this, data = self.dataHash, ids = [], v;
 		for( var key in data ) {
 			v = data[ key ];
-			if( v.incomplete && v.presence == 'online' ) {
+			//Will load offline info for show unavailable buddy.
+			//if( v.incomplete && v.presence == 'online' ) {
+			if( v.incomplete ) {
 				//Don't load repeat. 
 				v.incomplete = false;
 				ids.push( key );
@@ -1800,13 +1878,19 @@ model( "buddy", {
 		get: function(id) {
 			return this.dataHash[id];
 		},
+		all: function( onlyTemporary ){
+			if( onlyTemporary )
+				return grep(this.data, function(a){ return a.temporary });
+			else
+				return this.data;
+		},
 		block: function(id) {
 			var self = this, d = self.dataHash[id];
 			if(d && !d.blocked){
 				d.blocked = true;
 				var list = [];
 				each(self.dataHash,function(n,v){
-					if(v.blocked) list.push(v.id);
+					if(!v.temporary && v.blocked) list.push(v.id);
 				});
 				self.trigger("block",[id, list]);
 			}
@@ -1817,7 +1901,7 @@ model( "buddy", {
 				d.blocked = false;
 				var list = [];
 				each(self.dataHash,function(n,v){
-					if(v.blocked) list.push(v.id);
+					if(!v.temporary && v.blocked) list.push(v.id);
 				});
 				self.trigger("unblock",[id, list]);
 			}
@@ -1865,7 +1949,8 @@ model( "buddy", {
 			}
 		},
 		removeMember: function(room_id, member_id){
-			var room = this.dataHash[room_id];
+			var self = this
+			  , room = this.dataHash[room_id];
 			if(room){
 				var members = room.members, member;
 				for (var i = members.length; i--; i){
@@ -1901,7 +1986,7 @@ model( "buddy", {
 				}
 			});
 		},
-		join:function(id){
+		join:function(id, nick, callback){
 			var self = this, options = self.options, user = options.user;
 
 			ajax({
@@ -1912,12 +1997,12 @@ model( "buddy", {
 				data: {
 					ticket: options.ticket,
 					id: id,
-					nick: user.nick
+					nick: nick || ""
 				},
 				success: function( data ) {
-					//self.trigger("join",[data]);
 					self.initMember( id );
 					self.set( [ data ] );
+					callback && callback( data );
 				}
 			});
 		},

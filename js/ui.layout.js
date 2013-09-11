@@ -38,7 +38,7 @@ app("layout", function( options ) {
 	  , buddyUI = self.buddy
 	  , room = im.room;
 
-	var layout = new webimUI.layout( null,extend({
+	var layout = ui.layout = new webimUI.layout( null,extend({
 		chatAutoPop: im.setting.get("msg_auto_pop")
 	}, options, {
 		ui: ui
@@ -75,13 +75,7 @@ app("layout", function( options ) {
 	}).bind("update", function(e, data){
 		layout.updateChat("buddy", data);
 	});
-	room.bind("addMember", function(e, room_id, info){
-		var c = layout.chat("room", room_id);
-		c && c.addMember(info.id, info.nick, info.id == im.data.user.id);
-	}).bind("removeMember", function(e, room_id, info){
-		var c = layout.chat("room", room_id);
-		c && c.removeMember(info.id, info.nick);
-	});
+
 	layout.bind("collapse", function(){
 		setting.set("minimize_layout", true);
 	});
@@ -93,6 +87,17 @@ app("layout", function( options ) {
 	layout.bind("displayUpdate", function(e){
 		_updateStatus(); //save status
 	});
+
+	(function(){
+		//room  events
+		room.bind("addMember", function(e, room_id, info){
+			var c = layout.chat("room", room_id);
+			c && c.addMember(info.id, info.nick, info.id == im.data.user.id);
+		}).bind("removeMember", function(e, room_id, info){
+			var c = layout.chat("room", room_id);
+			c && c.removeMember(info.id, info.nick);
+		});
+	})();
 
 	//all ready.
 	//message
@@ -139,24 +144,27 @@ app("layout", function( options ) {
 		});
 	});
 
-	history.bind("unicast", function( e, id, data){
-		var c = layout.chat("unicast", id), count = "+" + data.length;
-		if(c){
-			c.history.add(data);
-		}
-		//(c ? c.history.add(data) : im.addChat(id));
-	});
-	history.bind("multicast", function(e, id, data){
-		var c = layout.chat("multicast", id), count = "+" + data.length;
-		if(c){
-			c.history.add(data);
-		}
-		//(c ? c.history.add(data) : im.addChat(id));
-	});
-	history.bind("clear", function(e, type, id){
-		var c = layout.chat(type, id);
-		c && c.history.clear();
-	});
+	(function(){
+		//history events
+		history.bind("unicast", function( e, id, data){
+			var c = layout.chat("unicast", id), count = "+" + data.length;
+			if(c){
+				c.history.add(data);
+			}
+			//(c ? c.history.add(data) : im.addChat(id));
+		});
+		history.bind("multicast", function(e, id, data){
+			var c = layout.chat("multicast", id), count = "+" + data.length;
+			if(c){
+				c.history.add(data);
+			}
+			//(c ? c.history.add(data) : im.addChat(id));
+		});
+		history.bind("clear", function(e, type, id){
+			var c = layout.chat(type, id);
+			c && c.history.clear();
+		});
+	})();
 
 	return layout;
 
@@ -262,7 +270,8 @@ widget("layout",{
 	</div>\
 	<em class="webim-icon" style="background-image:url(<%=icon%>)"></em>\
 	</a>\
-	</div>'
+	</div>',
+	chatApp: "chat"
 },{
 	_init: function(element, options){
 		var self = this, options = self.options;
@@ -613,34 +622,34 @@ widget("layout",{
 		var self = this;
 		if(self.chat(type, id))return;
 
-		var widget = self.options.ui.addApp("chat", extend({
-			id: id, 
-			type: type, 
-			nick: nick, 
-			winOptions: winOptions
-		}, chatOptions ));
-
 		var  panels 	= self.panels;
-		id = _id_with_type(type, id);
-		panels[id] = widget;
+		var panelId = _id_with_type(type, id);
 
-		var win = self.tabs[id] = new webimUI.window(null, extend({
+		var win = self.tabs[panelId] = new webimUI.window(null, extend({
 			isMinimize: self.activeTabId || !self.options.chatAutoPop,
 			tabWidth: self.tabWidth -2,
 			titleVisibleLength: 9
 		}, winOptions))
 			.bind("close", function(){ 
-				self._onChatClose(id)
+				self._onChatClose(panelId)
 			})
 			.bind("displayStateChange", function(e, state){ 
-				self._onChatChange(id,state)
+				self._onChatChange(panelId,state)
 			});
-		self.tabIds.push(id);
+
+		var widget = self.options.ui.addApp(self.options.chatApp, extend({
+			id: id, 
+			type: type, 
+			nick: nick, 
+			window: win
+		}, chatOptions ));
+
+		panels[panelId] = widget;
+		self.tabIds.push(panelId);
 		self.$.tabs.insertBefore(win.element, self.$.tabs.firstChild);
-		widget.setWindow( win );
-		!win.isMinimize() && self._changeActive(id);
+		!win.isMinimize() && self._changeActive(panelId);
 		self._fitUI();
-		//else self.focusChat(id);
+		//else self.focusChat(panelId);
 	},
 	removeChat: function(type, id){
 		//ids = idsArray(ids);

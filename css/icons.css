@@ -3,10 +3,9 @@
 }
 .webim-icon-home{
 	background-position:0 0;
-
- }
- .webim-icon-buddy{
-	 background-position:-16px 0;
+}
+.webim-icon-buddy{
+	background-position:-16px 0;
  }
  .webim-icon-notification{
 	 background-position:-32px 0;
@@ -51,8 +50,12 @@
 	 background-position:-48px -32px;
  }
 
+ .webim-icon-upload{
+	 background-position:-16px -48px;
+}
+
 .webim-icon-available{
-	 background-position:0 -80px;
+	background-position:0 -80px;
 }
 
 .webim-icon-dnd{
@@ -69,7 +72,7 @@
 }
 /*use bullet*/
 .webim-icon-available{
-	 background-position:0 -64px;
+	background-position:0 -64px;
 }
 
 .webim-icon-dnd{

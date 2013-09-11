@@ -1,0 +1,33 @@
+
+.webim .webim-note{
+	padding: 0 1em;
+}
+.webim .webim-note p{
+	margin: 1em 0;
+}
+
+.webim .webim-note label{
+	display: block;
+}
+
+.webim .webim-note form input{
+	width: 180px;
+}
+
+.webim .webim-note form textarea{
+	width: 180px;
+	height: 70px;
+}
+
+.webim .webim-note .webim-note-submit{
+	width: 100px;
+	padding: .4em 0;
+}
+
+.webim .webim-note-notice{
+	font-size: 1em;
+	margin: 10px 0;
+}
+
+
+

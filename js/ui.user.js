@@ -6,7 +6,7 @@ app( "user", function( options ) {
 	options = options || {};
 	var ui = this, im = ui.im;
 	var userUI = new webimUI.user();
-	hide( userUI.element );
+	!options.show && hide( userUI.element );
 	options.container && options.container.appendChild( userUI.element );
 	userUI.bind("online", function( e, params ) {
 		im.online( params );

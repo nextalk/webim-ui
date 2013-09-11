@@ -93,7 +93,7 @@ widget("layout.customer",{
 			minimizable: false,
 			title: webim.ui.i18n("online support")
 		});
-		self.$.layout.insertBefore( win.element );
+		self.$.layout.insertBefore( win.element, null );
 		win.html( content );
 	},
 	buildUI: function(e){
@@ -130,12 +130,11 @@ widget("layout.customer",{
 			nick: nick, 
 			winOptions: winOptions,
 			clearHistory: false,
-			downloadHistory: false,
+			downloadHistory: false
 		}, chatOptions ));
 
 		widget.__id = _id_with_type(type, id);
-
-		widget.setWindow( self.win );
+		widget.setWindow( self.win, true );
 		self.$.content.appendChild( widget.element );
 	}
 });

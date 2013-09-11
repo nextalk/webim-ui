@@ -1,0 +1,134 @@
+
+* html  .webim-popup, .webim-popup{
+	position: static; 
+	bottom: auto;
+	right: auto;
+	left: auto;
+	top:auto;
+	-webkit-box-shadow:none;
+	-moz-box-shadow:none;
+	box-shadow:none;
+	margin-left: 220px;
+}
+
+.webim-popup .webim-widgets{
+	float: none;
+	background: none;
+	margin-top: -1px;
+}
+
+.webim-popup .webim-widgets
+, .webim-popup .webim-layout-bg{
+	height: 26px;
+}
+
+.webim-popup .webim-window-normal .webim-window-tab{
+	border-width: 0;
+	border-right-width: 1px;
+	padding-bottom: 1px;
+}
+
+.webim-popup .webim-window-header h4{
+	margin: 3px 0;
+}
+
+.webim-popup .webim-window-window{
+	position: relative;
+	bottom: auto;
+	z-index: 5;
+	right: auto;
+	width: 100%;
+}
+
+.webim-popup-left{
+	width: 200px;
+	margin-left: -220px;
+	float: left;
+}
+
+.webim-popup .webim-popup-left .webim-window-content{
+	height: 350px;
+}
+
+.webim-popup .webim-chat-input{
+	height: 6em;
+}
+.webim-popup .webim-chat-input-wrap{
+	height: 80px;
+}
+
+.webim-popup .webim-chat-main
+, .webim-popup .webim-chat-content
+, .webim-popup .webim-member{
+	height: 319px;
+}
+
+.webim-popup-right{
+}
+
+.webim-popup .webim-window{
+	float: none;
+}
+
+.webim-popup .webim-window-tab-wrap {
+	display: none;
+}
+
+.webim-popup .webim-widgets .webim-window-tab-wrap {
+	display: block;
+}
+
+.webim-popup .webim-chat{
+}
+
+
+.webim-popup .webim-chat-sidebar {
+	right: 0;
+}
+
+.webim-popup .webim-member{
+	left: 0em;
+	-moz-border-radius-topleft: 0; -webkit-border-top-left-radius: 0; border-top-left-radius: 0; -moz-border-radius-bottomleft: 0; -webkit-border-bottom-left-radius: 0; border-bottom-left-radius: 0;
+	-moz-border-radius-topright: 4px; -webkit-border-top-right-radius: 4px; border-top-right-radius: 4px; -moz-border-radius-bottomright: 4px; -webkit-border-bottom-right-radius: 4px; border-bottom-right-radius: 4px;
+}
+
+.webim-popup #webim-buddy.webim-buddy-scroll .webim-buddy-content{
+	/* height: 25em; */
+	height: 24em;
+}
+
+.webim-popup #webim-room.webim-room-scroll .webim-room-content {
+	height: 24em;
+}
+
+.webim-popup #webim-buddy .webim-buddy-content{
+        padding: .2em 0 1.5em;
+}
+
+.webim-popup #webim-buddy.webim-buddy-simple ul li a span{
+	display: block;
+}
+
+.webim-popup .webim-chat .webim-chat-notice-wrap1{
+	position: relative;
+	z-index: 3;
+}
+
+.webim-popup .webim-chat .webim-chat-notice-wrap{
+	position: absolute;
+	width: 100%;
+}
+
+/*user icon*/
+/*
+.webim-popup .webim-user-show-dnd,.webim-popup  .webim-user-show-away,.webim-popup  .webim-user-show-invisible{
+	display: none !important;
+}
+ */
+
+.webim-popup .webim-window-window {
+	/*-moz-box-shadow:0 20px 40px rgba(0, 0, 0, 0.4);*/
+	-moz-box-shadow:0 10px 20px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow:0 10px 20px rgba(0, 0, 0, 0.4);
+}
+

@@ -42,6 +42,7 @@
 .webim .webim-user-show p{
 	position: absolute;
 	z-index: 2;
+	margin-top: -50px;
 }
 
 .webim .webim-user-show p a{

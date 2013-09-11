@@ -93,6 +93,14 @@ webim.ui.i18n.store('zh-CN',{
 	"question": "问题",
 	"answer": "答案",
 	"login": "登录",
+	"upload": "上传",
+	"discussion": "讨论组",
+	"discussion name": "讨论组名称",
+	"create discussion": "创建讨论组",
+	"select discussion buddies": "选择加入讨论组的好友",
+	"confirm": "确定",
+	"cancel": "取消",
+	"invite": "邀请",
 	"exit": "退出"
 });
 

@@ -1,0 +1,29 @@
+.webim-upload{
+	display: none;
+}
+
+.webim-upload-show{
+	display: block;
+}
+
+.webim-chat .webim-upload{
+	position: absolute;
+	bottom: 0;
+	padding: 10px 0;
+	border-left-width: 0;
+	border-right-width: 0;
+	width: 100%;
+}
+
+.webim-upload input{
+	float: left;
+	width: 130px;
+	margin: 3px 10px;
+}
+
+.webim-upload .webim-upload-submit{
+	width: auto;
+	margin: 0 10px;
+	float: right;
+	padding: 3px 10px;
+}

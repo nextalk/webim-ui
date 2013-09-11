@@ -17,6 +17,7 @@ app("logmsg", function(options){
 		for (var i = 0; i < messages.length; i++) {
 			var msg = messages[i];
 			msg.ticket = im.data.connection.ticket;
+			msg.to_nick = im.data.user.nick;
 			ajax( {
 				type: "get",
 				url: route( "logmsg" ),

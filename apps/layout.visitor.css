@@ -1,9 +1,9 @@
 .webim-layout .webim-widgets .webim-window-window{
-	width: 17.2em;
+	width: 17.7em;
 }
 
 .webim-layout .webim-buddy-window .webim-window-tab{
-	width: 17em;
+	width: 15em;
 }
 
 
@@ -17,10 +17,72 @@
 }
 
 .webim-chat {
-	width: 20em;
+	width: auto;
+}
+
+.webim-chat-wrap{
+	width: 100%;
 }
 
 .webim-chat-board {
-	border-width: 0;
-	border-left-width: 1px;
+	border-right-width: 0 !important;
+	border-top-width: 0 !important;
+	border-bottom-width: 0 !important;
+	border-left-width: 1px !important;
+	text-align: left;
+	vertical-align: top;
+	padding: 5px;
+	width: 123px;
 }
+
+.webim-loading{
+	background: url("../images/loading.gif") no-repeat center;
+	height: 200px;
+}
+
+.webim-chat-switch{
+	text-align: center;
+}
+
+.webim-chat-switch a{
+	display: inline-block;
+	padding: 5px 20px;
+	margin: 50px 30px;
+}
+
+/*evaluate*/
+
+.webim-chat-eval{
+	position: absolute;
+	z-index: 2;
+	left: 10px;
+	width: 357px;
+	top: 20px;
+}
+
+.webim-chat-eval p{
+	margin: 1em 0;
+}
+
+.webim-chat-eval .webim-window-content{
+	padding: 1px 1em 1em;
+}
+
+.webim-chat-eval textarea{
+	width: 310px;
+	height: 60px;
+}
+
+.webim-chat-eval-actions {
+	text-align: center;
+}
+
+.webim-chat-eval-actions input{
+	padding: 5px 20px;
+	margin: 0 10px;
+}
+
+#webim-buddy ul li .webim-icon {
+	display: none;
+}
+

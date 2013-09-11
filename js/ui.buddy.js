@@ -24,12 +24,12 @@ app("buddy", function( options ){
 	options = options || {};
 	var ui = this, im = ui.im, buddy = im.buddy, layout = ui.layout;
 	var buddyUI = new webimUI.buddy(null, extend({
-		title: i18n("buddy")
+		title: options.title || i18n("buddy")
 	}, options ) );
 
 	layout.addWidget( buddyUI, {
 		className: "webim-buddy-window",
-		title: i18n( "buddy" ),
+		title: options.title || i18n( "buddy" ),
 		titleVisibleLength: 19,
 		sticky: im.setting.get("buddy_sticky"),
 		isMinimize: !im.status.get("b"),
@@ -46,6 +46,7 @@ app("buddy", function( options ){
 		userUI = ui.addApp( "user", options.userOptions );
 		if( options.is_login ) {
 			buddyUI.window.subHeader( userUI.element );
+			show( userUI.element );
 			userUI = null;
 		}
 	}
@@ -59,7 +60,7 @@ app("buddy", function( options ){
 	});
 
 	//Bug... 如果用户还没登录，点击， status.set 会清理掉正在聊天的session
-	buddyUI.window && buddyUI.window.bind("displayStateChange",function(type){
+	buddyUI.window && buddyUI.window.bind("displayStateChange",function(e, type){
 		if(type != "minimize"){
 			buddy.options.active = true;
 			im.status.set("b", 1);
@@ -79,7 +80,13 @@ app("buddy", function( options ){
 	});
 	//some buddies offline.
 	buddy.bind("offline", function( e, data){
-		buddyUI.remove(map(data, mapId));
+		if ( options.showUnavailable ) {
+			buddyUI.remove(map(data, mapId));
+			buddyUI.add(data);
+			//buddyUI.update(data);
+		} else {
+			buddyUI.remove(map(data, mapId));
+		}
 	});
 	//some information has been modified.
 	buddy.bind( "update", function( e, data){
@@ -334,6 +341,22 @@ self.trigger("offline");
 		var self = this, el = self.li[id];
 		el && el.firstChild.click();
 		return el;
+	},
+	active: function(id){
+		var self = this; 
+		if( !self.options.highlightable )
+			return;
+		if ( self._actived )
+			removeClass( self._actived.firstChild, "ui-state-default ui-state-highlight" );
+		if( !id ){
+			self._actived = null;
+			return;
+		}
+		var el = self.li[id];
+		if( el ) {
+			addClass( el.firstChild,  "ui-state-default ui-state-highlight" );
+			self._actived = el;
+		}
 	},
 	destroy: function(){
 	}

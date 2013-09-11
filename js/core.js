@@ -26,7 +26,7 @@ function HTMLEnCode(str)
 {  
 	var    s    =    "";  
 	if    (str.length    ==    0)    return    "";  
-	s    =    str.replace(/&/g,    "&gt;");  
+	s    =    str.replace(/&/g,    "&amp;");  
 	s    =    s.replace(/</g,        "&lt;");  
 	s    =    s.replace(/>/g,        "&gt;");  
 	s    =    s.replace(/    /g,        "&nbsp;");  
@@ -119,6 +119,15 @@ function hide(obj){
 }
 function remove(obj){
 	obj && obj.parentNode && (obj.parentNode.removeChild(obj));
+}
+function html(obj, obj2){
+	var childs = obj.childNodes;
+	for( i=0;i<childs.length;i++ ) {
+		obj.removeChild(childs[i]);
+	}
+	typeof obj2 === "string" ?
+		(obj.innerHTML = obj2) :
+		obj.appendChild( obj2 );
 }
 function addEvent( obj, type, fn ) {
 	if ( obj.addEventListener ) {

@@ -66,5 +66,21 @@ clean_phpwind:
 	@@$(MAKE) clean -f build/phpwind.mk
 
 
+service_customer:
+	@@echo "Build webim for service.customer"
+	@@$(MAKE) -f build/service.customer.mk
+
+clean_service_customer:
+	@@echo "Clean service.customer"
+	@@$(MAKE) clean -f build/service.customer.mk
+
+service_visitor:
+	@@echo "Build webim for service.visitor"
+	@@$(MAKE) -f build/service.visitor.mk
+
+clean_service_visitor:
+	@@echo "Clean service.visitor"
+	@@$(MAKE) clean -f build/service.visitor.mk
+
 clean: clean_uchome clean_discuzX clean_discuz clean_service clean_phpbb clean_phpwind clean_thinksns clean_JishiGou
 
