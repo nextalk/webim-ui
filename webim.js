@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Fri Aug 30 18:09:39 2013 +0800
- * Commit: 571a5ef5ad8faf5780602a8dd2b8721d23b48afb
+ * Date: Tue Sep 17 17:33:53 2013 +0800
+ * Commit: 9bb0296f5de5fe6bb0b0985db98c9d72d49f585c
  */
 (function(window, document, undefined){
 
@@ -1316,10 +1316,10 @@ extend(webim.prototype, {
 	_ready: function( post_data ) {
 		var self = this;
 		self.state = webim.BEFOREONLINE;
-		self._unloadFun = window.onbeforeunload;
-		window.onbeforeunload = function(){
-			self._deactivate();
-		};
+		//self._unloadFun = window.onbeforeunload;
+		//window.onbeforeunload = function(){
+		//	self._deactivate();
+		//};
 		self.trigger( "beforeOnline", [ post_data ] );
 	},
 	_go: function() {
@@ -1359,7 +1359,7 @@ extend(webim.prototype, {
 			return;
 		}
 		self.state = webim.OFFLINE;
-		window.onbeforeunload = self._unloadFun;
+		//window.onbeforeunload = self._unloadFun;
 		self.data.user.presence = "offline";
 		self.data.user.show = "unavailable";
 		self.buddy.clear();
