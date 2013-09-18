@@ -77,6 +77,7 @@ app("buddy", function( options ){
 	//some buddies online.
 	buddy.bind("online", function( e, data){
 		buddyUI.add(grep(data, grepVisible));
+		buddyUI.update(data);
 	});
 	//some buddies offline.
 	buddy.bind("offline", function( e, data){
