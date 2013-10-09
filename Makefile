@@ -1,4 +1,4 @@
-all: uchome discuzX discuz service phpbb  phpwind thinksns JishiGou
+all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns JishiGou vBulletin ipboard
 
 uchome:
 	@@echo "Build webim for uchome"
@@ -65,6 +65,29 @@ clean_phpwind:
 	@@echo "Clean phpwind"
 	@@$(MAKE) clean -f build/phpwind.mk
 
+phpwind9:
+	@@echo "Build webim for phpwind9"
+	@@$(MAKE) -f build/phpwind9.mk
+
+clean_phpwind9:
+	@@echo "Clean phpwind9"
+	@@$(MAKE) clean -f build/phpwind9.mk
+
+vBulletin:
+	@@echo "Build webim for vBulletin"
+	@@$(MAKE) -f build/vBulletin.mk
+
+clean_vBulletin:
+	@@echo "Clean vBulletin"
+	@@$(MAKE) clean -f build/vBulletin.mk
+
+ipboard:
+	@@echo "Build webim for ipboard"
+	@@$(MAKE) -f build/ipboard.mk
+
+clean_ipboard:
+	@@echo "Clean ipboard"
+	@@$(MAKE) clean -f build/ipboard.mk
 
 service_customer:
 	@@echo "Build webim for service.customer"
@@ -82,5 +105,5 @@ clean_service_visitor:
 	@@echo "Clean service.visitor"
 	@@$(MAKE) clean -f build/service.visitor.mk
 
-clean: clean_uchome clean_discuzX clean_discuz clean_service clean_phpbb clean_phpwind clean_thinksns clean_JishiGou
+clean: clean_uchome clean_discuzX clean_discuz clean_service clean_phpbb clean_phpwind clean_phpwind9 clean_thinksns clean_JishiGou
 
