@@ -70,6 +70,7 @@ widget("chatlink",
 
 		function parse_id(link, re){
 			if(!link)return false;
+			if(!re)return false;
 			var re_len = re.length; 
 			for(var i = 0; i < re_len; i++){
 				var ex = re[i].exec(link);
@@ -125,7 +126,7 @@ widget("chatlink",
 		var self = this, list = self.list, anthors = self.anthors, l = data.length, i, da, uid, li, anthor;
 		for(i = 0; i < l; i++){
 			da = data[i];
-			if(da.id && (uid = da.uid) && (li = list[uid])){
+			if(da.id && (uid = da.uid || da.id) && (li = list[uid])){
 				anthor = anthors[uid];
 				if(!li.elements && anthor){
 					li.elements = [];
@@ -148,7 +149,7 @@ widget("chatlink",
 		var self = this, list = self.list, anthors = self.anthors, l = data.length, i, da, uid, li, anthor;
 		for(i = 0; i < l; i++){
 			da = data[i];
-			if(da.id && (uid = da.uid) && (li = list[uid])){
+			if(da.id && (uid = da.uid || da.id) && (li = list[uid])){
 				li.elements && each(li.elements, function(n, v){
 					remove(v);
 				});
