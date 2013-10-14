@@ -1,10 +1,13 @@
 var sound = (function(){
 	var playSound = true;
+	var webimAudio;
 	var play = function(url){
 		if( window.Audio ) {
-			var a = new Audio();
-			a.src = url;
-			a.play();
+			if( !webimAudio ) {
+				var webimAudio = new Audio();
+			}
+			webimAudio.src = url;
+			webimAudio.play();
 		}else if(navigator.userAgent.indexOf('MSIE') >= 0){
 			try {
 				document.getElementById('webim-bgsound').src = url ? url : '/sound/sound.mp3';
