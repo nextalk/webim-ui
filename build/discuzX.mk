@@ -1,6 +1,6 @@
 include build/config.mk
 
-PRODUCT_NAME = discuzx
+PRODUCT_NAME = discuzX
 
 JS_APP_FILES = ${JS_SRC_DIR}/ui.setting.js\
 	${JS_SRC_DIR}/ui.user.js\
@@ -22,6 +22,6 @@ CSS_APP_FILES = ${CSS_SRC_DIR}/buddy.css\
 	${APP_SRC_DIR}/chatlink.css\
 	${APP_SRC_DIR}/notification.css\
 	${APP_SRC_DIR}/layout.popup.css\
-	${APP_SRC_DIR}/discuzx.css\
+	${APP_SRC_DIR}/discuzX.css\
 
 include build/include.mk
