@@ -8,7 +8,22 @@
 <?php
 error_reporting(E_ALL | E_STRICT);
 require('UploadHandler.php');
-$upload = new UploadHandler(null, false);
+
+class WebimUploadHandler extends UploadHandler
+{
+	protected function get_file_name($name,
+		$type = null, $index = null, $content_range = null) {
+			return $this->get_unique_filename(
+				$this->trim_file_name(str_replace('.', '-', microtime(true) . "." . rand(100, 999)), $type, $index, $content_range),
+				$type,
+				$index,
+				$content_range
+			);
+		}
+}
+
+
+$upload = new WebimUploadHandler(null, false);
 $data = $upload->post(false);
 $data = isset( $data["files"] ) && count( $data["files"] )
 	? $data["files"] : array( array("error" => "Upload failed") );
