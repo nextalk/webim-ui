@@ -310,7 +310,18 @@ widget("layout",{
 		var w = (windowWidth() - 45) - $.shortcut.offsetWidth - $.widgets.offsetWidth - 70;
 		self.maxVisibleTabs = parseInt(w / self.tabWidth);
 		self._fitUI();
+		self._autoResizeWindow();
 		self._ready = true;
+	},
+	_autoResizeWindow: function(){
+		var self = this, $ = self.$
+		  , width = $.widgets.offsetWidth;
+		for( var key in self.widgets ) {
+			var window = self.widgets[key] && self.widgets[key].window;
+			window = window && window.$ && window.$.window;
+			if( window )
+				window.style.width = width + "px";
+		}
 	},
 	_updatePrevCount: function(activeId){
 		var self = this, tabIds = self.tabIds, max = self.maxVisibleTabs, len = tabIds.length, id = activeId, count = self.prevCount;
