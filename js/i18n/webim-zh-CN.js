@@ -101,6 +101,8 @@ webim.ui.i18n.store('zh-CN',{
 	"confirm": "确定",
 	"cancel": "取消",
 	"invite": "邀请",
+	"visitor":"访客",
+	"manager":"管理员",
 	"exit": "退出"
 });
 
