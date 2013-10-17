@@ -89,6 +89,14 @@ clean_ipboard:
 	@@echo "Clean ipboard"
 	@@$(MAKE) clean -f build/ipboard.mk
 
+struts2:
+	@@echo "Build webim for struts2"
+	@@$(MAKE) -f build/struts2.mk
+
+clean_struts2:
+	@@echo "Clean struts2"
+	@@$(MAKE) clean -f build/struts2.mk
+
 service_customer:
 	@@echo "Build webim for service.customer"
 	@@$(MAKE) -f build/service.customer.mk
