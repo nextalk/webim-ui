@@ -42,7 +42,9 @@ webim.ui.ready(function(){
 	  , showUnavailable: true
 	  //,	userOptions: { show: true }
 	});
-	ui.addApp("room");
+	ui.addApp("room", {
+		discussion: true
+	});
 	ui.addApp("notification");
 	ui.addApp("setting", {"data": webim.setting.defaults.data});
 	ui.addApp("chatlink", {
