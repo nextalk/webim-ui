@@ -165,6 +165,9 @@ widget("room",{
 		};
 		self._count = 0;
 		show(self.$.empty);
+		if( !self.options.discussion )
+			hide( self.$.create );
+
 		//self._initEvents();
 	},
 	_initEvents: function(){
