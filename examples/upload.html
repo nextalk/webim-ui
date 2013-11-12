@@ -20,7 +20,7 @@
 			upload( document.getElementById("upload"), function( obj ){
 				window.console && window.console.log( obj );
 				obj = obj && obj[0];
-				document.getElementById("res").innerHTML = obj && obj.url ? obj.url : (obj && obj.error || "error");
+				document.getElementById("res").innerHTML = obj && obj.url ? (obj.name + "<br/>" + obj.url) : (obj && obj.error || "error");
 
 			} );
 		</script>
