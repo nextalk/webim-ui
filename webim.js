@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Wed Sep 18 21:10:11 2013 +0800
- * Commit: 0b37f2df9f6ca19abbb5f40df0b502a07fc0c4ce
+ * Date: Tue Dec 3 10:39:37 2013 +0800
+ * Commit: 912b69777b86acfb637f17a70ea423671f12d3fa
  */
 (function(window, document, undefined){
 
@@ -1271,6 +1271,7 @@ function webim( element, options ) {
 
 ClassEvent.on( webim );
 
+webim.csrf_token = "";
 webim.OFFLINE = 0;
 webim.BEFOREONLINE = 1;
 webim.ONLINE = 2;
@@ -1286,6 +1287,9 @@ extend(webim.prototype, {
 				show: 'unavailable'
 			}
 		};
+
+		ajax.settings.dataType = options.jsonp ? "jsonp" : "json";
+
 		self.status = new webim.status();
 		self.setting = new webim.setting();
 		self.buddy = new webim.buddy();
@@ -1456,11 +1460,10 @@ extend(webim.prototype, {
 		msg.ticket = self.data.connection.ticket;
 		self.trigger( "sendMessage", [ msg ] );
 		ajax({
-			type:"get",
-			dataType: "jsonp",
+			type:"post",
 			cache: false,
 			url: route( "message" ),
-			data: msg,
+			data: extend({csrf_token: webim.csrf_token}, msg),
 			success: callback,
 			error: callback
 		});
@@ -1470,11 +1473,10 @@ extend(webim.prototype, {
 		msg.ticket = self.data.connection.ticket;
 		self.trigger( "sendStatus", [ msg ] );
 		ajax({
-			type:"get",
-			dataType: "jsonp",
+			type:"post",
 			cache: false,
 			url: route( "status" ),			
-			data: msg,
+			data: extend({csrf_token: webim.csrf_token}, msg),
 			success: callback,
 			error: callback
 		});
@@ -1487,11 +1489,10 @@ extend(webim.prototype, {
 		self.status.set( "s", msg.show );
 		self.trigger( "sendPresence", [ msg ] );
 		ajax( {
-			type:"get",
-			dataType: "jsonp",
+			type:"post",
 			cache: false,
 			url: route( "presence" ),			
-			data: msg,
+			data: extend({csrf_token: webim.csrf_token}, msg),
 			success: callback,
 			error: callback
 		} );
@@ -1517,6 +1518,7 @@ extend(webim.prototype, {
 			//stranger_ids: self.stranger_ids.join(","),
 			buddy_ids: buddy_ids.join(","),
 			room_ids: room_ids.join(","),
+			csrf_token: webim.csrf_token,
 			show: status.get("s") || "available"
 		}, params);
 		self._ready(params);
@@ -1526,7 +1528,6 @@ extend(webim.prototype, {
 
 		ajax({
 			type:"get",
-			dataType: "jsonp",
 			cache: false,
 			url: route( "online" ),
 			data: params,
@@ -1556,11 +1557,11 @@ extend(webim.prototype, {
 		self._stop("offline", "offline");
 		ajax({
 			type:"get",
-			dataType: "jsonp",
 			cache: false,
 			url: route( "offline" ),
 			data: {
 				status: 'offline',
+				csrf_token: webim.csrf_token,
 				ticket: data.connection.ticket
 			}
 		});
@@ -1571,11 +1572,11 @@ extend(webim.prototype, {
 		if( !data || !data.connection || !data.connection.ticket ) return;
 		ajax( {
 			type:"get",
-			dataType: "jsonp",
 			cache: false,
 			url: route( "deactivate" ),
 			data: {
-				ticket: data.connection.ticket
+				ticket: data.connection.ticket,
+				csrf_token: webim.csrf_token
 			}
 		} );
 	}
@@ -1679,12 +1680,12 @@ model("setting",{
 			var _new = extend( {}, _old, options );
 			self.data = _new;
 			ajax( {
-				type: 'get',
+				type: 'post',
 				url: route( "setting" ),
-				dataType: 'jsonp',
 				cache: false,
 				data: {
-					data: JSON.stringify( _new )
+					data: JSON.stringify( _new ),
+					csrf_token: webim.csrf_token
 				}
 			} );
 		}
@@ -1826,8 +1827,7 @@ model( "buddy", {
 				type: "get",
 				url: route( "buddies" ),
 				cache: false,
-				dataType: "jsonp",
-				data:{ ids: ids.join(",") },
+				data:{ ids: ids.join(","), csrf_token: webim.csrf_token },
 				context: self,
 				success: self.set
 			} );
@@ -1976,10 +1976,10 @@ model( "buddy", {
 				type: "get",
 				cache: false,
 				url: route( "members" ),
-				dataType: "jsonp",
 				data: {
 					ticket: options.ticket,
-					id: id
+					id: id,
+					csrf_token: webim.csrf_token
 				},
 				success: function(data){
 					self.addMember(id, data);
@@ -1990,14 +1990,14 @@ model( "buddy", {
 			var self = this, options = self.options, user = options.user;
 
 			ajax({
-				type: "get",
+				type: "post",
 				cache: false,
 				url: route( "join" ),
-				dataType: "jsonp",
 				data: {
 					ticket: options.ticket,
 					id: id,
-					nick: nick || ""
+					nick: nick || "", 
+					csrf_token: webim.csrf_token
 				},
 				success: function( data ) {
 					self.initMember( id );
@@ -2011,14 +2011,14 @@ model( "buddy", {
 			if(d){
 				d.initMember = false;
 				ajax({
-					type: "get",
+					type: "post",
 					cache: false,
 					url: route( "leave" ),
-					dataType: "jsonp",					
 					data: {
 						ticket: options.ticket,
 						id: id,
-						nick: user.nick
+						nick: user.nick, 
+						csrf_token: webim.csrf_token
 					}
 				});
 				self.trigger("leave",[d]);
@@ -2080,10 +2080,9 @@ model("history", {
 		self.trigger("clear", [type, id]);
 		ajax({
 			url: route( "clear" ),
-			type: "get",
+			type: "post",
 			cache: false,
-			dataType: "jsonp",
-			data:{ type: type, id: id }
+			data:{ type: type, id: id, csrf_token: webim.csrf_token }
 		});
 	},
 	download: function(type, id){
@@ -2116,8 +2115,7 @@ model("history", {
 			url: route( "history" ),
 			cache: false,
 			type: "get",
-			dataType: "jsonp",
-			data:{type: type, id: id},
+			data:{type: type, id: id, csrf_token: webim.csrf_token},
 			//context: self,
 			success: function(data){
 				self.init(type, id, data);
