@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Tue Dec 3 10:39:37 2013 +0800
- * Commit: 912b69777b86acfb637f17a70ea423671f12d3fa
+ * Date: Tue Dec 3 12:12:10 2013 +0800
+ * Commit: 0fa3012c239697baeb23936584d38fa0de21b218
  */
 (function(window, document, undefined){
 
@@ -1527,7 +1527,7 @@ extend(webim.prototype, {
 		status.set("s", params.show);
 
 		ajax({
-			type:"get",
+			type:"post",
 			cache: false,
 			url: route( "online" ),
 			data: params,
@@ -1556,7 +1556,7 @@ extend(webim.prototype, {
 		self.connection.close();
 		self._stop("offline", "offline");
 		ajax({
-			type:"get",
+			type:"post",
 			cache: false,
 			url: route( "offline" ),
 			data: {
