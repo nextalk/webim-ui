@@ -1,4 +1,4 @@
-all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns JishiGou vBulletin ipboard struts2 dotnet4
+all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp JishiGou vBulletin ipboard struts2 dotnet4
 
 uchome:
 	@@echo "Build webim for uchome"
@@ -20,10 +20,17 @@ thinksns:
 	@@echo "Build webim for ThinkSNS"
 	@@$(MAKE) -f build/thinksns.mk
 
+thinkphp:
+	@@echo "Build webim for ThinkPHP"
+	@@$(MAKE) -f build/thinkphp.mk
+
 clean_thinksns:
 	@@echo "Clean ThinkSNS"
 	@@$(MAKE) clean -f build/thinksns.mk
 
+clean_thinkphp:
+	@@echo "Clean ThinkPHP"
+	@@$(MAKE) clean -f build/thinkphp.mk
 
 JishiGou:
 	@@echo "Build webim for JishiGou"
@@ -121,5 +128,5 @@ clean_service_visitor:
 	@@echo "Clean service.visitor"
 	@@$(MAKE) clean -f build/service.visitor.mk
 
-clean: clean_uchome clean_discuzX clean_discuz clean_service clean_phpbb clean_phpwind clean_phpwind9 clean_thinksns clean_JishiGou clean_struts2 clean_dotnet4
+clean: clean_uchome clean_discuzX clean_discuz clean_service clean_phpbb clean_phpwind clean_phpwind9 clean_thinksns clean_thinkphp clean_JishiGou clean_struts2 clean_dotnet4
 
