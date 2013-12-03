@@ -30,7 +30,6 @@ model("notification",{
 		ajax({
 			url: route( "notifications" ),
 			cache: false,
-			dataType: self.options.jsonp ? "jsonp" : "json",
 			context: self,
 			success: self.handle
 		});

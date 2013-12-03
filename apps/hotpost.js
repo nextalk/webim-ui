@@ -27,7 +27,6 @@ model("hotpost",{
 		ajax({
 			url: options.url,
 			cache: false,
-			dataType: "json",
 			context: self,
 			success: self.handle
 		});

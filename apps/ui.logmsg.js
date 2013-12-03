@@ -22,7 +22,6 @@ app("logmsg", function(options){
 				type: "get",
 				url: route( "logmsg" ),
 				cache: false,
-				dataType: "jsonp",
 				data:msg
 			} );
 		};

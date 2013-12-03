@@ -392,7 +392,6 @@ app( "chat.visitor", function( options ) {
 		data.group_id = info.id;
 		ajax({
 			type:"get",
-			dataType: "jsonp",
 			cache: false,
 			url: route( "note" ),
 			data: data,
@@ -431,7 +430,6 @@ app( "chat.visitor", function( options ) {
 		if( bid ) {
 			ajax({
 				type:"get",
-				dataType: "jsonp",
 				cache: false,
 				url: route( "eval" ),
 				data: {
@@ -490,7 +488,6 @@ app( "chat.visitor", function( options ) {
 		if( bid ) {
 			ajax({
 				type:"get",
-				dataType: "jsonp",
 				cache: false,
 				url: route( "closechat" ),
 				data: {
@@ -505,7 +502,6 @@ app( "chat.visitor", function( options ) {
 	function checkCustomer(){
 		ajax({
 			type:"get",
-			dataType: "jsonp",
 			cache: false,
 			url: route( "openchat" ),
 			data: {
