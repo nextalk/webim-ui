@@ -1,4 +1,16 @@
-all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp JishiGou vBulletin ipboard struts2 dotnet4
+all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp JishiGou vBulletin ipboard struts2 dotnet4 jinhusns ci
+
+ci:
+	@@echo "Build webim for ci"
+	@@$(MAKE) -f build/ci.mk
+
+jinhusns:
+	@@echo "Build webim for jinhusns"
+	@@$(MAKE) -f build/jinhusns.mk
+
+clean_jinhusns:
+	@@echo "Clean webim for jinhusns"
+	@@$(MAKE) clean -f build/jinhusns.mk
 
 uchome:
 	@@echo "Build webim for uchome"
