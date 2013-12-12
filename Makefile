@@ -1,4 +1,12 @@
-all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp JishiGou vBulletin ipboard struts2 dotnet4 jinhusns ci
+all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp JishiGou vBulletin ipboard struts2 dotnet4 jinhusns ci rails4
+	
+rails4:
+	@@echo "Build webim for rails4"
+	@@$(MAKE) -f build/rails4.mk
+
+clean_rails4:
+	@@echo "Clean webim for rails4"
+	@@$(MAKE) clean -f build/rails4.mk
 
 ci:
 	@@echo "Build webim for ci"
