@@ -6,3 +6,6 @@
 	*display:inline-block;
 }
 
+.webim-chatlink-offline{
+	background-image:url(../images/chat_offline.gif);
+}
