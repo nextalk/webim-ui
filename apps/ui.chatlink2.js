@@ -1,6 +1,6 @@
 /* 
  * ui.chatlink2
- *
+ * <a class="webim-chat" href="/chat/2/Susan">和我聊天</a>
  * Notice: chatlink2 use user_id
  *
  * TODO: 支持群组Link
