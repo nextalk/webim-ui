@@ -348,6 +348,7 @@ widget("chat",{
 	_updateInfo:function(info){
 		var self = this, $ = self.$;
 		$.userPic.setAttribute("href", info.url);
+		$.userPic.setAttribute("target", info.target || self.options.target || "");
 		$.userPic.firstChild.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
 		setTimeout(function(){
 			if(info.pic_url || info.default_pic_url) {

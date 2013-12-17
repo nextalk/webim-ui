@@ -1,5 +1,6 @@
 
 webim.ui.ready(function(){
+	webim.ui.chat.defaults.target = "_blank";
 	webim = window.webim;
 	_path = "images/";
 	webim.route({
@@ -27,6 +28,7 @@ webim.ui.ready(function(){
 		is_login: is_login
 	  , showUnavailable: true
 	});
+	
 	ui.addApp("room");
 	ui.addApp("notification");
 	ui.addApp("setting", {"data": webim.setting.defaults.data});
