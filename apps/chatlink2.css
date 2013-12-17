@@ -1,0 +1,11 @@
+.webim-chatlink2{
+	cursor:pointer;
+	padding-left: 1.2em;
+	background:url(../images/chat_offline.gif) no-repeat 2px center;
+	display:inline;
+	*display:inline-block;
+}
+
+.webim-chatlink2-online{
+	background-image:url(../images/chat_online.gif);
+}
