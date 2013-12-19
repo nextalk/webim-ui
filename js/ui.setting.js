@@ -51,6 +51,11 @@ widget("setting",{
 },{
 	_init: function(){
 		//this._initEvents();
+		var copyright = this.options.copyright;	
+		if( copyright ) {
+			copyright = copyright === true ? '<p style="margin: 5px 10px;text-align:right;"><a class="webim-gray" href="http://nextalk.im/" target="_blank">Powered by NextTalk</a></p>' : copyright;
+			this.element.appendChild(createElement(copyright));
+		}
 	},
 	template: function(){
 		var self = this, temp = [], data = self.options.data;

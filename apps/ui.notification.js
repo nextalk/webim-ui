@@ -60,7 +60,7 @@ widget("notification",{
 		return tpl(this.options.tpl_li, {
 			text: data.text,
 			link: data.link,
-			target: data.isExtlink ? "_blank" : ""
+			target: this.options.target || data.target || ""
 		});
 	},
 	_fitUI:function(){
