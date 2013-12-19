@@ -7,7 +7,7 @@ UI_JS_FILES = ${IM} \
 	${JS_APP_FILES} \
 	${JS_SRC_DIR}/outro.js
 
-UI_VER = `cat ${SRC_DIR}/version.txt`
+UI_VER = `cat ${SRC_DIR}/version` 
 DATE=`git log -n 1  --pretty=format:%ad`
 COMMIT=`git log -n 1 --pretty=format:%H`
 
