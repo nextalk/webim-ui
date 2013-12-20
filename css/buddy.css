@@ -166,3 +166,9 @@
         position: fixed;
 }
 
+#webim-buddy .webim-buddy-unavailable img{
+	filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+	-webkit-filter: grayscale(100%);
+}
+
+
