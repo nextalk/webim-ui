@@ -13,7 +13,7 @@ COMMIT=`git log -n 1 --pretty=format:%H`
 
 REPLACE = sed 's/@DATE/'"${DATE}"'/' | \
 		sed 's/@COMMIT/'"${COMMIT}"'/' | \
-		sed s/@VERSION/${UI_VER}/
+		sed 's/@VERSION/'"${UI_VER}"'/'
 
 MINJAR = java -jar ${BUILD_DIR}/yuicompressor-2.4.2.jar
 JSMINJAR = java -jar ${BUILD_DIR}/google-compiler-20100616.jar
