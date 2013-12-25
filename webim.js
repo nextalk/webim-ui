@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Tue Dec 3 12:12:10 2013 +0800
- * Commit: 0fa3012c239697baeb23936584d38fa0de21b218
+ * Date: Wed Dec 25 10:50:02 2013 +0800
+ * Commit: 1f7caa3e17097453ba6ab676f3cb7c7261815732
  */
 (function(window, document, undefined){
 
@@ -1349,7 +1349,13 @@ extend(webim.prototype, {
 		self.trigger("online",[data]);
 		self._createConnect();
 		//handle new messages at last
-		var n_msg = data.new_messages;
+		var n_msg = [];
+		if( data.new_messages ) {
+			n_msg = n_msg.concat( data.new_messages );
+		}
+		if( data.offline_messages ) {
+			n_msg = n_msg.concat( data.offline_messages );
+		}
 		if(n_msg && n_msg.length){
 			each(n_msg, function(n, v){
 				v["new"] = true;
