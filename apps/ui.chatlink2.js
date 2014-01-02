@@ -24,6 +24,10 @@ app("chatlink2", function(options){
 		ui.im.online();
 		ui.layout.addChat("buddy", id);
 		ui.layout.focusChat("buddy", id);
+		if( options && options.insertlink ) {
+			var chat = ui.layout.chat( "buddy", id );
+			chat && chat.insert( window.location.href );
+		}
 	});
 	var grepVisible = function(a){ return a.show != "invisible" && a.presence == "online"};
 	var grepInvisible = function(a){ return a.show == "invisible" };

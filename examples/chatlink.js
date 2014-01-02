@@ -36,7 +36,7 @@ webim.ui.ready(function(){
 	ui.addApp("room");
 	ui.addApp("notification");
 	ui.addApp("setting", {"data": webim.setting.defaults.data});
-	ui.addApp("chatlink2");
+	ui.addApp("chatlink2", {insertlink: true});
 	ui.render();
 	is_login && im.autoOnline() && im.online();
 	im.bind("online", function(e, data){
