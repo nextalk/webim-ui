@@ -82,7 +82,6 @@ app("buddy", function( options ){
 	//some buddies offline.
 	buddy.bind("offline", function( e, data){
 		if ( options.showUnavailable ) {
-			console.log( 111 );
 			buddyUI.remove(map(data, mapId));
 			buddyUI.add(data);
 			//buddyUI.update(data);
