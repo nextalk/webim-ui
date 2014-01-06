@@ -275,7 +275,7 @@ widget("chat",{
 			nick: options.user.nick,
 			to_nick: info.nick,
 			//stype: '',
-			offline: info.presence != "online",
+			offline: info.presence != "online" ? "true" : "false",
 			timestamp: (new Date()).getTime() - date.timeSkew,
 			body: val
 		};
