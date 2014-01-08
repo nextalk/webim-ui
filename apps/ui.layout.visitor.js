@@ -169,6 +169,8 @@ app("layout.visitor", function( options ) {
 			buddies: options.buddies,
 			disable_group: true
 		} );
+	} else {
+		layout.options.disableResize = true;
 	}
 	buddy.presence( options.buddies );
 	im.bind("offline", function(){

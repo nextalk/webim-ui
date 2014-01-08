@@ -310,7 +310,8 @@ widget("layout",{
 		var w = (windowWidth() - 45) - $.shortcut.offsetWidth - $.widgets.offsetWidth - 70;
 		self.maxVisibleTabs = parseInt(w / self.tabWidth);
 		self._fitUI();
-		self._autoResizeWindow();
+		if( !self.options.disableResize )
+			self._autoResizeWindow();
 		self._ready = true;
 	},
 	_autoResizeWindow: function(){
