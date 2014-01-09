@@ -1,6 +1,6 @@
 
 webim.ui.ready(function(){
-	var path = "http://"+document.domain+"/uc/discuz/source/plugin/webim/";
+	var path = "http://"+document.domain+"/uc/discuz/source/plugin/nextalk/";
 	webim.extend(webim.setting.defaults.data, {} );
 	webim.route( {
 		online: path + "im.php?webim_action=online",

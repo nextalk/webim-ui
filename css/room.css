@@ -102,6 +102,7 @@
 	float: right;
 	position: relative;
 	z-index: 2;
+	margin-left: 3px;
 }
 
 #webim-room ul li a img{

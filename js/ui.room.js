@@ -56,6 +56,9 @@ app("room", function( options ) {
 				}, i*500);
 			})(msg, i);
 		};
+	}).bind("exit", function(e, id){
+		room.block( id );
+		layout.removeChat("room",id);
 	});
 	im.bind("event", function( e, events ) {
 		for (var i = 0; i < events.length; i++) {
@@ -156,7 +159,7 @@ widget("room",{
 	</div>\
 	<div id=":actions" class="webim-room-actions"><a id=":create" href="#" class="webim-button ui-state-default ui-corner-all"><%=create discussion%></a></div>\
 	</div>',
-	tpl_li: '<li title=""><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=invite%>" /><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><img width="25" src="<%=pic_url%>" defaultsrc="<%=default_pic_url%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong></a></li>'
+	tpl_li: '<li title=""><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=exit%>" /><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=invite%>" /><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><img width="25" src="<%=pic_url%>" defaultsrc="<%=default_pic_url%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong></a></li>'
 },{
 	_init: function(){
 		var self = this;
@@ -208,7 +211,7 @@ widget("room",{
 		toggleClass(this.element, "webim-room-scroll", is);
 	},
 	_updateInfo:function(el, info){
-		el = el.firstChild.nextSibling;
+		el = el.firstChild.nextSibling.nextSibling;
 		el.setAttribute("href", info.url);
 		el = el.firstChild.nextSibling;
 		el.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
@@ -224,14 +227,20 @@ widget("room",{
 			if(!info.default_pic_url)info.default_pic_url = "";
 			var el = li[id] = createElement(tpl(self.options.tpl_li, info));
 			//self._updateInfo(el, info);
-			var a = el.firstChild;
+			var exit = el.firstChild;
+			var a = el.firstChild.nextSibling;
 			if( info.temporary ) {
+				addEvent(exit, "click",function(e){
+					preventDefault(e);
+					self.trigger( "exit", [id] );
+				});
 				addEvent(a, "click",function(e){
 					preventDefault(e);
 					self.updateDiscussion( info );
 				});
 			} else {
 				hide( a );
+				hide( exit );
 			}
 			addEvent(a.nextSibling, "click",function(e){
 				preventDefault(e);
