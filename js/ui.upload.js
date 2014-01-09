@@ -13,8 +13,12 @@ widget("upload", {
 				if( !data.url || data.error ) {
 					alert( data.error || 'Upload error' );
 				} else {
-					var markup = ["image/jpeg","image/jpg","image/gif","image/png"].indexOf(data.type) == -1 
-						? "" : "!";
+					var markup = "", ar = ["image/jpeg","image/jpg","image/gif","image/png"];
+					for (var i = 0; i < ar.length; i++) {
+						if( ar[i] == data.type ) {
+							markup = "!";break;
+						}
+					};
 					markup += "["+(data.name || "").replace(/\[|\]/ig, "")+"]("+data.url+")";
 					if( data.thumbnailUrl )
 						markup += "("+data.thumbnailUrl+")";
