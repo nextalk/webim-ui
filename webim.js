@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Wed Dec 25 10:50:02 2013 +0800
- * Commit: 1f7caa3e17097453ba6ab676f3cb7c7261815732
+ * Date: Fri Jan 10 21:26:30 2014 +0800
+ * Commit: 6c4d6a83334b2bfde22e16fe87424f2f0749b6c8
  */
 (function(window, document, undefined){
 
@@ -1698,12 +1698,12 @@ model("setting",{
 	}
 } );
 /*
-* 状态(cookie临时存储[刷新页面有效])
-* 
-* get(key);//get
-* set(key,value);//set
-* clear()
-*/
+ * 状态(cookie临时存储[刷新页面有效])
+ * 
+ * get(key);//get
+ * set(key,value);//set
+ * clear()
+ */
 //var d = {
 //        tabs:{1:{n:5}}, // n -> notice count
 //        tabIds:[1],
@@ -1718,8 +1718,22 @@ model( "status", {
 }, {
 	_init:function() {
 		var self = this, data = self.data, key = self.options.key;
+		var store = window.localStorage;
+		if( store ) {
+			//无痕浏览模式
+			try {
+				var testKey = '__store_webim__'
+				store.setItem(testKey, testKey)
+				if (store.getItem(testKey) == testKey) { 
+					self.store = store;
+				}
+				store.removeItem(testKey);
+			} catch(e) {
+				self.store = undefined;
+			}
+		}
 		if ( !data ) {
-			var c = window.localStorage ? window.localStorage.getItem( key ) : cookie( key );
+			var c = self.store ? self.store.getItem( key ) : cookie( key );
 			self.data = c ? JSON.parse( c ) : {};
 		}else{
 			self._save( data );
@@ -1747,7 +1761,7 @@ model( "status", {
 		var self = this, key = self.options.key;
 		self.data = data;
 		data = JSON.stringify( data );
-		window.localStorage ? window.localStorage.setItem( key, data ) : cookie( key, data, {
+		self.store ? self.store.setItem( key, data ) : cookie( key, data, {
 			path: '/',
 			domain: document.domain
 		} );
