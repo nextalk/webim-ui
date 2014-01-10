@@ -30,7 +30,13 @@ webim.ui.ready(function(){
 		imOptions: {
 			jsonp: true
 		},
-		soundUrls: soundUrls
+		soundUrls: soundUrls,
+		buddyChatOptions: {
+			upload: true
+		},
+		roomChatOptions: {
+			upload: true
+		}
 	}), im = ui.im;
 
 	//im.user({"uid":"1","id":"admin","nick":"admin","pic_url":"http:\/\/test.com\/project\/uc\/discuzX\/uc_server\/avatar.php?uid=0&size=small","url":"home.php?mod=space&uid=1"});

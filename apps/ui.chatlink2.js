@@ -24,7 +24,7 @@ app("chatlink2", function(options){
 		ui.im.online();
 		ui.layout.addChat("buddy", id);
 		ui.layout.focusChat("buddy", id);
-		if( options && options.insertlink ) {
+		if( options && options.autoInsertlink ) {
 			var chat = ui.layout.chat( "buddy", id );
 			chat && chat.insert( window.location.href );
 		}
@@ -53,6 +53,7 @@ widget("chatlink2",
 {
 	wrap: null,
 	re_id: [/chat\/([^\/]+)/i],
+	elementId: null,
 	className: /webim-chat/
 },
 {
@@ -60,6 +61,7 @@ widget("chatlink2",
 		var self = this, element = self.element, list = self.list = {}, 
 			options = self.options, anthors = self.anthors = {}, 
 			re_id = options.re_id, 
+			elementId = options.elementId, 
 			className = options.className,
 			wrap = options.wrap || document;
 
@@ -75,10 +77,16 @@ widget("chatlink2",
 			}
 			return false;
 		}
-		var a = wrap.getElementsByTagName("a"), b;
+		var a, b;
+		if( elementId ) {
+			a = document.getElementById( elementId );
+			a = a ? [ a ] : null;
+		} else {
+			a = wrap.getElementsByTagName("a");
+		}
 		a && each(a, function(i, el){
 			var id = parse_id(el.href, re_id), text = el.innerHTML;
-			if(id && children(el).length == 0 && text && (className.test(el.className))){
+			if(id && children(el).length == 0 && text && (elementId || className.test(el.className))){
 				anthors[id] ? anthors[id].push(el) :(anthors[id] = [el]);
 				list[id] = {id: id, name: text};
 				var icon = createElement('<a class="webim-chatlink2"><em>');;

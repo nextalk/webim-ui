@@ -1,5 +1,5 @@
 
-webim.ui.ready(function(){
+(function (webim) {
 	webim.ui.chat.defaults.target = "_blank";
 	webim = window.webim;
 	_path = "images/";
@@ -21,6 +21,11 @@ webim.ui.ready(function(){
 		}
 	  , buddyChatOptions: {
 		  simple: true
+		, upload: true
+		, downloadHistory: false
+		}
+	  , roomChatOptions: {
+			upload: true
 		}
 	}), im = ui.im;
 	//im.user({"uid":"1","id":"admin","nick":"admin","pic_url":"http:\/\/test.com\/project\/uc\/discuzX\/uc_server\/avatar.php?uid=0&size=small","url":"home.php?mod=space&uid=1"});
@@ -36,11 +41,15 @@ webim.ui.ready(function(){
 	ui.addApp("room");
 	ui.addApp("notification");
 	ui.addApp("setting", {"data": webim.setting.defaults.data});
-	ui.addApp("chatlink2", {insertlink: true});
+	ui.addApp("chatlink2", {autoInsertlink: true, elementId: "webim-chatme" });
 	ui.render();
 	is_login && im.autoOnline() && im.online();
 	im.bind("online", function(e, data){
 		data.connection.server = "../../webim-js/test/" + data.connection.server;
 	});
-});
+	window._webimUI = ui;
+})(webim);
+
+window._webimUI.im.notification.handle( [{"from":"ok","text":"admin给你发了一条消息","link":"http:\/\/google.com","time":"8:30"},{"from":"ok","text":"test给你发了>一条消息","link":"http:\/\/google.com","time":"8:30"}] );
+
 
