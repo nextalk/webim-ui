@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Fri Jan 10 21:26:30 2014 +0800
- * Commit: 6c4d6a83334b2bfde22e16fe87424f2f0749b6c8
+ * Date: Sun Jan 19 22:26:51 2014 +0800
+ * Commit: 35a0daae9d462677b9a51ded149d97254609dc85
  */
 (function(window, document, undefined){
 
@@ -1836,6 +1836,9 @@ model( "buddy", {
 			//Presence in [show,offline,online]
 			v.presence = v.presence == "offline" ? "offline" : "online";
 			v.incomplete = !dataHash[ v.id ];
+			if( !v.group && v.id ) {
+				v.group = v.id.indexOf("vid:") == 0 ? "visitor" : v.group;
+			}
 		}
 		self.set( data );
 	},
