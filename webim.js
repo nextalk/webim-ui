@@ -5,8 +5,8 @@
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Sun Jan 19 22:26:51 2014 +0800
- * Commit: 35a0daae9d462677b9a51ded149d97254609dc85
+ * Date: Sun Jan 19 22:51:12 2014 +0800
+ * Commit: cd177fb0f6f884052ae5bb85514f45322a3957ea
  */
 (function(window, document, undefined){
 
@@ -1374,6 +1374,7 @@ extend(webim.prototype, {
 		self.data.user.show = "unavailable";
 		self.buddy.clear();
 		self.room.clear();
+		self.history.clean();
 		self.trigger("offline", [type, msg] );
 	},
 	autoOnline: function(){
@@ -2066,6 +2067,11 @@ model("history", {
 		self.data = self.data || {};
 		self.data.chat = self.data.chat || {};
 		self.data.grpchat = self.data.grpchat || {};
+	},
+	clean: function(){
+		var self = this;
+		self.data.chat = {};
+		self.data.grpchat = {};
 	},
 	get: function( type, id ) {
 		return this.data[type][id];

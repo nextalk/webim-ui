@@ -141,6 +141,16 @@ app("room", function( options ) {
 		info.blocked && (info.nick = nick + "(" + i18n("blocked") + ")");
 		roomUI.li[info.id] ? roomUI.update(info) : ( !ignore && roomUI.add(info) );
 	}
+	hide( roomUI.$.actions );
+	im.bind( "beforeOnline", function(){
+	}).bind("online", function() {
+		show( roomUI.$.actions );
+	}).bind( "offline", function( type, msg ) {
+		hide( roomUI.$.actions );
+		roomUI.removeAll();
+	});
+	return roomUI;
+
 });
 widget("room",{
 	template: '<div id="webim-room" class="webim-room webim-flex webim-box">\
