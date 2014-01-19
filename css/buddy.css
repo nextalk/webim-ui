@@ -93,6 +93,12 @@
         padding: .2em .5em 0;
 }
 
+#webim-buddy ul h4 em{
+	float: left;
+	margin-left: -8px;
+	display: inline;
+}
+
 #webim-buddy ul li{
 }
 
