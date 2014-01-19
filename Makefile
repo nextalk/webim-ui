@@ -1,4 +1,12 @@
-all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp JishiGou vBulletin ipboard struts2 dotnet4 jinhusns ci rails4
+all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp JishiGou vBulletin ipboard struts2 dotnet4 jinhusns ci rails4 flask
+
+flask:
+	@@echo "Build webim for flask"
+	@@$(MAKE) -f build/flask.mk
+
+clean_flask:
+	@@echo "Clean webim for flask"
+	@@$(MAKE) clean -f build/flask.mk
 	
 rails4:
 	@@echo "Build webim for rails4"

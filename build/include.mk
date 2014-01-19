@@ -20,11 +20,11 @@ JSMINJAR = java -jar ${BUILD_DIR}/google-compiler-20100616.jar
 UNICODE = native2ascii -encoding utf-8 
 
 DIST_DIR = ${PREFIX}/dist/${PRODUCT_NAME}
-UI_CSS = ${DIST_DIR}/webim.${PRODUCT_NAME}.css
-UI_JS = ${DIST_DIR}/webim.${PRODUCT_NAME}.js
+UI_CSS = ${DIST_DIR}/webim.css #.${PRODUCT_NAME}
+UI_JS = ${DIST_DIR}/webim.js #.${PRODUCT_NAME}
 
-UI_MIN_CSS = ${DIST_DIR}/webim.${PRODUCT_NAME}.min.css
-UI_MIN_JS = ${DIST_DIR}/webim.${PRODUCT_NAME}.min.js
+UI_MIN_CSS = ${DIST_DIR}/webim.min.css #.${PRODUCT_NAME}
+UI_MIN_JS = ${DIST_DIR}/webim.min.js #.${PRODUCT_NAME}
 
 all: min copy i18n
 	@@echo "WebIM UI build complete."
