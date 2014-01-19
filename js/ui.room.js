@@ -337,7 +337,7 @@ widget("room",{
 	showCount:function( id, count ){
 		var li = this.li;
 		if( li[id] ){
-			_countDisplay( li[id].firstChild.nextSibling.firstChild, count );
+			_countDisplay( li[id].firstChild.nextSibling.nextSibling.firstChild, count );
 		}
 	},
 	active: function(id){
