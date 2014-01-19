@@ -56,7 +56,7 @@ app( "chat", function( options ) {
 		var chatUI = new webimUI.chat( null, options );
 
 		chatUI.bind( "sendMessage", function( e, msg ) {
-			im.sendMessage( msg );
+			im.sendMessage( msg, function(data){ data && data.message && chatUI.history.notice( data.message ); } );
 			history.set( msg );
 		}).bind("downloadHistory", function( e, info ){
 			history.download( "grpchat", info.id );
@@ -109,7 +109,7 @@ app( "chat", function( options ) {
 			im.buddy.update(id);
 
 		chatUI.bind("sendMessage", function( e, msg ) {
-			im.sendMessage( msg );
+			im.sendMessage( msg, function(data){ data && data.message && chatUI.history.notice( data.message ); } );
 			history.set( msg );
 		}).bind("sendStatus", function( e, msg ) {
 			im.sendStatus( msg );

@@ -25,4 +25,9 @@
 .webim .webim-history *{
 		*background:url(about:blank);
 }
+.webim .webim-history-notice{
+	padding: 3px 8px;
+	margin: 5px 0;
+}
+
 

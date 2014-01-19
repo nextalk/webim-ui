@@ -38,8 +38,13 @@ widget("history", {
 			var val = data[i];
 			markup.push(self._renderMsg(val));
 		}
-		self.$.content.innerHTML += markup.join('');
+		//self.$.content.innerHTML += markup.join('');
+		self.$.content.appendChild( createElement( "<div>"+markup.join('')+"</div>" ) );
 		self.trigger("update");
+	},
+	notice: function( msg ) {
+		this.$.content.appendChild( createElement( "<div class='ui-corner-all webim-history-notice ui-state-default ui-state-error'>"+msg+"</div>" ) );
+		this.trigger("update");
 	},
 	_renderMsg: function(logItem){
 		var self = this;
