@@ -334,7 +334,7 @@ widget("room",{
 		  , buddies = buddy.all(true);
 		self._discussion = info;
 		var $ = this.$;
-		$.name.value = info && info.nick.replace(/\([^\)]*\)/ig, "") || (self.options.user.nick + "的讨论组");
+		$.name.value = info && info.nick.replace(/\([^\)]*\)/ig, "") || (i18n("discussion name input", {name: self.options.user.nick}));
 		for (var i = 0; i < buddies.length; i++) {
 			var b = buddies[i];
 			markup.push('<li><label for="webim-discussion-'+b.id+'"><input id="webim-discussion-'+b.id+'" type="checkbox" name="buddy" value="'+b.id+'" />'+b.nick+'</label></li>');

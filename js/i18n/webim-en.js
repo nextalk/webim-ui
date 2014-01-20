@@ -94,6 +94,11 @@ webim.ui.i18n.store('en',{
 	"answer": "Answer",
 	"login": "Login",
 	"upload": "Upload",
+	"discussion": "Discussion",
+	"discussion name": "Discussion name",
+	"create discussion": "Create discussion",
+	"select discussion buddies": "Select buddies",
+	"discussion name input": "{{name}}'s discussion",
 	"visitor":"Visitor",
 	"manager":"Manager",
 	"exit": "Exit"
