@@ -1,5 +1,5 @@
 /*!
- * Webim v1.1.0
+ * Webim v5.1
  * http://www.webim20.cn/
  *
  * Copyright (c) 2013 Arron
@@ -1621,7 +1621,7 @@ function route( ob, val ) {
 window.webim = webim;
 
 extend( webim, {
-	version: "1.1.0",
+	version: "5.2",
 	defaults:{
 	},
 	log: log,
