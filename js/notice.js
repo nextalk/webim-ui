@@ -37,7 +37,7 @@ var sound = (function(){
 		init: function(urls){
 			extend(_urls, urls);
 			if(!window.Audio && navigator.userAgent.indexOf('MSIE') >= 0){
-				document.getElementById('webim-flashlib-c').innerHTML = '<bgsound id="webim-bgsound" src="#" loop="1">';
+				document.getElementById('webim-flashlib-c').innerHTML = '<bgsound id="webim-bgsound" src="#" autostart="true" loop="1">';
 			}
 			/*
 			 swfobject.embedSWF(_urls.lib + "?_" + new Date().getTime(), "webim-flashlib-c", "100", "100", "9.0.0", null, null, {
