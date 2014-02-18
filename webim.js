@@ -1,12 +1,12 @@
 /*!
- * Webim v1.1.0
+ * Webim v5.2
  * http://www.webim20.cn/
  *
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Sun Jan 19 23:26:49 2014 +0800
- * Commit: bc8bcd8b60c1eda8ad39da4f00a5e256c0b91825
+ * Date: Sun Jan 26 21:19:29 2014 +0800
+ * Commit: cc528aeb68260efa8f0c65fea9b835e35bdae3b9
  */
 (function(window, document, undefined){
 
@@ -1621,7 +1621,7 @@ function route( ob, val ) {
 window.webim = webim;
 
 extend( webim, {
-	version: "1.1.0",
+	version: "5.2",
 	defaults:{
 	},
 	log: log,

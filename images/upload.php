@@ -23,7 +23,8 @@ class WebimUploadHandler extends UploadHandler
 
 	protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
 		$index = null, $content_range = null) {
-			$file  = call_user_func_array(array($this, 'parent::handle_file_upload'), func_get_args());
+            $args = func_get_args();
+			$file  = call_user_func_array(array($this, 'parent::handle_file_upload'), $args);
 			$file->name = $this->trim_file_name($name, $type, $index, $content_range);
 			return $file;
 		}
