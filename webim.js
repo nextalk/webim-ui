@@ -1,12 +1,12 @@
 /*!
- * Webim v5.2
+ * Webim v1.1.0
  * http://www.webim20.cn/
  *
  * Copyright (c) 2013 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Sun Jan 26 21:19:29 2014 +0800
- * Commit: cc528aeb68260efa8f0c65fea9b835e35bdae3b9
+ * Date: Thu Feb 20 01:06:33 2014 +0800
+ * Commit: 6b6c05bb48e614c5663dec71d8d0e1881d652bd8
  */
 (function(window, document, undefined){
 
@@ -292,6 +292,11 @@ function ajax( origSettings ) {
 		for( var key in origSettings ) {
 			s[ key ] = origSettings[ key ];
 		}
+	}
+
+	//Only GET when jsonp
+	if( s.dataType === "jsonp" ) {
+		s.type = "GET";
 	}
 
 	var jsonp, status, data, type = s.type.toUpperCase(), noContent = rnoContent.test(type), head, proxy, win = window, script;
@@ -1621,7 +1626,7 @@ function route( ob, val ) {
 window.webim = webim;
 
 extend( webim, {
-	version: "5.2",
+	version: "1.1.0",
 	defaults:{
 	},
 	log: log,
