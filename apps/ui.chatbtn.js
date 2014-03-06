@@ -1,6 +1,17 @@
 /* 
  * ui.chatbtn
+ *
+ * HTML页面:
  * <a class="webim-chatbtn" href="/chat/2">和我聊天</a>
+ *
+ * webim.$product.js:
+ *
+ * ui.addApp("chatbtn", {
+ *  wrap: document.getElementById('wrap')
+ *	elementId: null,
+ * 	className: /webim-chatbtn/,
+ *  autoInsertlink: true
+ * });
  * 
  * TODO: 支持群组Link
  *
@@ -21,6 +32,7 @@ app("chatbtn", function(options){
 	var ui = this, im = ui.im;
 	var chatbtn = ui.chatbtn = new webim.ui.chatbtn(null, options).bind("select", function(e, id){
 		ui.im.online();
+        id = id.substr("webim-chatid-".length);
 		ui.layout.addChat("buddy", id);
 		ui.layout.focusChat("buddy", id);
 		if( options && options.autoInsertlink ) {
@@ -92,7 +104,7 @@ widget("chatbtn",
 				el.appendChild( icon );
 				el.icon = icon;
 				el.title = i18n("offline");
-				el.id = id;
+				el.id = 'webim-chatid-' + id;
 				addEvent(el, "click", function(e){
 					self.trigger("select", this.id);
 					stopPropagation(e);
