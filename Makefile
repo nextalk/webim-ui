@@ -1,4 +1,12 @@
-all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp jishigou vBulletin ipboard struts2 dotnet4 jinhusns ci rails4 flask
+all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp jishigou vBulletin ipboard struts2 dotnet4 jinhusns ci rails4 flask slim
+
+slim:
+	@@echo "Build webim for slimframework"
+	@@$(MAKE) -f build/slim.mk
+
+clean_slim:
+	@@echo "Clean webim for slimframework"
+	@@$(MAKE) clean -f build/slim.mk
 
 flask:
 	@@echo "Build webim for flask"
@@ -156,5 +164,5 @@ clean_service_visitor:
 	@@echo "Clean service.visitor"
 	@@$(MAKE) clean -f build/service.visitor.mk
 
-clean: clean_uchome clean_discuzX clean_discuz clean_service clean_phpbb clean_phpwind clean_phpwind9 clean_thinksns clean_thinkphp clean_jishigou clean_struts2 clean_dotnet4
+clean: clean_uchome clean_discuzX clean_discuz clean_service clean_phpbb clean_phpwind clean_phpwind9 clean_thinksns clean_thinkphp clean_jishigou clean_struts2 clean_dotnet4 clean_slim
 

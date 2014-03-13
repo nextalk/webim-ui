@@ -75,10 +75,10 @@ app( "chat", function( options ) {
 		setTimeout( function(){
 			if( chatUI.options.info.blocked )
 				room.join( id );
-			else room.initMember( id );
+			else room.loadMember( id );
 		}, 500 );
 		isArray( info.members ) && each( info.members, function( n, info ){
-			chatUI.addMember( info.id, info.nick, info.id == im.data.user.id );
+			chatUI.addMember( info.id, info.nick, info.presence != "online" );
 		} );
 
 	} else {
@@ -539,6 +539,18 @@ plugin.add("chat","block",{
 });
 webimUI.chat.defaults.member = true;
 extend(webimUI.chat.prototype, {
+    updateRoom: function(room) {
+        var self = this, ul = self.$.member;
+        while (ul.hasChildNodes()) {
+            ul.removeChild(ul.lastChild);
+        }
+        self.memberLi = {};
+        self.$.memberCount.innerHTML = "0";
+        each(room.members, function(k, v) {
+            self.addMember(v.id, v.nick, v.presence == "offline");
+        });
+    },
+
 	addMember: function(id, nick, disable){
 		var self = this, ul = self.$.member, li = self.memberLi;
 		if(li[id])return;
@@ -551,6 +563,7 @@ extend(webimUI.chat.prototype, {
 		self.$.member.appendChild(el);
 		self.$.memberCount.innerHTML = parseInt(self.$.memberCount.innerHTML) + 1;
 	},
+
 	removeMember: function(id){
 		var self = this, el = self.memberLi[id];
 		if(el){

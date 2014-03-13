@@ -49,10 +49,10 @@ app("layout.popup", function( options ) {
 
 	(function(){
 		//room  events
-		room.bind("addMember", function(e, room_id, info){
+		room.bind("memberAdded", function(e, room_id, info){
 			var c = layout.chat("room", room_id);
-			c && c.addMember(info.id, info.nick, info.id == im.data.user.id);
-		}).bind("removeMember", function(e, room_id, info){
+			c && c.addMember(info.id, info.nick, info.presence == "offline");
+		}).bind("memberRemoved", function(e, room_id, info){
 			var c = layout.chat("room", room_id);
 			c && c.removeMember(info.id, info.nick);
 		});

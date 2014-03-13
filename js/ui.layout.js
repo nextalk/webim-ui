@@ -89,14 +89,18 @@ app("layout", function( options ) {
 	});
 
 	(function(){
-		//room  events
-		room.bind("addMember", function(e, room_id, info){
+		//room  events TODO: Remove
+		room.bind("memberAdded", function(e, room_id, info){
 			var c = layout.chat("room", room_id);
 			c && c.addMember(info.id, info.nick, info.id == im.data.user.id);
-		}).bind("removeMember", function(e, room_id, info){
+		}).bind("memberRemoved", function(e, room_id, info){
 			var c = layout.chat("room", room_id);
 			c && c.removeMember(info.id, info.nick);
-		});
+		}).bind("updated", function(e, data){ //room data
+			var c = layout.chat("room", data.id);
+            c && c.updateRoom(data);
+        
+        });
 	})();
 
 	//all ready.

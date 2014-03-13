@@ -76,10 +76,10 @@ app("layout.visitor", function( options ) {
 	}).bind("update", function(e, data){
 		layout.updateChat("buddy", data);
 	});
-	room.bind("addMember", function(e, room_id, info){
+	room.bind("memberAdded", function(e, room_id, info){
 		var c = layout.chat("room", room_id);
 		c && c.addMember(info.id, info.nick, info.id == im.data.user.id);
-	}).bind("removeMember", function(e, room_id, info){
+	}).bind("memberRemoved", function(e, room_id, info){
 		var c = layout.chat("room", room_id);
 		c && c.removeMember(info.id, info.nick);
 	});

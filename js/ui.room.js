@@ -35,30 +35,13 @@ app("room", function( options ) {
 		layout.focusChat("room", info.id);
 	}).bind("discussion", function( e, info, buddies ){
 		info.id = info.id || ruid();
-		room.join( info.id, info.nick, function(){
+		room.invite( info.id, info.nick, buddies, function(){
 			layout.addChat("room", info.id);
 			layout.focusChat("room", info.id);
 		} );
-		for (var i = 0; i < buddies.length; i++) {
-			var id = buddies[i];
-			var msg = {
-				type: "chat"
-			  , to: id
-			  , from: im.data.user.id
-			  , nick: im.data.user.nick
-			  , to_nick: buddy.get(id) && buddy.get(id).nick
-			  , timestamp: (new Date()).getTime()
-			  , body: "webim-event:invite|,|" + info.id + "|,|" + info.nick
-			};
-			(function(msg, i){
-				setTimeout(function(){
-					im.sendMessage( msg );
-				}, i*500);
-			})(msg, i);
-		};
 	}).bind("exit", function(e, id){
-		room.block( id );
-		layout.removeChat("room",id);
+		room.leave( id );
+		layout.removeChat("room", id);
 	});
 	im.bind("event", function( e, events ) {
 		for (var i = 0; i < events.length; i++) {
@@ -66,6 +49,7 @@ app("room", function( options ) {
 			if( event && event[0] == "invite" ) {
 				var id = event[1];
 				room.join( id, event[2], function(){
+                    //TODO: no need this callback?
 					//layout.addChat("room", id);
 				} );
 			}
@@ -81,65 +65,33 @@ app("room", function( options ) {
 	im.setting.bind("update",function(e, key, val){
 		if(key == "buddy_sticky")roomUI.window.options.sticky = val;
 	});
-	room.bind("join",function( e, info){
+	room.bind("updated",function(e, info){
+        //FIXME: info is a room list??
 		updateRoom(info);
-		//Save temporary room
-		if( info.temporary ) {
-			var data = []
-			  , list = setting.get("temporary_rooms") || []
-			  , has = false, up = false;
-			for (var i = 0; i < list.length; i++) {
-				if( list[i].id == info.id ) {
-					has = true;
-					up = list[i].nick != info.nick;
-					list[i].nick = info.nick;
-				}
-				data.push( list[i] );
-			};
-			if( !has )
-				data.push({id: info.id, nick: info.nick});
-			if( !has || up )
-				setting.set("temporary_rooms",data);
-		}
-	}).bind("leave", function( e, info){
-		//Remove temporary room
-		if( info.temporary ) {
-			var data = []
-			  , list = setting.get("temporary_rooms") || []
-			  , has = false;
-			for (var i = 0; i < list.length; i++) {
-				if( list[i].id == info.id )
-					has = true;
-				else
-					data.push( list[i] );
-			};
-			if( has )
-				setting.set("temporary_rooms",data);
-			roomUI.remove( info.id );
-		}
-
-	}).bind("block", function( e, id, list){
+	}).bind("leaved", function( e, id){
+        //TODO:
+        roomUI.remove([id]);
+		//updateRoom(info);
+	}).bind("blocked", function( e, id, list){
 		var info = room.get(id);
-		setting.set("blocked_rooms",list);
 		updateRoom(info);
-		room.leave(id);
-	}).bind("unblock", function( e, id, list){
+		//room.leave(id);
+	}).bind("unblocked", function( e, id, list){
 		var info = room.get(id);
-		setting.set("blocked_rooms",list);
 		updateRoom(info);
-		room.join(id, info && info.nick);
-	}).bind("addMember", function( e, room_id, info){
-		updateRoom(room.get(room_id), true);
-	}).bind("removeMember", function( e, room_id, info){
-		updateRoom(room.get(room_id), true);
+		//room.join(id, info && info.nick);
 	});
 	//room
-	function updateRoom(info, ignore){
+	function updateRoom(info){
 		var nick = info.nick;
-		info = extend({},info,{group:"group", nick: nick + "(" + (parseInt(info.count) + "/"+ parseInt(info.all_count || info.count)) + ")"});
+        if(info.all_count === 0) {
+            info = extend({}, info, {group:"group", nick: nick});
+        } else {
+            info = extend({},info,{group:"group", nick: nick + "(" + (parseInt(info.count) + "/"+ parseInt(info.all_count || info.count)) + ")"});
+        }
 		layout.updateChat(info);
 		info.blocked && (info.nick = nick + "(" + i18n("blocked") + ")");
-		roomUI.li[info.id] ? roomUI.update(info) : ( !ignore && roomUI.add(info) );
+		roomUI.li[info.id] ? roomUI.update(info) : roomUI.add(info);
 	}
 	hide( roomUI.$.actions );
 	im.bind( "beforeOnline", function(){

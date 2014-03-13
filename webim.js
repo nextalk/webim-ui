@@ -1,12 +1,12 @@
 /*!
- * Webim v5.3
- * http://www.webim20.cn/
+ * Webim v5.4
+ * http://nextalk.im/
  *
- * Copyright (c) 2013 Arron
+ * Copyright (c) 2014 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Thu Feb 20 12:08:45 2014 +0800
- * Commit: bcbb5a54e8a0cb03ae3930a572056bdb69a22ff6
+ * Date: Tue Mar 11 20:08:39 2014 +0800
+ * Commit: 79335913a83c863a557f0a7f4cd16c33c02d4f0d
  */
 (function(window, document, undefined){
 
@@ -1110,7 +1110,6 @@ ClassEvent.on( comet );
  * websocket
  */
 
-
 function socket( url, options ) {
 	var self = this, options = options || {};
 	var ws = self.ws = new WebSocket( url );
@@ -1344,12 +1343,13 @@ extend(webim.prototype, {
 		each( data.rooms, function(n, v) {
 			history.init( "grpchat", v.id, v.history );
 		});
+        //FIXED BY ery
 		//blocked rooms
-		var b = self.setting.get("blocked_rooms"), roomData = data.rooms;
-		isArray(b) && roomData && each(b,function(n,v){
-			roomData[v] && (roomData[v].blocked = true);
-		});
-		room.set(roomData);
+		//var b = self.setting.get("blocked_rooms"), roomData = data.rooms;
+		//isArray(b) && roomData && each(b,function(n,v){
+		//	roomData[v] && (roomData[v].blocked = true);
+		//});
+		room.set(data.rooms);
 		room.options.ticket = data.connection.ticket;
 		self.trigger("online",[data]);
 		self._createConnect();
@@ -1420,15 +1420,12 @@ extend(webim.prototype, {
 			buddy.presence( map( grep( data, grepPresence ), mapFrom ) );
 			data = grep( data, grepRoomPresence );
 			for (var i = data.length - 1; i >= 0; i--) {
-				var dd = data[i];
-				if( dd.type == "leave" ) {
-					room.removeMember(dd.to || dd.status, dd.from);
-				} else {
-					room.addMember(dd.to || dd.status, {
-						id: dd.from
-					  , nick: dd.nick
-					});
-				}
+                /*
+                 * Redsigned by ery
+                 * 
+                 * Load all members when leaved
+                 */
+                room.onPresence(data[i]);
 			};
 		});
 
@@ -1444,7 +1441,7 @@ extend(webim.prototype, {
 			return a.type == "online" || a.type == "offline" || a.type == "show";
 		}
 		function grepRoomPresence( a ){
-			return a.type == "join" || a.type == "leave";
+			return a.type == "invite" || a.type == "join" || a.type == "leave";
 		}
 	},
 	handle: function(data){
@@ -1626,7 +1623,7 @@ function route( ob, val ) {
 window.webim = webim;
 
 extend( webim, {
-	version: "5.3",
+	version: "5.4",
 	defaults:{
 	},
 	log: log,
@@ -1665,9 +1662,7 @@ model("setting",{
 		play_sound: true,
 		buddy_sticky: true,
 		minimize_layout: true,
-		msg_auto_pop: true,
-		temporary_rooms: [],
-		blocked_rooms: []
+		msg_auto_pop: true
 	}
 },{
 	_init:function(){
@@ -1914,93 +1909,142 @@ model( "buddy", {
 			else
 				return this.data;
 		},
+        //Invite members to create a temporary room
+        invite: function(id, nick, members, callback) {
+			var self = this, options = self.options, user = options.user;
+			ajax({
+				type: "post",
+				cache: false,
+				url: route( "invite" ),
+				data: {
+					ticket: options.ticket,
+					id: id,
+					nick: nick || "", 
+                    members: members.join(","),
+					csrf_token: webim.csrf_token
+				},
+                //data is a room object
+				success: function( data ) {
+					self.set( [ data ] );
+					self.loadMember( id );
+					callback && callback( data );
+				}
+			});
+                
+        },
+		join:function(id, nick, callback){
+			var self = this, options = self.options, d = self.dataHash[id], user = options.user;
+
+			ajax({
+				type: "post",
+				cache: false,
+				url: route( "join" ),
+				data: {
+					ticket: options.ticket,
+					id: id,
+                    //temporary: d.temporary,
+					nick: nick || "", 
+					csrf_token: webim.csrf_token
+				},
+				success: function( data ) {
+					self.set( [ data ] );
+					self.loadMember( id );
+					callback && callback( data );
+				}
+			});
+		},
+		leave: function(id) {
+			var self = this, options = self.options, d = self.dataHash[id], user = options.user;
+			if(d) {
+				ajax({
+					type: "post",
+					cache: false,
+					url: route( "leave" ),
+					data: {
+						ticket: options.ticket,
+						id: id,
+						nick: user.nick, 
+                        temporary: d.temporary,
+						csrf_token: webim.csrf_token
+                    },
+                    success: function( data ) {
+                        delete self.dataHash[id];
+                        self.trigger("leaved",[id]);
+                    }
+				});
+			}
+		},
 		block: function(id) {
-			var self = this, d = self.dataHash[id];
+			var self = this, options = self.options, d = self.dataHash[id];
 			if(d && !d.blocked){
 				d.blocked = true;
 				var list = [];
-				each(self.dataHash,function(n,v){
+				each(self.dataHash, function(n,v){
 					if(!v.temporary && v.blocked) list.push(v.id);
 				});
-				self.trigger("block",[id, list]);
+				ajax({
+					type: "post",
+					cache: false,
+					url: route( "block" ),
+					data: {
+						ticket: options.ticket,
+						id: id,
+						csrf_token: webim.csrf_token
+                    },
+                    success: function(data) {
+                        self.trigger("blocked",[id, list]);
+                    }
+				});
 			}
 		},
 		unblock: function(id) {
-			var self = this, d = self.dataHash[id];
+			var self = this, options = self.options, d = self.dataHash[id];
 			if(d && d.blocked){
 				d.blocked = false;
 				var list = [];
 				each(self.dataHash,function(n,v){
 					if(!v.temporary && v.blocked) list.push(v.id);
 				});
-				self.trigger("unblock",[id, list]);
+				ajax({
+					type: "post",
+					cache: false,
+					url: route( "unblock" ),
+					data: {
+						ticket: options.ticket,
+						id: id,
+						csrf_token: webim.csrf_token
+                    },
+                    success: function(data) {
+                        self.trigger("unblocked",[id, list]);
+                    }
+				});
 			}
 		},
 		set: function(d) {
 			var self = this, data = self.data, dataHash = self.dataHash, status = {};
 			each(d,function(k,v){
 				var id = v.id;
-				if(id){
-					v.members = v.members || [];
-					v.count = v.count || 0;
-					v.all_count = v.all_count || 0;
-					if(!dataHash[id]){
-						dataHash[id] = v;
-						data.push(v);
-					}
-					else extend(dataHash[id], v);
-					self.trigger("join",[dataHash[id]]);
-				}
+                if(!id) return;
 
+                v.members = v.members || [];
+                v.all_count = v.members.length;
+                v.count = 0;
+                each(v.members, function(k, m) {
+                    if(m.presence == "online")  {
+                        v.count += 1;
+                    }
+                });
+                if(!dataHash[id]){
+                    dataHash[id] = v;
+                    data.push(v);
+                } else {
+                    extend(dataHash[id], v);
+                    //TODO: compare and trigger
+                }
+                self.trigger("updated", dataHash[id]);
 			});
 		},
-		addMember: function(room_id, info){
-			var self = this;
-			if(isArray(info)){
-				each(info, function(k,v){
-					self.addMember(room_id, v);
-				});
-				return;
-			};
-			var room = self.dataHash[room_id];
-			if(room){
-				var members = room.members, member;
-				for (var i = members.length; i--; i){
-					if (members[i].id == info.id) {
-						member = members[i];
-					}
-				}
-				if(!member){
-					info.nick = info.nick;
-					members.push(info);
-					room.count = members.length;
-					self.trigger("addMember",[room_id, info]);
-				}
-			}
-		},
-		removeMember: function(room_id, member_id){
-			var self = this
-			  , room = this.dataHash[room_id];
-			if(room){
-				var members = room.members, member;
-				for (var i = members.length; i--; i){
-					if (members[i].id == member_id) {
-						member = members[i];
-						members.splice(i, 1);
-						room.count--;
-					}
-				}
-				member && self.trigger("removeMember",[room_id, member]);
-			}
-		},
-		initMember: function(id){
-			var room = this.dataHash[id];
-			if(room && !room.initMember){
-				room.initMember = true;
-				this.loadMember(id);
-			}
-		},
-		loadMember: function(id){
+		loadMember: function(id) {
 			var self = this, options = self.options;
 			ajax( {
 				type: "get",
@@ -2012,48 +2056,32 @@ model( "buddy", {
 					csrf_token: webim.csrf_token
 				},
 				success: function(data){
-					self.addMember(id, data);
+					self.updateMember(id, data);
 				}
 			});
 		},
-		join:function(id, nick, callback){
-			var self = this, options = self.options, user = options.user;
 
-			ajax({
-				type: "post",
-				cache: false,
-				url: route( "join" ),
-				data: {
-					ticket: options.ticket,
-					id: id,
-					nick: nick || "", 
-					csrf_token: webim.csrf_token
-				},
-				success: function( data ) {
-					self.initMember( id );
-					self.set( [ data ] );
-					callback && callback( data );
-				}
-			});
-		},
-		leave: function(id){
-			var self = this, options = self.options, d = self.dataHash[id], user = options.user;
-			if(d){
-				d.initMember = false;
-				ajax({
-					type: "post",
-					cache: false,
-					url: route( "leave" ),
-					data: {
-						ticket: options.ticket,
-						id: id,
-						nick: user.nick, 
-						csrf_token: webim.csrf_token
-					}
-				});
-				self.trigger("leave",[d]);
-			}
-		},
+        updateMember: function(room_id, data) {
+			var room = this.dataHash[room_id];
+            if(room) {
+                room.memberLoaded = true;
+                room.members = data;
+                this.set([room]);
+            }
+        },
+
+        onPresence: function(presence) {
+            var tp = presence.type;
+            if( (tp == "join") || (tp == "leave") ) {
+                var roomId = presence.to || presence.status;
+                var oneRoom = this.dataHash[roomId];
+                if(oneRoom && oneRoom.memberLoaded) {
+                    alert("reloading " + roomId);
+                    this.loadMember(roomId);
+                }
+            }
+        },
+
 		clear:function(){
 			var self = this;
 			self.data = [];
