@@ -81,6 +81,19 @@ app( "chat", function( options ) {
 			chatUI.addMember( info.id, info.nick, info.presence != "online" );
 		} );
 
+        /**
+         * notice member leaved or joined
+         */
+        room.bind("memberLeaved", function(e, roomId, presence) {
+            if(roomId == id) {
+                chatUI.notice(i18n("user leaved notice", {"name": presence.nick}), 5000);
+            }
+        }).bind("memberJoined", function(e, roomId, presence){
+            if(roomId == id) {
+                chatUI.notice(i18n("user joined notice", {"name": presence.nick}), 5000);
+            }
+        });
+
 	} else {
 		var h = history.get( "chat", id );
 		if( !h )

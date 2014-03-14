@@ -2071,13 +2071,18 @@ model( "buddy", {
         },
 
         onPresence: function(presence) {
-            var tp = presence.type;
+			var self = this, tp = presence.type;
             if( (tp == "join") || (tp == "leave") ) {
                 var roomId = presence.to || presence.status;
                 var oneRoom = this.dataHash[roomId];
                 if(oneRoom && oneRoom.memberLoaded) {
-                    alert("reloading " + roomId);
-                    this.loadMember(roomId);
+                    //alert("reloading " + roomId);
+                    self.loadMember(roomId);
+                }
+                if(tp == "join") {
+                    self.trigger("memberJoined", [roomId, presence]);
+                } else {
+                    self.trigger("memberLeaved", [roomId, presence]);
                 }
             }
         },

@@ -47,6 +47,8 @@ webim.ui.i18n.store('zh-TW',{
 	"buddy offline notice": "{{name}}已離線，您所發送的消息{{name}}將在下次登錄時收到",
 	"input notice": "這裏輸入消息，Enter鍵發送",
 	"clear history notice": "聊天歷史記錄已清除",
+    "user leaved notice": "{{name}}已離線或退出群聊",
+    "user joined notice": "{{name}}加入群聊",
 	"typing":" 正在輸入...",
 	"inputing":" 正在輸入...",
 	"chat with":"和{{name}}聊天",

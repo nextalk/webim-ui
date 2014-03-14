@@ -47,6 +47,8 @@ webim.ui.i18n.store('en',{
 	"buddy offline notice": "{{name}} is offline，{{name}} will receive your messsage when next online",
 	"input notice": "Input message here，type 'Enter'",
 	"clear history notice": "The histories has been cleared",
+    "user leaved notice": "{{name}} is offline or leaved",
+    "user joined notice": "{{name}} is joined",
 	"typing":" Typing...",
 	"inputing":" Typing...",
 	"chat with":"Chat with {{name}}",
