@@ -68,7 +68,7 @@ app("room", function( options ) {
 	room.bind("updated",function(e, info){
         //FIXME: info is a room list??
 		updateRoom(info);
-	}).bind("leaved", function( e, id){
+	}).bind("leaved", function(e, id){
         //TODO:
         roomUI.remove([id]);
 		//updateRoom(info);
@@ -283,13 +283,15 @@ widget("room",{
 		var self = this
 		  , buddy = self.options.buddy
 		  , markup = []
-		  , buddies = buddy.all(true);
+          //all buddies
+		  , buddies = buddy.all(); 
 		self._discussion = info;
 		var $ = this.$;
 		$.name.value = info && info.nick.replace(/\([^\)]*\)/ig, "") || (i18n("discussion name input", {name: self.options.user.nick}));
 		for (var i = 0; i < buddies.length; i++) {
 			var b = buddies[i];
-			markup.push('<li><label for="webim-discussion-'+b.id+'"><input id="webim-discussion-'+b.id+'" type="checkbox" name="buddy" value="'+b.id+'" />'+b.nick+'</label></li>');
+            var clz = b.show && (b.show == "unavailable" || b.show == "hidden") ? "ui-state-disabled" : "";
+			markup.push('<li class="'+clz+'"><label for="webim-discussion-'+b.id+'"><input id="webim-discussion-'+b.id+'" type="checkbox" name="buddy" value="'+b.id+'" />'+b.nick+'</label></li>');
 		};
 		$.ul2.innerHTML = markup.join("");
 		show( $.discussion );
