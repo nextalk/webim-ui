@@ -88,6 +88,7 @@ app("buddy", function( options ){
 		} else {
 			buddyUI.remove(map(data, mapId));
 		}
+        
 	});
 	//some information has been modified.
 	buddy.bind( "update", function( e, data){
@@ -134,6 +135,9 @@ widget("buddy",{
         self.on_li_group = {
         };
 		self.size = 0;
+        //id: "online" | "offline"
+        self.presences = {
+        }
 		if(options.disable_group){
 			addClass(self.element, "webim-buddy-hidegroup");
 		}
@@ -194,7 +198,9 @@ self.trigger("offline");
 	},
 	titleCount: function(){
 		var self = this, size = self.size, win = self.window, empty = self.$.empty, element = self.element;
-		win && win.title(self.options.title + "(" + (size ? size : "0") + ")");
+        var ol_sz = 0;
+        each(self.presences, function(id, p) { if(p) ol_sz++; });
+		win && win.title(self.options.title + "(" + ol_sz + "/" + (size ? size : "0") + ")");
 		if(!size){
 			show(empty);
 		}else{
@@ -244,6 +250,7 @@ self.trigger("offline");
 		var self = this, $ = self.$, win = self.window;
 		self.scroll(false);
 		self.removeAll();
+        self.presences = {};
 		hide( $.empty );
 		self.notice("offline");
 	},
@@ -273,10 +280,13 @@ self.trigger("offline");
 			_countDisplay( li[id].firstChild.firstChild, count );
 		}
 	},
+    isOnline: function(show) {
+        return !((show == "unavailable") || (show == "hidden"));
+    },
 	_addOne:function(info, end) {
 		var self = this, li = self.li, on_li = self.on_li, li_group = self.li_group, on_li_group = self.on_li_group;
         info.show = info.show || "available";
-        if(self.options.online_group && !((info.show == "unavailable") || (info.show == "hidden"))) {
+        if(self.options.online_group && self.isOnline(info.show)) {
             this._addOne2Grp(info, on_li, "online_group", on_li_group, false);
         }
         var group_name = info["group"] || "friend";
@@ -286,7 +296,11 @@ self.trigger("offline");
     _addOne2Grp:function(info, li, group_name, li_group, end) {
 		var self = this, id = info.id, ul = self.$.ul, on_li = self.on_li;
 		if(!li[id]){
-			if(li === self.li) self.size++;
+			if(li === self.li) {
+                //to count online 
+                self.presences[info.id] = self.isOnline(info.show);
+                self.size++;
+            }
 			if(!info.default_pic_url)info.default_pic_url = "";
 			info.status = stripHTML(info.status) || "&nbsp;";
 			//info.show = info.show || "available";
@@ -330,6 +344,7 @@ self.trigger("offline");
 					name: group_name,
 					el: g_el,
 					count: 0,
+                    online_count: 0,
 					title: g_el.firstChild.lastChild,
 					li: li_el
 				};
@@ -364,12 +379,17 @@ self.trigger("offline");
 		var self = this, li = self.li, on_li = self.on_li, id = info.id;
 		li[id] && self._updateInfo(li[id], info);
         on_li[id] && self._updateInfo(on_li[id], info);
+        //added in 5.4... count online
+        var show = info.show || "available";
+        self.presences[info.id] = self.isOnline(show);
+
 	},
 	update: function(data){
 		data = makeArray(data);
 		for(var i=0; i < data.length; i++){
 			this._updateOne(data[i]);
 		}
+		this.titleCount();
 	},
 	add: function(data, end){
 		data = makeArray(data);
@@ -384,7 +404,7 @@ self.trigger("offline");
 			ids.push(k);
 		}
 		this.remove(ids);
-		this.titleCount();
+		//this.titleCount();
 	},
 	remove: function(ids){
 		var self = this, id, el, li = self.li, group, li_group = self.li_group;
@@ -399,7 +419,10 @@ self.trigger("offline");
     _removeOne: function(id, li, li_group) {
         var self = this, el = li[id];
         if(el){
-            if(li == self.li) self.size--;
+            if(li == self.li) {
+                self.size--;
+                delete(self.presences[id]);
+            }
             group = li_group[id];
             if(group){
                 group.count --;
