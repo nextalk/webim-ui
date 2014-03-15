@@ -73,6 +73,7 @@ webim.ui.i18n.store('zh-CN',{
 	"room member": "群成员",
 	"collapse": "收缩",
 	"expand": "展开",
+    "online_group": "在线用户",
 	"friend":"好友",
 	"stranger":"陌生人",
 	"available": "在线",

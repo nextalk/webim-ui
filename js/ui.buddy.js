@@ -128,6 +128,11 @@ widget("buddy",{
 		};
 		self.li_group = {
 		};
+        //added in 5.4
+        self.on_li = {
+        };
+        self.on_li_group = {
+        };
 		self.size = 0;
 		if(options.disable_group){
 			addClass(self.element, "webim-buddy-hidegroup");
@@ -253,13 +258,23 @@ self.trigger("offline");
 			_countDisplay( li[id].firstChild.firstChild, count );
 		}
 	},
-	_addOne:function(info, end){
-		var self = this, li = self.li, id = info.id, ul = self.$.ul;
+	_addOne:function(info, end) {
+		var self = this, li = self.li, on_li = self.on_li, li_group = self.li_group, on_li_group = self.on_li_group;
+        info.show = info.show || "available";
+        if(self.options.online_group && !((info.show == "unavailable") || (info.show == "hidden"))) {
+            this._addOne2Grp(info, on_li, "online_group", on_li_group, false);
+        }
+        var group_name = info["group"] || "friend";
+        this._addOne2Grp(info, li, group_name, li_group, end);
+    },
+
+    _addOne2Grp:function(info, li, group_name, li_group, end) {
+		var self = this, id = info.id, ul = self.$.ul, on_li = self.on_li;
 		if(!li[id]){
-			self.size++;
+			if(li === self.li) self.size++;
 			if(!info.default_pic_url)info.default_pic_url = "";
 			info.status = stripHTML(info.status) || "&nbsp;";
-			info.show = info.show || "available";
+			//info.show = info.show || "available";
 			info.human_show = i18n(info.show);
 			info.pic_url = info.pic_url || "";
 			var el = li[id] = createElement(tpl(self.options.tpl_li, info));
@@ -271,19 +286,24 @@ self.trigger("offline");
 				self.trigger("select", [info]);
 				this.blur();
 			});
-			var groups = self.groups, group_name = i18n(info["group"] || "friend"), group = groups[group_name];
+			var groups = self.groups, group_name = i18n(group_name), group = groups[group_name];
 			if(!group){
 				var g_el = createElement(tpl(self.options.tpl_group));
 				hide( g_el );
 				if(group_name == i18n("stranger")) end = true;
-				if(end) {
-					ul.appendChild(g_el);
-					self._lastChild = g_el;
-				} else {
-					self._lastChild ? 
-						ul.insertBefore(g_el, ul.lastChild) :
-						ul.appendChild(g_el);
-				}
+                if(group_name == i18n("online_group")) {
+                    //insert firstchild
+                    ul.insertBefore(g_el, ul.firstChild);
+                } else {
+                    if(end) {
+                        ul.appendChild(g_el);
+                        self._lastChild = g_el;
+                    } else {
+                        self._lastChild ? 
+                            ul.insertBefore(g_el, ul.lastChild) :
+                            ul.appendChild(g_el);
+                    }
+                }
 				var li_el = g_el.lastChild
 				  , trigger = g_el.firstChild
 				  , _icon = trigger.firstChild
@@ -318,15 +338,17 @@ self.trigger("offline");
 				}
 			}
 			if(group.count == 0) show(group.el);
-			self.li_group[id] = group;
+			li_group[id] = group;
 			group.li.appendChild(el);
 			group.count++;
 			group.title.innerHTML = group_name + "("+ group.count+")";
 		}
 	},
+
 	_updateOne:function(info){
-		var self = this, li = self.li, id = info.id;
+		var self = this, li = self.li, on_li = self.on_li, id = info.id;
 		li[id] && self._updateInfo(li[id], info);
+        on_li[id] && self._updateInfo(on_li[id], info);
 	},
 	update: function(data){
 		data = makeArray(data);
@@ -353,22 +375,27 @@ self.trigger("offline");
 		var self = this, id, el, li = self.li, group, li_group = self.li_group;
 		ids = idsArray(ids);
 		for(var i=0; i < ids.length; i++){
-			id = ids[i];
-			el = li[id];
-			if(el){
-				self.size--;
-				group = li_group[id];
-				if(group){
-					group.count --;
-					if(group.count == 0)hide(group.el);
-					group.title.innerHTML = group.name + "("+ group.count+")";
-				}
-				remove(el);
-				delete(li[id]);
-			}
+            var id = ids[i];
+            self._removeOne(id, self.on_li, self.on_li_group);
+            self._removeOne(id, self.li, self.li_group);
 		}
 		self.titleCount();
 	},
+    _removeOne: function(id, li, li_group) {
+        var self = this, el = li[id];
+        if(el){
+            if(li == self.li) self.size--;
+            group = li_group[id];
+            if(group){
+                group.count --;
+                if(group.count == 0)hide(group.el);
+                group.title.innerHTML = group.name + "("+ group.count+")";
+            }
+            remove(el);
+            delete(li[id]);
+        }
+    },
+    
 	select: function(id){
 		var self = this, el = self.li[id];
 		el && el.firstChild.click();

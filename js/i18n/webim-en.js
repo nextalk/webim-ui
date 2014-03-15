@@ -73,6 +73,7 @@ webim.ui.i18n.store('en',{
 	"room member": "Members",
 	"collapse": "Collapse",
 	"expand": "Expand",
+    "online_group": "Online",
 	"friend":"Friend",
 	"stranger":"Stranger",
 	"available": "Available",

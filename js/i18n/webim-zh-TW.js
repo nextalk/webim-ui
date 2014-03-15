@@ -73,6 +73,7 @@ webim.ui.i18n.store('zh-TW',{
 	"room member": "群成員",
 	"collapse": "收縮",
 	"expand": "展開",
+    "online_group": "在線用戶",
 	"friend":"好友",
 	"stranger":"陌生人",
 	"available": "在線",
