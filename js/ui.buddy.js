@@ -157,11 +157,26 @@ widget("buddy",{
 			if(this.value == "")this.value = placeholder;
 		});
 		addEvent(input, "keyup", function(){
-			var list = self.li, val = this.value;
-			each(self.li, function(n, li){
-				if(val && (li.text || li.innerHTML.replace(/<[^>]*>/g,"")).indexOf(val) == -1) hide(li);
-				else show(li);
-			});
+			var val = this.value;
+            if(val == undefined || val == "") {
+                //show all when finished
+                each(self.groups, function(n, grp) { show(grp.el) });
+                each(self.on_li, function(n,li) { show(li); });
+                each(self.li, function(n,li) { show(li); });
+            } else {
+                //hide all first
+                each(self.groups, function(n, grp) { hide(grp.el) });      
+                each(self.on_li, function(n,li) { hide(li); });
+                each(self.li, function(n,li) { hide(li); });
+                //show searched
+                each(self.li, function(id, li){
+                     if ( (li.text || li.innerHTML.replace(/<[^>]*>/g, "")).indexOf(val) >= 0 ) {
+                         var grp = self.li_group[id];
+                         if(grp) show(grp.el);
+                         show(li);
+                     }
+                });
+            }
 		});
 /*
 var a = $.online.firstChild;
