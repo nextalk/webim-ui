@@ -196,10 +196,11 @@ self.trigger("offline");
 */
 
 	},
+    //FIXME Later: should be moved to model...
 	titleCount: function(){
 		var self = this, size = self.size, win = self.window, empty = self.$.empty, element = self.element;
         var ol_sz = 0;
-        each(self.presences, function(id, p) { if(p) ol_sz++; });
+        each(self.presences, function(id, p) { if(p.o) ol_sz++; });
 		win && win.title(self.options.title + "(" + ol_sz + "/" + (size ? size : "0") + ")");
 		if(!size){
 			show(empty);
@@ -212,6 +213,20 @@ self.trigger("offline");
 			self.scroll(false);
 		}
 	},
+
+    //FIXME Later: should be moved to model...
+    groupTitleCount: function(grp) {
+        var self = this, oncnt = 0;
+        if(grp.name == i18n("online_group")) {
+            grp.title.innerHTML = grp.name + "(" + grp.count+")";
+        } else {
+            each(self.presences, function(id, p) { 
+                if(p.o && p.g == grp.name) oncnt++; 
+            });
+            grp.title.innerHTML = grp.name + "(" + oncnt + "/" + grp.count+")";
+        }
+    },
+
 	scroll:function(is){
 		toggleClass(this.element, "webim-buddy-scroll", is);
 	},
@@ -298,7 +313,7 @@ self.trigger("offline");
 		if(!li[id]){
 			if(li === self.li) {
                 //to count online 
-                self.presences[info.id] = self.isOnline(info.show);
+                self.presences[info.id] = {o: self.isOnline(info.show), g: i18n(group_name)};
                 self.size++;
             }
 			if(!info.default_pic_url)info.default_pic_url = "";
@@ -371,7 +386,7 @@ self.trigger("offline");
 			li_group[id] = group;
 			group.li.appendChild(el);
 			group.count++;
-			group.title.innerHTML = group_name + "("+ group.count+")";
+            self.groupTitleCount(group);
 		}
 	},
 
@@ -381,8 +396,10 @@ self.trigger("offline");
         on_li[id] && self._updateInfo(on_li[id], info);
         //added in 5.4... count online
         var show = info.show || "available";
-        self.presences[info.id] = self.isOnline(show);
-
+        var group_name = i18n(info.group || "friend");
+        var group = self.groups[group_name];
+        if(group) { self.groupTitleCount(group); }
+        self.presences[info.id] = {o: self.isOnline(show), g: group_name};
 	},
 	update: function(data){
 		data = makeArray(data);
@@ -425,9 +442,9 @@ self.trigger("offline");
             }
             group = li_group[id];
             if(group){
-                group.count --;
+                group.count--;
                 if(group.count == 0)hide(group.el);
-                group.title.innerHTML = group.name + "("+ group.count+")";
+                self.groupTitleCount(group);
             }
             remove(el);
             delete(li[id]);
