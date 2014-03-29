@@ -174,7 +174,9 @@
 
 #webim-buddy .webim-buddy-unavailable img{
 	filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
-	-webkit-filter: grayscale(100%);
+    filter: gray; /* IE6-9 */
+	-webkit-filter: grayscale(100%); /*webkit*/
 }
+
 
 
