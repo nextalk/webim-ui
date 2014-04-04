@@ -1509,10 +1509,6 @@ extend(webim.prototype, {
 			error: callback
 		} );
 	},
-	//setStranger: function(ids){
-	//	this.stranger_ids = idsArray(ids);
-	//},
-	//stranger_ids: [],
 	online: function( params ) {
 		var self = this, status = self.status;
 		if ( self.state !== webim.OFFLINE ) {
@@ -1527,7 +1523,7 @@ extend(webim.prototype, {
 			});
 		}
 		params = extend({                                
-			//stranger_ids: self.stranger_ids.join(","),
+			//chatlink_ids: self.chatlink_ids.join(","),
 			buddy_ids: buddy_ids.join(","),
 			room_ids: room_ids.join(","),
 			csrf_token: webim.csrf_token,

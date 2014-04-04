@@ -83,7 +83,6 @@ $setting = empty($setting) ? "{}" : $setting;
 		}).bind("offline",function(data){
 			chatlink.offline(mapIds(data));
 		});
-		im.setStranger(chatlink.idsArray());
 		im.autoOnline() && im.online();
 	}
 	function ready(){
