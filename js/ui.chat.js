@@ -203,7 +203,7 @@ widget("chat",{
 			self._updateInfo(info);
 		}
 		var userOn = self.options.user.presence == "online";
-		var buddyOn = self.options.info.presence == "online";
+		var buddyOn = (self.options.info.presence == "online") && (self.options.info.show != "invisible");
 		if(!userOn){
 			self.notice(i18n("user offline notice"));
 		}else if(!buddyOn){

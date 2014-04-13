@@ -67,9 +67,12 @@
 .webim-icon-invisible{
 	background-position:-48px -80px;
 }
+
+/*
 .webim-icon-unavailable{
 	background-position:-64px -80px;
 }
+*/
 /*use bullet*/
 .webim-icon-available{
 	background-position:0 -64px;

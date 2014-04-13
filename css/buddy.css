@@ -178,5 +178,9 @@
 	-webkit-filter: grayscale(100%); /*webkit*/
 }
 
+/* invisible -> unavailable icon */
+#webim-buddy li.webim-buddy-invisible .webim-icon-invisible{
+	background-position:-64px -64px;
+}
 
 
