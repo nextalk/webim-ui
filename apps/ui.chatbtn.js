@@ -52,7 +52,7 @@ app("chatbtn", function(options){
 	});
 
 	im.bind("beforeOnline", function( e, params ){
-		params.stranger_ids = chatbtn.idsArray();
+		params.chatlink_ids = chatbtn.idsArray();
 	}).bind("online", function(e){
 		chatbtn.off(im.data.user);
 	}).bind("offline", function(e){

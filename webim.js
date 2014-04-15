@@ -5,8 +5,8 @@
  * Copyright (c) 2014 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Tue Mar 11 20:08:39 2014 +0800
- * Commit: 79335913a83c863a557f0a7f4cd16c33c02d4f0d
+ * Date: Sat Apr 5 10:22:27 2014 +0800
+ * Commit: 62756690a8b3ef65c198cd8ea9ce651b348cfcd9
  */
 (function(window, document, undefined){
 
@@ -1507,10 +1507,6 @@ extend(webim.prototype, {
 			error: callback
 		} );
 	},
-	//setStranger: function(ids){
-	//	this.stranger_ids = idsArray(ids);
-	//},
-	//stranger_ids: [],
 	online: function( params ) {
 		var self = this, status = self.status;
 		if ( self.state !== webim.OFFLINE ) {
@@ -1525,7 +1521,7 @@ extend(webim.prototype, {
 			});
 		}
 		params = extend({                                
-			//stranger_ids: self.stranger_ids.join(","),
+			//chatlink_ids: self.chatlink_ids.join(","),
 			buddy_ids: buddy_ids.join(","),
 			room_ids: room_ids.join(","),
 			csrf_token: webim.csrf_token,

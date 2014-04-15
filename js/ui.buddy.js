@@ -75,8 +75,12 @@ app("buddy", function( options ){
 	var grepVisible = function(a){ return a.show != "invisible" && a.presence == "online"};
 	var grepInvisible = function(a){ return a.show == "invisible"; };
 	//some buddies online.
-	buddy.bind("online", function( e, data){
-		buddyUI.add(grep(data, grepVisible));
+	buddy.bind("online", function( e, data) {
+		if ( options.showUnavailable ) {
+            buddyUI.add(data);
+        } else {
+            buddyUI.add(grep(data, grepVisible));
+        }
 		buddyUI.update(data);
 	});
 	//some buddies offline.
@@ -92,9 +96,14 @@ app("buddy", function( options ){
 	});
 	//some information has been modified.
 	buddy.bind( "update", function( e, data){
-		buddyUI.add(grep(data, grepVisible));
-		buddyUI.update(grep(data, grepVisible));
-		buddyUI.remove(map(grep(data, grepInvisible), mapId));
+		if ( options.showUnavailable ) {
+            buddyUI.add(data);
+            buddyUI.update(data);
+        } else { 
+            buddyUI.add(grep(data, grepVisible));
+            buddyUI.update(grep(data, grepVisible));
+            buddyUI.remove(map(grep(data, grepInvisible), mapId));
+        }
 	} );
 	buddyUI.offline();
 	im.bind( "beforeOnline", function(){
@@ -296,7 +305,7 @@ self.trigger("offline");
 		}
 	},
     isOnline: function(show) {
-        return !((show == "unavailable") || (show == "hidden"));
+        return !((show == "unavailable") || (show == "invisible"));
     },
 	_addOne:function(info, end) {
 		var self = this, li = self.li, on_li = self.on_li, li_group = self.li_group, on_li_group = self.on_li_group;

@@ -36,7 +36,7 @@ app("chatlink", function(options){
 	});
 
 	im.bind("beforeOnline", function( e, params ){
-		params.stranger_ids = chatlink.idsArray();
+		params.chatlink_ids = chatlink.idsArray();
 	}).bind("online", function(e){
 		chatlink.remove(im.data.user);
 	}).bind("offline", function(e){
