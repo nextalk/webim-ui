@@ -13,8 +13,9 @@ class WebimUploadHandler extends UploadHandler
 {
 	protected function get_file_name($name,
 		$type = null, $index = null, $content_range = null) {
+			$ext = pathinfo($name, PATHINFO_EXTENSION);
 			return $this->get_unique_filename(
-				$this->trim_file_name(str_replace('.', '-', microtime(true) . "." . rand(100, 999)), $type, $index, $content_range),
+				$this->trim_file_name(str_replace('.', '-', microtime(true) . "." . rand(100, 999)) . ($ext ? ("." . $ext) : ""), $type, $index, $content_range),
 				$type,
 				$index,
 				$content_range
