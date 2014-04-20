@@ -340,6 +340,11 @@ app( "chat.visitor", function( options ) {
 	}, options );
 
 	var chatUI = new webimUI.chat( null, options );
+	im.bind("online",function(){
+		chatUI.options.user = im.data.user;
+		chatUI.history.user = im.data.user;
+		chatUI.notice("");
+	});
 
 	// Set board content
 	chatUI.$.board && (chatUI.$.board.innerHTML = info.desc);
