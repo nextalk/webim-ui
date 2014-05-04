@@ -407,8 +407,8 @@ app( "chat.visitor", function( options ) {
 				commentOrRobot();
 				//win.minimize();
 			},
-			"error": function(){
-				alert( "留言失败");
+			"error": function(t){
+				alert(t && t.responseText || "留言失败");
 			}
 		});
 	});
