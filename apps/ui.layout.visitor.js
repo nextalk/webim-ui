@@ -464,7 +464,8 @@ app( "chat.visitor", function( options ) {
 	}
 
 	function showRobot() {
-		//history.load( "chat", info.id );
+		if(!history.get("chat", info.id))
+			history.init( "chat", info.id, [] );
 		chatUI.setWindow( win );
 		chatUI.notice("");
 		html( chatUI.$.wrap, chatUI.$.container );
