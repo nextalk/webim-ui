@@ -226,7 +226,8 @@ widget("window", {
 
 		each(["minimize", "maximize", "close", "tabClose"], function(n,v){
 			addEvent($[v], "click", function(e){
-				if(!this.disabled)self[v]();
+				//Different the element `disabled` attr
+				if(!this.disable)self[v]();
 				stop(e);
 			});
 			addEvent($[v],"mousedown",stop);

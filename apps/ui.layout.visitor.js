@@ -416,8 +416,8 @@ app( "chat.visitor", function( options ) {
 	im.bind("offline", commentOrRobot);
 
 	//evaluate events
-	win.$.close.disabled = true;
-	win.$.tabClose.disabled = true;
+	win.$.close.disable = true;
+	win.$.tabClose.disable = true;
 	addEvent( win.$.close, "click", evaluate);
 	addEvent( win.$.tabClose, "click", evaluate);
 	addEvent( $evals.cancel, "click", function(){
