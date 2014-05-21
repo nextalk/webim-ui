@@ -198,6 +198,9 @@
         width: 19.7em;
 }
 
+.webim-layout .webim-window-normal .webim-window-tab {
+    width: 19.8em !important;
+}
 
 .webim-layout .webim-buddy-window .webim-window-tab{
         width: 16em;
