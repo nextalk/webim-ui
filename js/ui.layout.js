@@ -311,7 +311,7 @@ widget("layout",{
 	buildUI: function(e){
 		var self = this, $ = self.$;
 		//var w = self.element.width() - $.shortcut.outerWidth() - $.widgets.outerWidth() - 55;
-		var w = (windowWidth() - 45) - $.shortcut.offsetWidth - $.widgets.offsetWidth - 70;
+		var w = (windowWidth() - 45) - $.shortcut.offsetWidth - $.widgets.offsetWidth - 70 - 105;
 		self.maxVisibleTabs = parseInt(w / self.tabWidth);
 		self._fitUI();
 		if( !self.options.disableResize )
