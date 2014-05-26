@@ -150,9 +150,6 @@ widget("chat",{
 	<div id=":tools" class="webim-chat-tools ui-helper-clearfix ui-state-default"></div>\
 	<table class="webim-chat-t" cellSpacing="0"> \
 	<tr> \
-	<td style="vertical-align:top;"> \
-	<em class="webim-icon webim-icon-chat-edit"></em>\
-	</td> \
 	<td style="vertical-align:top;width:100%;"> \
 	<div class="webim-chat-input-wrap">\
 	<textarea id=":input" class="webim-chat-input webim-gray ui-widget-content"><%=input notice%></textarea> \
@@ -570,7 +567,8 @@ extend(webimUI.chat.prototype, {
 		var el = createElement('<li><a class="'+ (disable ? 'ui-state-disabled' : '') +'" href="'+ id +'">'+ nick +'</a></li>');
 		addEvent(el.firstChild,"click",function(e){
 			preventDefault(e);
-			disable || self.trigger("select", [{id: id, nick: nick}]);
+            //5.4.2 fixec: disable || 
+			self.trigger("select", [{id: id, nick: nick}]);
 		});
 		li[id] = el;
 		self.$.member.appendChild(el);
