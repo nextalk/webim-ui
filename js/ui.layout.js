@@ -628,7 +628,10 @@ widget("layout",{
 		if(leave){
 			a == id && (self.activeTabId = null);
 		}else{
-			a && a != id && self.tabs[a].minimize();
+            var activeTab = self.tabs[a];
+            //fixed in 5.5
+            //don't minimize if detached
+			a && a != id && !activeTab.isDetached() && activeTab.minimize();
 			self.activeTabId = id;
 			self._updatePrevCount(id);
 		}
@@ -644,6 +647,7 @@ widget("layout",{
 		var win = self.tabs[panelId] = new webimUI.window(null, extend({
 			isMinimize: self.activeTabId || !self.options.chatAutoPop,
 			tabWidth: self.tabWidth -2,
+            detachable: self.options.detachable || false,
 			titleVisibleLength: 9
 		}, winOptions))
 			.bind("close", function(){ 

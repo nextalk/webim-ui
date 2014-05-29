@@ -31,6 +31,7 @@
 widget("window", {
         isMinimize: false,
         minimizable:true,
+        detachable: false,
         maximizable:false,
         closeable:true,
         sticky: true,
@@ -60,6 +61,7 @@ widget("window", {
                                                     <div id=":header" class="webim-window-header ui-widget-header ui-corner-top">\
                                                             <span id=":actions" class="webim-window-actions">\
                                                                     <a id=":minimize" title="<%=minimize%>" class="webim-window-minimize" href="#minimize"><em class="ui-icon ui-icon-minus"><%=minimize%></em></a>\
+                                                                    <a id=":detach" title="<%=detach%>" class="webim-window-detach" href="#detach"><em class="ui-icon ui-icon-arrowthick-1-ne"><%=detach%></em></a>\
                                                                     <a id=":maximize" title="<%=maximize%>" class="webim-window-maximize" href="#maximize"><em class="ui-icon ui-icon-plus"><%=maximize%></em></a>\
                                                                     <a id=":close" title="<%=close%>" class="webim-window-close" href="#close"><em class="ui-icon ui-icon-close"><%=close%></em></a>\
                                                             </span>\
@@ -89,6 +91,7 @@ widget("window", {
 		self.title(options.title, options.icon);
 		!options.minimizable && hide($.minimize);
 		!options.maximizable && hide($.maximize);
+        !options.detachable && hide($.detach);
 		if(!options.closeable){
 		       	hide($.tabClose);
 		       	hide($.close);
@@ -98,6 +101,12 @@ widget("window", {
 		}else{
 			self.restore();
 		}
+        self.position = {right: 0, bottom: 26.4};
+        if(options.detached) {
+            self.position.right = options.detached.right; 
+            self.position.bottom = options.detached.bottom;
+            self.detach();
+        }
 		if(options.onlyIcon){
 			hide($.tabTitle);
 		}else{
@@ -163,7 +172,11 @@ widget("window", {
 	},
 	_setVisibile: function(){
 		var self = this, $ = self.$;
-		replaceClass($.tab, "ui-state-default ui-state-highlight", "ui-state-active");
+        if(self.isDetached()) { 
+            hide($.tab); 
+        } else {
+            replaceClass($.tab, "ui-state-default ui-state-highlight", "ui-state-active");
+        }
 		self.activate();
 		_countDisplay($.tabCount, 0);
 	},
@@ -182,20 +195,74 @@ widget("window", {
 	minimize: function(){
 		var self = this;
 		if(self.isMinimize())return;
+        show(self.$.tab);
 		replaceClass(self.$.tab, "ui-state-active", "ui-state-default");
 		self.deactivate();
 		self._changeState("minimize");
 	},
+
 	tabClose: function(){
 		this.close();
 	},
+
 	close: function(){
 		var self = this;
 		self.trigger("close");
 		remove(self.element);
 	},
+
+    detach: function() {
+        var self = this, position = self.position, tab = self.$.tab, win = self.$.window, btn = self.$.detach;
+        if(self.isDetached())return;
+        var vaaaa = self.vaaaa;
+        //fix bottom when tab is hidden
+        position.bottom -= tab.clientHeight;
+        hide(this.$.tab);
+        win.style.bottom = position.bottom + 'px';
+        win.style.right = position.right + "px";
+        replaceClass(btn.firstChild, "ui-icon-arrowthick-1-ne", "ui-icon-arrowthick-1-sw");
+        self.detached = true;
+    },
+
+    isDetached: function() {
+        return this.detached || false; 
+    },
+
+    attach : function() {
+        var self = this, position = self.position, tab = self.$.tab, win = self.$.window, btn = self.$.detach;
+        position.right = 0;
+        position.bottom = 26.4;
+        show(this.$.tab);
+        win.style.bottom = position.bottom + 'px';
+        win.style.right = position.right + "px";
+        replaceClass(btn.firstChild, "ui-icon-arrowthick-1-sw", "ui-icon-arrowthick-1-ne");
+        self.detached = false;
+    },
+
+    _beforeMove: function(e) {
+        var self = this, position = self.position, win= self.$.window;
+        if(win.style.right) position.right = parseInt(win.style.right);
+        if(win.style.bottom) position.bottom = parseInt(win.style.bottom);
+        position.right = position.right || 0;
+        position.bottom = position.bottom || 26.4;
+        position.mouseX = e.pageX || e.clientX;
+        position.mouseY = e.pageY || e.clientY;
+    },
+    
+    move: function(e) {
+        var self = this, position = self.position, win = self.$.window;
+        var offsetX = (e.pageX || e.clientX) - position.mouseX;
+        var offsetY = (e.pageY || e.clientY) - position.mouseY;
+        position.mouseX = (e.pageX || e.clientX);
+        position.mouseY = (e.pageY || e.clientY);
+        position.right -= offsetX;
+        position.bottom -= offsetY
+        win.style.right = position.right + "px";
+        win.style.bottom = position.bottom + "px";
+    },
+
 	_initEvents:function(){
-		var self = this, element = self.element, $ = self.$, tab = $.tab;
+		var self = this, element = self.element, $ = self.$, tab = $.tab, header = $.header, win = $.window;
 		var stop = function(e){
 			stopPropagation(e);
 			preventDefault(e);
@@ -204,6 +271,39 @@ widget("window", {
 		var minimize = function(e){
 			self.minimize();
 		};
+
+        if(self.options.detachable) {
+
+            //the window should be detached first
+            addEvent($.detach, "click", function(e) {
+                self.isDetached() ?  self.attach() : self.detach();
+				stop(e);
+            });
+
+            //if detached, move...
+            var _move = function(e) { self.move(e); }
+
+            addEvent(header, "mouseover", function() {
+                if(self.isDetached()) { 
+                    header.style.cursor = "move"; 
+                } else {
+                    header.style.cursor = "default"; 
+                }
+            });
+
+            addEvent(header, "mousedown", function(e) {
+                if(self.isDetached()) {
+                    self._beforeMove(e);
+                    addEvent(header, "mousemove", _move);
+                }
+            });
+
+            addEvent(header, "mouseup", function(e) {
+                removeEvent(header, "mousemove", _move);
+            });
+
+        }
+
 		//addEvent($.header, "click", minimize);
 		addEvent(tab, "click", function(e){
 			if(self.isMinimize())self.restore();
@@ -230,7 +330,7 @@ widget("window", {
 				if(!this.disable)self[v]();
 				stop(e);
 			});
-			addEvent($[v],"mousedown",stop);
+			addEvent($[v],"mousedown", stop);
 		});
 
 	},

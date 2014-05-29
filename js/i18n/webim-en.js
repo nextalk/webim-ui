@@ -28,6 +28,7 @@ webim.ui.i18n.store('en',{
 	"close":"Close",
 	"minimize":"Minimize",
 	"maximize":"Maximize",
+    "detach": "Move",
 	"restore":"Restore",
 	"setting":"Setting",
 	"notification":"Notification",

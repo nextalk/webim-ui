@@ -28,6 +28,7 @@ webim.ui.i18n.store('zh-TW',{
 	"close":"關閉",
 	"minimize":"最小化",
 	"maximize":"最大化",
+    "detach": "移動",
 	"restore":"還原",
 	"setting":"設置",
 	"notification":"通知",
