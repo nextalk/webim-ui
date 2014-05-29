@@ -101,7 +101,7 @@ widget("window", {
 		}else{
 			self.restore();
 		}
-        self.position = {right: 0, bottom: 26.4};
+        self.position = {right: 0, bottom: 0};
         if(options.detached) {
             self.position.right = options.detached.right; 
             self.position.bottom = options.detached.bottom;
@@ -214,9 +214,7 @@ widget("window", {
     detach: function() {
         var self = this, position = self.position, tab = self.$.tab, win = self.$.window, btn = self.$.detach;
         if(self.isDetached())return;
-        var vaaaa = self.vaaaa;
-        //fix bottom when tab is hidden
-        position.bottom -= tab.clientHeight;
+        //hide tab first
         hide(this.$.tab);
         win.style.bottom = position.bottom + 'px';
         win.style.right = position.right + "px";
@@ -230,11 +228,11 @@ widget("window", {
 
     attach : function() {
         var self = this, position = self.position, tab = self.$.tab, win = self.$.window, btn = self.$.detach;
-        position.right = 0;
-        position.bottom = 26.4;
         show(this.$.tab);
-        win.style.bottom = position.bottom + 'px';
-        win.style.right = position.right + "px";
+        position.right = 0;
+        position.bottom = 0;
+        win.style.bottom = "26.4px";
+        win.style.right = "0px";
         replaceClass(btn.firstChild, "ui-icon-arrowthick-1-sw", "ui-icon-arrowthick-1-ne");
         self.detached = false;
     },
@@ -244,7 +242,7 @@ widget("window", {
         if(win.style.right) position.right = parseInt(win.style.right);
         if(win.style.bottom) position.bottom = parseInt(win.style.bottom);
         position.right = position.right || 0;
-        position.bottom = position.bottom || 26.4;
+        position.bottom = position.bottom || 0;
         position.mouseX = e.pageX || e.clientX;
         position.mouseY = e.pageY || e.clientY;
     },
