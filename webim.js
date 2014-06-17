@@ -5,8 +5,8 @@
  * Copyright (c) 2014 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Fri May 23 18:01:08 2014 +0800
- * Commit: ee2a1e4b0f871eec9671603e35f4023d21b51e3a
+ * Date: Sat Jun 7 15:15:31 2014 +0800
+ * Commit: eddc282944b455ca1b4b172a0c37e04046d19933
  */
 (function(window, document, undefined){
 
@@ -1884,9 +1884,9 @@ model( "buddy", {
 	set: function( addData ) {
 		var self = this, data = self.data, dataHash = self.dataHash, status = {};
 		addData = addData || [];
-		var l = addData.length , v, type, add;
-		//for(var i = 0; i < l; i++){
-		for(var i in addData){
+		var l = addData.length , v, type, add, id;
+		for(var i = 0; i < l; i++){
+		//for(var i in addData){
 			v = addData[i], id = v.id;
 			if(id){
 				if(!dataHash[id]){
