@@ -39,7 +39,7 @@ webim.ui.ready(function(){
 		}
 	}), im = ui.im;
 
-	//im.user({"uid":"1","id":"admin","nick":"admin","pic_url":"http:\/\/test.com\/project\/uc\/discuzX\/uc_server\/avatar.php?uid=0&size=small","url":"home.php?mod=space&uid=1"});
+	//im.user({"uid":"1","id":"admin","nick":"admin","avatar":"http:\/\/test.com\/project\/uc\/discuzX\/uc_server\/avatar.php?uid=0&size=small","url":"home.php?mod=space&uid=1"});
 	//ui.addApp("menu", {"data": menu});
 	//ui.layout.addShortcut( menu);
 	var is_login = true;

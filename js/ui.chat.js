@@ -359,10 +359,10 @@ widget("chat",{
 		var self = this, $ = self.$;
 		$.userPic.setAttribute("href", info.url);
 		$.userPic.setAttribute("target", info.target || self.options.target || "");
-		$.userPic.firstChild.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
+		$.userPic.firstChild.setAttribute("defaultsrc", info.default_avatar ? info.default_avatar : "");
 		setTimeout(function(){
-			if(info.pic_url || info.default_pic_url) {
-				try{$.userPic.firstChild.setAttribute("src", info.pic_url || info.default_pic_url);}catch(e){};
+			if(info.avatar || info.default_avatar) {
+				try{$.userPic.firstChild.setAttribute("src", info.avatar || info.default_avatar);}catch(e){};
 			}
 		},100);
 		$.userStatus.innerHTML = stripHTML(info.status) || "&nbsp";

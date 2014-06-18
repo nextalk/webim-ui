@@ -44,7 +44,7 @@ var ui = new webim.ui(document.body, {
 	}
 }), im = ui.im;
 im.buddy.bind("online", function(data){
-	webim.each(data, function(n,d){ d.pic_url = _path + "test/" + d.pic_url;});
+	webim.each(data, function(n,d){ d.avatar = _path + "test/" + d.avatar;});
 });
 im.bind("go", function(data){
 	data.connection.server =  _path + "im/test/" + data.connection.server;

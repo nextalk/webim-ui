@@ -46,7 +46,7 @@
 			}
 		}), im = ui.im;
 
-		im.setUser( {"id":"51c8450e9bc15","nick":"guest8276","visitor":"true","pic_url":"http:\/\/www.gravatar.com\/avatar\/?s=50","default_pic_url":"http:\/\/www.gravatar.com\/avatar\/?s=50","show":"unavailable","status":null,"url":"http:\/\/www.gravatar.com\/"} );
+		im.setUser( {"id":"51c8450e9bc15","nick":"guest8276","visitor":"true","avatar":"http:\/\/www.gravatar.com\/avatar\/?s=50","default_avatar":"http:\/\/www.gravatar.com\/avatar\/?s=50","show":"unavailable","status":null,"url":"http:\/\/www.gravatar.com\/"} );
 
 		ui.addApp("buddy", {
 			is_login: true,

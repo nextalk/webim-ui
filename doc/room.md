@@ -15,7 +15,7 @@ Response:
 {"id":"d94781a658a1a939",
  "nick":"TestRoom",
  "temporary":true,
- "pic_url":"http:\/\/discuzx3.nextalk.im\/source\/plugin\/nextalk\/static\/images\/chat.png",
+ "avatar":"http:\/\/discuzx3.nextalk.im\/source\/plugin\/nextalk\/static\/images\/chat.png",
  "count":1
 }
 

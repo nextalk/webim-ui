@@ -121,7 +121,7 @@ widget("room",{
 	</div>\
 	<div id=":actions" class="webim-room-actions"><a id=":create" href="#" class="webim-button ui-state-default ui-corner-all"><%=create discussion%></a></div>\
 	</div>',
-	tpl_li: '<li title=""><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=exit%>" /><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=invite%>" /><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><img width="25" src="<%=pic_url%>" defaultsrc="<%=default_pic_url%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong></a></li>'
+	tpl_li: '<li title=""><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=exit%>" /><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=invite%>" /><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><img width="25" src="<%=avatar%>" defaultsrc="<%=default_avatar%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong></a></li>'
 },{
 	_init: function(){
 		var self = this;
@@ -176,8 +176,8 @@ widget("room",{
 		el = el.firstChild.nextSibling.nextSibling;
 		el.setAttribute("href", info.url);
 		el = el.firstChild.nextSibling;
-		el.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
-		el.setAttribute("src", info.pic_url);
+		el.setAttribute("defaultsrc", info.default_avatar ? info.default_avatar : "");
+		el.setAttribute("src", info.avatar);
 		el = el.nextSibling;
 		el.innerHTML = info.nick;
 		return el;
@@ -186,7 +186,7 @@ widget("room",{
 		var self = this, li = self.li, id = info.id, ul = self.$.ul;
 		self.size++;
 		if(!li[id]){
-			if(!info.default_pic_url)info.default_pic_url = "";
+			if(!info.default_avatar)info.default_avatar = "";
 			var el = li[id] = createElement(tpl(self.options.tpl_li, info));
 			//self._updateInfo(el, info);
 			var exit = el.firstChild;

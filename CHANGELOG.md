@@ -11,6 +11,7 @@ CHANGELOG
 * js/ui.buddy.js: ()改为[]
 * css/chat.css: 聊天窗口高度调整为20em
 * css/layout.css: 聊天窗口底栏宽度调整为20em
+* replace 'pic_url' with 'avatar'
 
 
 5.4

@@ -129,7 +129,7 @@ widget("buddy",{
 						</div>\
 							</div>',
 	tpl_group: '<li><h4><em class="ui-icon ui-icon-triangle-1-s"></em><span><%=title%>(<%=count%>)</span></h4><hr class="webim-line ui-state-default" /><ul></ul></li>',
-	tpl_li: '<li title="" class="webim-buddy-<%=show%>"><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><em class="webim-icon webim-icon-<%=show%>" title="<%=human_show%>"><%=show%></em><img width="25" src="<%=pic_url%>" defaultsrc="<%=default_pic_url%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong><span><%=status%></span></a></li>'
+	tpl_li: '<li title="" class="webim-buddy-<%=show%>"><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><em class="webim-icon webim-icon-<%=show%>" title="<%=human_show%>"><%=show%></em><img width="25" src="<%=avatar%>" defaultsrc="<%=default_avatar%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong><span><%=status%></span></a></li>'
 },{
 	_init: function(){
 		var self = this, options = self.options;
@@ -289,9 +289,9 @@ self.trigger("offline");
 		el.className = "webim-icon webim-icon-" + show;
 		el.setAttribute("title", i18n(show));
 		el = el.nextSibling;
-		el.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
-		if(info.pic_url || info.default_pic_url) {
-			el.setAttribute("src", info.pic_url || info.default_pic_url);
+		el.setAttribute("defaultsrc", info.default_avatar ? info.default_avatar : "");
+		if(info.avatar || info.default_avatar) {
+			el.setAttribute("src", info.avatar || info.default_avatar);
 		}
 		el = el.nextSibling;
 		el.innerHTML = info.nick;
@@ -326,11 +326,11 @@ self.trigger("offline");
                 self.presences[info.id] = {o: self.isOnline(info.show), g: i18n(group_name)};
                 self.size++;
             }
-			if(!info.default_pic_url)info.default_pic_url = "";
+			if(!info.default_avatar)info.default_avatar = "";
 			info.status = stripHTML(info.status) || "&nbsp;";
 			//info.show = info.show || "available";
 			info.human_show = i18n(info.show);
-			info.pic_url = info.pic_url || "";
+			info.avatar = info.avatar || "";
 			var el = li[id] = createElement(tpl(self.options.tpl_li, info));
 			//self._updateInfo(el, info);
 			var a = el.firstChild;
