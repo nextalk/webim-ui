@@ -48,8 +48,10 @@ webim.ui.i18n.store('en',{
 	"buddy offline notice": "{{name}} is offline，{{name}} will receive your messsage when next online",
 	"input notice": "Input message here，type 'Enter'",
 	"clear history notice": "The histories has been cleared",
-    "user leaved notice": "{{name}} is offline or leaved",
+    "user leaved notice": "{{name}} is leaved",
     "user joined notice": "{{name}} is joined",
+    "member online notice": "{{name}} is online",
+    "member offline notice": "{{name}} is offline",
 	"typing":" Typing...",
 	"inputing":" Typing...",
 	"chat with":"Chat with {{name}}",
@@ -105,7 +107,9 @@ webim.ui.i18n.store('en',{
 	"discussion name input": "{{name}}'s discussion",
 	"visitor":"Visitor",
 	"manager":"Manager",
-	"exit": "Exit"
+	"exit": "Exit",
+    "Exit Room": "Are you sure to exit '{{name}}'?",
+    "Remove Buddy": "Are you sure to remove {{name}}?"
 });
 
 webim.ui.i18n.store('en',{

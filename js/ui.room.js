@@ -39,9 +39,12 @@ app("room", function( options ) {
 			layout.addChat("room", info.id);
 			layout.focusChat("room", info.id);
 		} );
-	}).bind("exit", function(e, id){
-		room.leave( id );
-		layout.removeChat("room", id);
+	}).bind("exit", function(e, id) {
+        var r = room.get(id);
+        if( r && window.confirm(i18n("Exit Room", {name: r.nick})) ) {
+            room.leave( id );
+            layout.removeChat("room", id);
+        }
 	});
 	im.bind("event", function( e, events ) {
 		for (var i = 0; i < events.length; i++) {
@@ -87,10 +90,10 @@ app("room", function( options ) {
         if(info.all_count === 0) {
             info = extend({}, info, {group:"group", nick: nick});
         } else {
-            info = extend({},info,{group:"group", nick: nick + "(" + (parseInt(info.count) + "/"+ parseInt(info.all_count || info.count)) + ")"});
+            info = extend({},info,{group:"group", nick: nick + "[" + (parseInt(info.count) + "/"+ parseInt(info.all_count || info.count)) + "]"});
         }
 		layout.updateChat(info);
-		info.blocked && (info.nick = nick + "(" + i18n("blocked") + ")");
+		info.blocked && (info.nick = nick + "[" + i18n("blocked") + "]");
 		roomUI.li[info.id] ? roomUI.update(info) : roomUI.add(info);
 	}
 	hide( roomUI.$.actions );
@@ -291,7 +294,8 @@ widget("room",{
 		for (var i = 0; i < buddies.length; i++) {
 			var b = buddies[i];
             var clz = b.show && (b.show == "unavailable" || b.show == "hidden") ? "ui-state-disabled" : "";
-			markup.push('<li class="'+clz+'"><label for="webim-discussion-'+b.id+'"><input id="webim-discussion-'+b.id+'" type="checkbox" name="buddy" value="'+b.id+'" />'+b.nick+'</label></li>');
+			markup.push('<li class="'+clz+'"><label for="webim-discussion-'+b.id+'"><input id="webim-discussion-'+b.id+'" type="checkbox" name="buddy" value="'+b.id+'" />'
+                    +b.nick+'-'+i18n(b.group)+'</label></li>');
 		};
 		$.ul2.innerHTML = markup.join("");
 		show( $.discussion );

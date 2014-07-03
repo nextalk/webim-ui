@@ -48,8 +48,10 @@ webim.ui.i18n.store('zh-TW',{
 	"buddy offline notice": "{{name}}已離線，您所發送的消息{{name}}將在下次登錄時收到",
 	"input notice": "這裏輸入消息，Enter鍵發送",
 	"clear history notice": "聊天歷史記錄已清除",
-    "user leaved notice": "{{name}}已離線或退出群聊",
-    "user joined notice": "{{name}}加入群聊",
+    "user leaved notice": "{{name}}已退出群組",
+    "user joined notice": "{{name}}加入群組",
+    "member online notice": "{{name}}上線",
+    "member offline notice": "{{name}}已下線",
 	"typing":" 正在輸入...",
 	"inputing":" 正在輸入...",
 	"chat with":"和{{name}}聊天",
@@ -108,7 +110,9 @@ webim.ui.i18n.store('zh-TW',{
 	"invite": "邀请",
 	"visitor":"訪客",
 	"manager":"管理員",
-	"exit": "退出"
+	"exit": "退出",
+    "Exit Room": "確定要退出'{{name}}'討論組嗎?",
+    "Remove Buddy": "确定要刪除好友{{name}}嗎?"
 });
 
 webim.ui.i18n.store('zh-TW',{

@@ -42,10 +42,11 @@ widget("history", {
 		self.$.content.appendChild( createElement( "<div>"+markup.join('')+"</div>" ) );
 		self.trigger("update");
 	},
-	notice: function( msg ) {
-		this.$.content.appendChild( createElement( "<div class='ui-corner-all webim-history-notice ui-state-default ui-state-error'>"+msg+"</div>" ) );
+	notice: function( type, msg ) {
+		this.$.content.appendChild( createElement( '<div class="webim-history-notice ui-state-default ui-state-' + type + '">' + msg + '</div>' ) );
 		this.trigger("update");
 	},
+    
 	_renderMsg: function(logItem){
 		var self = this;
 		logItem = extend({}, logItem);

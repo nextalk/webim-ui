@@ -1442,7 +1442,7 @@ extend(webim.prototype, {
 			history.set( data );
 		});
 
-		self.bind("presence",function( e, data ) {
+		self.bind("presence", function( e, data ) {
 			buddy.presence( map( grep( data, grepPresence ), mapFrom ) );
 			data = grep( data, grepRoomPresence );
 			for (var i = data.length - 1; i >= 0; i--) {
@@ -1467,7 +1467,7 @@ extend(webim.prototype, {
 			return a.type == "online" || a.type == "offline" || a.type == "show";
 		}
 		function grepRoomPresence( a ){
-			return a.type == "invite" || a.type == "join" || a.type == "leave";
+			return a.type == "grponline" || a.type == "grpoffline" || a.type == "invite" || a.type == "join" || a.type == "leave";
 		}
 	},
 	handle: function(data){
@@ -1800,12 +1800,27 @@ model( "status", {
 model( "buddy", {
 	active: true
 }, {
-	_init: function(){
+	_init: function() {
 		var self = this;
 		self.data = self.data || [];
 		self.dataHash = {};
 		self.set( self.data );
 	},
+    remove: function(id) {
+		var self = this;
+        var v = self.get(id);
+        if(!v) return;
+        ajax( {
+            type: "post",
+            url: route( "remove_buddy" ),
+            cache: false,
+            data:{ id: id, csrf_token: webim.csrf_token },
+            //context: self,
+            success: function(data) { }
+        } );
+        self.trigger( "unsubscribe", [ [v] ] );
+        delete self.dataHash[id];
+    },
 	clear:function() {
 		var self =this;
 		self.data = [];
@@ -2135,8 +2150,8 @@ model( "presence", {
 
         onPresence: function(presence) {
 			var self = this, tp = presence.type;
-            if( (tp == "join") || (tp == "leave") ) {
-                var roomId = presence.to || presence.status;
+            if(presence.to && self.dataHash[presence.to]) {
+                var roomId = presence.to;
                 var oneRoom = this.dataHash[roomId];
                 if(oneRoom && oneRoom.memberLoaded) {
                     //alert("reloading " + roomId);
@@ -2144,8 +2159,14 @@ model( "presence", {
                 }
                 if(tp == "join") {
                     self.trigger("memberJoined", [roomId, presence]);
-                } else {
+                } else if(tp == "leave") {
                     self.trigger("memberLeaved", [roomId, presence]);
+                } else if(tp == "grponline") {
+                    self.trigger("memberOnline", [roomId, presence]);
+                } else if(tp == "grpoffline") {
+                    self.trigger("memberOffline", [roomId, presence]);
+                } else { //do nothing
+
                 }
             }
         },

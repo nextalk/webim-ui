@@ -40,7 +40,11 @@ app("buddy", function( options ){
 	buddyUI.bind("select", function(e, info){
 		ui.layout.addChat("buddy", info.id);
 		ui.layout.focusChat("buddy", info.id);
-	});
+	}).bind("remove", function(e, info){
+        if(window.confirm(i18n("Remove Buddy", {name: info.nick}))) {
+            buddy.remove(info.id);
+        }
+    });
 	var userUI;
 	if(!options.disable_user) {
 		userUI = ui.addApp( "user", options.userOptions );
@@ -93,7 +97,6 @@ app("buddy", function( options ){
 		} else {
 			buddyUI.remove(map(data, mapId));
 		}
-        
 	});
 	//some information has been modified.
 	buddy.bind( "update", function( e, data){
@@ -104,8 +107,16 @@ app("buddy", function( options ){
             buddyUI.add(grep(data, grepVisible));
             buddyUI.update(grep(data, grepVisible));
             buddyUI.remove(map(grep(data, grepInvisible), mapId));
-        }
-	} );
+        } 
+    } ); 
+    //unsubscribe 
+    buddy.bind( "unsubscribe", function( e, data ) { 
+        var ids = map(data, mapId);
+        each(ids, function(n, id) {  
+            ui.layout.removeChat("buddy", id);
+        });
+        buddyUI.remove(ids);
+    });
 	buddyUI.offline();
 	im.bind( "beforeOnline", function(){
 		buddyUI.online();
@@ -129,7 +140,7 @@ widget("buddy",{
 						</div>\
 							</div>',
 	tpl_group: '<li><h4><em class="ui-icon ui-icon-triangle-1-s"></em><span><%=title%>(<%=count%>)</span></h4><hr class="webim-line ui-state-default" /><ul></ul></li>',
-	tpl_li: '<li title="" class="webim-buddy-<%=show%>"><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><em class="webim-icon webim-icon-<%=show%>" title="<%=human_show%>"><%=show%></em><img width="25" src="<%=avatar%>" defaultsrc="<%=default_avatar%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong><span><%=status%></span></a></li>'
+	tpl_li: '<li title="" class="webim-buddy-<%=show%>"><a href="<%=url%>" rel="<%=id%>" class="ui-helper-clearfix"><div id=":tabCount" class="webim-window-tab-count">0</div><em class="webim-icon ui-icon ui-icon-trash" style="display:none;cursor:pointer;"></em><em class="webim-icon webim-icon-<%=show%>" title="<%=human_show%>"><%=show%></em><img width="25" src="<%=avatar%>" defaultsrc="<%=default_avatar%>" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" /><strong><%=nick%></strong><span><%=status%></span></a></li>'
 },{
 	_init: function(){
 		var self = this, options = self.options;
@@ -266,12 +277,12 @@ self.trigger("offline");
 				self._title(type);
 		}
 	},
-	online: function(){
+	online: function() {
 		var self = this, $ = self.$, win = self.window;
 		self.notice("connect");
 		hide( $.empty );
 	},
-	offline: function(){
+	offline: function() {
 		var self = this, $ = self.$, win = self.window;
 		self.scroll(false);
 		self.removeAll();
@@ -279,13 +290,14 @@ self.trigger("offline");
 		hide( $.empty );
 		self.notice("offline");
 	},
-	_updateInfo:function(el, info){
+	_updateInfo: function(el, info){
 		var show = info.show ? info.show : "available";
 		el.className = "webim-buddy-" + show;
 		el = el.firstChild;
 		el.setAttribute("href", info.url);
 		el = el.firstChild;//tabCount...
-		el = el.nextSibling;
+		el = el.nextSibling;//delete button
+        el = el.nextSibling;//presence icon
 		el.className = "webim-icon webim-icon-" + show;
 		el.setAttribute("title", i18n(show));
 		el = el.nextSibling;
@@ -334,12 +346,22 @@ self.trigger("offline");
 			var el = li[id] = createElement(tpl(self.options.tpl_li, info));
 			//self._updateInfo(el, info);
 			var a = el.firstChild;
-			addEvent(a, "click",function(e){
+
+            //remove button...
+            var rmBtn = a.firstChild.nextSibling;
+            addEvent(rmBtn, "click", function(e) {
+                self.trigger("remove", [info]);
+                stopPropagation(e);
+                preventDefault(e);
+            });
+
+			addEvent(a, "click", function(e){
 				preventDefault(e);
 				self.showCount( id, 0 );
 				self.trigger("select", [info]);
 				this.blur();
 			});
+
 			var groups = self.groups, group_name = i18n(group_name), group = groups[group_name];
 			if(!group){
 				var g_el = createElement(tpl(self.options.tpl_group));

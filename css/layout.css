@@ -138,12 +138,13 @@
 		top: .4em;
 		position:absolute;
 }
+/*Notice: adjust width of chat window here*/
 .webim-layout .webim-window-window {
         position: absolute;
         bottom: 2.20em;
         z-index: 5;
         right: 0;
-        width: 20em; /*20em*/
+        width: 24em; /*20em*/
 }
 
 .webim-layout .webim-window-content {
@@ -166,7 +167,7 @@
         margin: 0 .1em;
 }
 .webim-layout .webim-window-header h4{
-        margin: 0;
+        margin: 0 0 0 24px;
         text-align: center;
         font-weight:normal;
         background:url(about:blank);/*events http://ued.koubei.com/?p=394*/
@@ -198,8 +199,9 @@
         width: 19.7em;
 }
 
+/*Notice: adjust width of chat window here*/
 .webim-layout .webim-panels .webim-window-normal .webim-window-tab {
-    width: 19.85em !important; /*19.85em*/
+    width: 23.85em !important; /*19.85em*/
 }
 
 .webim-layout .webim-buddy-window .webim-window-tab{

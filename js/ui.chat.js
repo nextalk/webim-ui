@@ -56,7 +56,7 @@ app( "chat", function( options ) {
 		var chatUI = new webimUI.chat( null, options );
 
 		chatUI.bind( "sendMessage", function( e, msg ) {
-			im.sendMessage( msg, function(data){ data && data.message && chatUI.history.notice( data.message ); } );
+			im.sendMessage( msg, function(data){ data && data.message && chatUI.history.notice( 'error', data.message ); } );
 			history.set( msg );
 		}).bind("downloadHistory", function( e, info ){
 			history.download( "grpchat", info.id );
@@ -78,7 +78,7 @@ app( "chat", function( options ) {
 			else room.loadMember( id );
 		}, 500 );
 		isArray( info.members ) && each( info.members, function( n, info ){
-			chatUI.addMember( info.id, info.nick, info.presence != "online" );
+			chatUI.addMember( info.id, info.nick, (info.presence == "offline" || info.show == "invisible") );
 		} );
 
         /**
@@ -86,11 +86,19 @@ app( "chat", function( options ) {
          */
         room.bind("memberLeaved", function(e, roomId, presence) {
             if(roomId == id) {
-                chatUI.notice(i18n("user leaved notice", {"name": presence.nick}), 5000);
+                chatUI.history.notice("highlight", i18n("user leaved notice", {"name": presence.nick}));
             }
         }).bind("memberJoined", function(e, roomId, presence){
             if(roomId == id) {
-                chatUI.notice(i18n("user joined notice", {"name": presence.nick}), 5000);
+                chatUI.history.notice("highlight", i18n("user joined notice", {"name": presence.nick}));
+            }
+        }).bind("memberOnline", function(e, roomId, presence){
+            if(roomId == id) {
+                chatUI.history.notice("highlight", i18n("member online notice", {"name": presence.nick}));
+            }
+        }).bind("memberOffline", function(e, roomId, presence){
+            if(roomId == id) {
+                chatUI.history.notice("highlight", i18n("member offline notice", {"name": presence.nick}));
             }
         });
 
@@ -122,7 +130,7 @@ app( "chat", function( options ) {
 			im.buddy.update(id);
 
 		chatUI.bind("sendMessage", function( e, msg ) {
-			im.sendMessage( msg, function(data){ data && data.message && chatUI.history.notice( data.message ); } );
+			im.sendMessage( msg, function(data){ data && data.message && chatUI.history.notice("error", data.message ); } );
 			history.set( msg );
 		}).bind("sendStatus", function( e, msg ) {
 			im.sendStatus( msg );
@@ -557,14 +565,14 @@ extend(webimUI.chat.prototype, {
         self.memberLi = {};
         self.$.memberCount.innerHTML = "0";
         each(room.members, function(k, v) {
-            self.addMember(v.id, v.nick, v.presence == "offline");
+            self.addMember(v.id, v.nick, (v.presence == "offline" || v.show == "invisible") );
         });
     },
 
 	addMember: function(id, nick, disable){
 		var self = this, ul = self.$.member, li = self.memberLi;
-		if(li[id])return;
-		var el = createElement('<li><a class="'+ (disable ? 'ui-state-disabled' : '') +'" href="'+ id +'">'+ nick +'</a></li>');
+		if( li[id] ) return;
+		var el = createElement('<li' + (disable ? ' class="ui-state-disabled"' : '') + '><a  href="' + id  + '">' + nick + '</a></li>');
 		addEvent(el.firstChild,"click",function(e){
 			preventDefault(e);
             //5.4.2 fixec: disable || 
