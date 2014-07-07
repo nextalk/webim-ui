@@ -72,8 +72,11 @@ widget("history", {
 			markup.push(nick);
 			markup.push('</h4><hr class="webim-line ui-state-default" />');
 		}
-
-		markup.push('<p>');
+        if(logItem.style) {
+            markup.push('<p style="' + logItem.style + '">');
+        } else {
+            markup.push('<p>');
+        }
 		markup.push(msg);
 		markup.push('</p>');
 		return markup.join("");

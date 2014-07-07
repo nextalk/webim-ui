@@ -51,7 +51,7 @@ app("layout", function( options ) {
 	}).bind("online",function(e, data){
 		layout.changeState("active");
 		layout.options.user = data.user;
-		_initStatus();
+		_initStatus(im);
 		//setting.set(data.setting);
 	}).bind("offline", function(e, type, msg){
 		type == "offline" && layout.removeAllChat();
@@ -172,7 +172,7 @@ app("layout", function( options ) {
 
 	return layout;
 
-	function _initStatus(){
+	function _initStatus(im){
 		if(__status)
 			return layout.updateAllChat();
 		// status start
@@ -180,16 +180,16 @@ app("layout", function( options ) {
 		var tabs = status.get("tabs"), 
 			tabIds = status.get("tabIds"),
 			//prev num
-			p = status.get("p"), 
+			p = status.get("p"),
 			//focus tab
 			a = status.get("a");
 
 		tabIds && tabIds.length && tabs && each(tabs, function(k,v){
 			var id = k.slice(2), type = k.slice(0,1);
-
-			layout.addChat(type, id, {}, { isMinimize: true});
-
-			layout.chat(k).window.notifyUser("information", v["n"]);
+            //fix issue #31
+            if( type == "r" && !im.room.get(id) ) return;
+            layout.addChat(type, id, {}, { isMinimize: true}); 
+            layout.chat(k).window.notifyUser("information", v["n"]);
 		});
 		p && (layout.prevCount = p) && layout._fitUI();
 		a && layout.focusChat(a);
