@@ -29,7 +29,7 @@ test("webim.ui", 1, function() {
 				jsonp: true
 			}
 		}), im = ui.im;
-		//im.user({"uid":"1","id":"admin","nick":"admin","pic_url":"http:\/\/test.com\/project\/uc\/discuzX\/uc_server\/avatar.php?uid=0&size=small","show":"available","url":"home.php?mod=space&uid=1"});
+		//im.user({"uid":"1","id":"admin","nick":"admin","avatar":"http:\/\/test.com\/project\/uc\/discuzX\/uc_server\/avatar.php?uid=0&size=small","show":"available","url":"home.php?mod=space&uid=1"});
 		ui.addApp("buddy", {
 			title: webim.ui.i18n("online support"),
 			simple: true,

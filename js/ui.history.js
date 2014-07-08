@@ -42,10 +42,11 @@ widget("history", {
 		self.$.content.appendChild( createElement( "<div>"+markup.join('')+"</div>" ) );
 		self.trigger("update");
 	},
-	notice: function( msg ) {
-		this.$.content.appendChild( createElement( "<div class='ui-corner-all webim-history-notice ui-state-default ui-state-error'>"+msg+"</div>" ) );
+	notice: function( type, msg ) {
+		this.$.content.appendChild( createElement( '<div class="webim-history-notice ui-state-default ui-state-' + type + '">' + msg + '</div>' ) );
 		this.trigger("update");
 	},
+    
 	_renderMsg: function(logItem){
 		var self = this;
 		logItem = extend({}, logItem);
@@ -71,8 +72,11 @@ widget("history", {
 			markup.push(nick);
 			markup.push('</h4><hr class="webim-line ui-state-default" />');
 		}
-
-		markup.push('<p>');
+        if(logItem.style) {
+            markup.push('<p style="' + logItem.style + '">');
+        } else {
+            markup.push('<p>');
+        }
 		markup.push(msg);
 		markup.push('</p>');
 		return markup.join("");

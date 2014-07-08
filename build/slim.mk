@@ -13,6 +13,8 @@ JS_APP_FILES = ${JS_SRC_DIR}/ui.setting.js\
 	${APP_SRC_DIR}/notification.js\
 	${APP_SRC_DIR}/ui.notification.js\
 	${APP_SRC_DIR}/ui.layout.popup.js\
+	${APP_SRC_DIR}/ui.visitorstatus.js\
+	${APP_SRC_DIR}/ui.logmsg.js\
 
 CSS_APP_FILES = ${CSS_SRC_DIR}/buddy.css\
 	${CSS_SRC_DIR}/setting.css\

@@ -51,7 +51,7 @@ app("layout", function( options ) {
 	}).bind("online",function(e, data){
 		layout.changeState("active");
 		layout.options.user = data.user;
-		_initStatus();
+		_initStatus(im);
 		//setting.set(data.setting);
 	}).bind("offline", function(e, type, msg){
 		type == "offline" && layout.removeAllChat();
@@ -172,7 +172,7 @@ app("layout", function( options ) {
 
 	return layout;
 
-	function _initStatus(){
+	function _initStatus(im){
 		if(__status)
 			return layout.updateAllChat();
 		// status start
@@ -180,16 +180,16 @@ app("layout", function( options ) {
 		var tabs = status.get("tabs"), 
 			tabIds = status.get("tabIds"),
 			//prev num
-			p = status.get("p"), 
+			p = status.get("p"),
 			//focus tab
 			a = status.get("a");
 
 		tabIds && tabIds.length && tabs && each(tabs, function(k,v){
 			var id = k.slice(2), type = k.slice(0,1);
-
-			layout.addChat(type, id, {}, { isMinimize: true});
-
-			layout.chat(k).window.notifyUser("information", v["n"]);
+            //fix issue #31
+            if( type == "r" && !im.room.get(id) ) return;
+            layout.addChat(type, id, {}, { isMinimize: true}); 
+            layout.chat(k).window.notifyUser("information", v["n"]);
 		});
 		p && (layout.prevCount = p) && layout._fitUI();
 		a && layout.focusChat(a);
@@ -311,7 +311,7 @@ widget("layout",{
 	buildUI: function(e){
 		var self = this, $ = self.$;
 		//var w = self.element.width() - $.shortcut.outerWidth() - $.widgets.outerWidth() - 55;
-		var w = (windowWidth() - 45) - $.shortcut.offsetWidth - $.widgets.offsetWidth - 70;
+		var w = (windowWidth() - 45) - $.shortcut.offsetWidth - $.widgets.offsetWidth - 70 - 105;
 		self.maxVisibleTabs = parseInt(w / self.tabWidth);
 		self._fitUI();
 		if( !self.options.disableResize )
@@ -628,7 +628,10 @@ widget("layout",{
 		if(leave){
 			a == id && (self.activeTabId = null);
 		}else{
-			a && a != id && self.tabs[a].minimize();
+            var activeTab = self.tabs[a];
+            //fixed in 5.5
+            //don't minimize if detached
+			a && a != id && !activeTab.isDetached() && activeTab.minimize();
 			self.activeTabId = id;
 			self._updatePrevCount(id);
 		}
@@ -644,6 +647,7 @@ widget("layout",{
 		var win = self.tabs[panelId] = new webimUI.window(null, extend({
 			isMinimize: self.activeTabId || !self.options.chatAutoPop,
 			tabWidth: self.tabWidth -2,
+            detachable: self.options.detachable || false,
 			titleVisibleLength: 9
 		}, winOptions))
 			.bind("close", function(){ 

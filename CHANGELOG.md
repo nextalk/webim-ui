@@ -1,6 +1,19 @@
 CHANGELOG
 ================================
 
+5.5
+---------------------------------
+* ui.layout.js: 当聊天窗口打开时, 底栏与窗口等宽
+* ui.chat.js: 输入框去掉前面图片并调整高度, 聊天记录框调整到20em高度
+* ui.layout.js: 支持拖动和缩放窗口
+* ui.chatbtn.js: 通过im.models['presence']设置页面按钮状态
+* js/ui.emot.js: 去掉.png后缀
+* js/ui.buddy.js: ()改为[]
+* css/chat.css: 聊天窗口高度调整为20em
+* css/layout.css: 聊天窗口底栏宽度调整为20em
+* replace 'pic_url' with 'avatar'
+
+
 5.4
 ---------------------------------
 *   修改好友隐身问题

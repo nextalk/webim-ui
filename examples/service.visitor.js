@@ -47,7 +47,7 @@
 			layoutOptions: {
 				unscalable: true,
 				buddyTitle: "在线客服",
-				buddies: [{"id":"1","nick":"\u6280\u672f\u652f\u6301","desc":"shouhou jishu zhichi ","presence":"online","show":"available","pic_url":"http:\/\/www.gravatar.com\/avatar\/e08894cc7de84fed191944a8be9f6ad6?s=50"},{"id":"2","nick":"\u5546\u52a1\u652f\u6301","desc":"shouqian ","presence":"online","show":"available","pic_url":"http:\/\/www.gravatar.com\/avatar\/e08894cc7de84fed191944a8be9f6ad6?s=50"}]
+				buddies: [{"id":"1","nick":"\u6280\u672f\u652f\u6301","desc":"shouhou jishu zhichi ","presence":"online","show":"available","avatar":"http:\/\/www.gravatar.com\/avatar\/e08894cc7de84fed191944a8be9f6ad6?s=50"},{"id":"2","nick":"\u5546\u52a1\u652f\u6301","desc":"shouqian ","presence":"online","show":"available","avatar":"http:\/\/www.gravatar.com\/avatar\/e08894cc7de84fed191944a8be9f6ad6?s=50"}]
 			},
 			buddyChatOptions: {
 				upload: true,
@@ -55,7 +55,7 @@
 			}
 		}), im = ui.im;
 
-		im.setUser( {"id":"51c8450e9bc15","nick":"guest8276","visitor":"true","pic_url":"http:\/\/www.gravatar.com\/avatar\/?s=50","default_pic_url":"http:\/\/www.gravatar.com\/avatar\/?s=50","show":"unavailable","status":null,"url":"http:\/\/www.gravatar.com\/", "presence": "online"} );
+		im.setUser( {"id":"51c8450e9bc15","nick":"guest8276","visitor":"true","avatar":"http:\/\/www.gravatar.com\/avatar\/?s=50","default_avatar":"http:\/\/www.gravatar.com\/avatar\/?s=50","show":"unavailable","status":null,"url":"http:\/\/www.gravatar.com\/", "presence": "online"} );
 
 		ui.addApp("visitorstatus");
 		ui.addApp("logmsg");

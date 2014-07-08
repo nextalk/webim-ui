@@ -1,12 +1,12 @@
 /*!
- * Webim v5.4
+ * Webim v5.5
  * http://nextalk.im/
  *
  * Copyright (c) 2014 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Sat Apr 5 10:22:27 2014 +0800
- * Commit: 62756690a8b3ef65c198cd8ea9ce651b348cfcd9
+ * Date: Sat Jun 7 15:15:31 2014 +0800
+ * Commit: eddc282944b455ca1b4b172a0c37e04046d19933
  */
 (function(window, document, undefined){
 
@@ -438,7 +438,14 @@ function ajax( origSettings ) {
 			}
 		}
 		function create() {
-			var doc = win.document;
+            var doc;
+            try{
+                //“Access is denied” when set `document.domain=""`
+                //http://stackoverflow.com/questions/1886547/access-is-denied-javascript-error-when-trying-to-access-the-document-object-of
+                doc = win.document
+            } catch(e){
+                doc = window.document
+            };
 			head = head || doc.getElementsByTagName("head")[0] || doc.documentElement;
 			script = doc.createElement("script");
 			if ( s.scriptCharset ) {
@@ -1291,11 +1298,14 @@ extend(webim.prototype, {
 				show: 'unavailable'
 			}
 		};
+        self.models = {}
+
 
 		ajax.settings.dataType = options.jsonp ? "jsonp" : "json";
 
 		self.status = new webim.status();
 		self.setting = new webim.setting();
+        self.models['presence'] = new webim.presence();
 		self.buddy = new webim.buddy();
 		self.room = new webim.room(null, self.data );
 		self.history = new webim.history(null, self.data );
@@ -1331,14 +1341,28 @@ extend(webim.prototype, {
 		self.trigger( "beforeOnline", [ post_data ] );
 	},
 	_go: function() {
-		var self = this, data = self.data, history = self.history, buddy = self.buddy, room = self.room;
+		var self = this, data = self.data, history = self.history, buddy = self.buddy, room = self.room, presence = self.models['presence'];
 		self.state = webim.ONLINE;
 		history.options.userInfo = data.user;
 		var ids = [];
+        //buddies
 		each( data.buddies, function(n, v) {
 			history.init( "chat", v.id, v.history );
 		});
 		buddy.set( data.buddies );
+
+        //added in version 5.5
+        //presences
+        if(data.presences) { 
+            presence.set(data.presences); 
+        } else {
+            presence.set(map(data.buddies, function(b) { 
+                var p = {};
+                p[b.id] = b.show;
+                return p; 
+            }));
+        }
+
 		//rooms
 		each( data.rooms, function(n, v) {
 			history.init( "grpchat", v.id, v.history );
@@ -1378,6 +1402,7 @@ extend(webim.prototype, {
 		self.data.user.presence = "offline";
 		self.data.user.show = "unavailable";
 		self.buddy.clear();
+        self.models['presence'].clear();
 		self.room.clear();
 		self.history.clean();
 		self.trigger("offline", [type, msg] );
@@ -1391,6 +1416,7 @@ extend(webim.prototype, {
 		  , setting = self.setting
 		  , history = self.history
 		  , buddy = self.buddy
+          , presence = self.models['presence']
 		  , room = self.room;
 
 		self.bind( "message", function( e, data ) {
@@ -1416,7 +1442,7 @@ extend(webim.prototype, {
 			history.set( data );
 		});
 
-		self.bind("presence",function( e, data ) {
+		self.bind("presence", function( e, data ) {
 			buddy.presence( map( grep( data, grepPresence ), mapFrom ) );
 			data = grep( data, grepRoomPresence );
 			for (var i = data.length - 1; i >= 0; i--) {
@@ -1441,7 +1467,7 @@ extend(webim.prototype, {
 			return a.type == "online" || a.type == "offline" || a.type == "show";
 		}
 		function grepRoomPresence( a ){
-			return a.type == "invite" || a.type == "join" || a.type == "leave";
+			return a.type == "grponline" || a.type == "grpoffline" || a.type == "invite" || a.type == "join" || a.type == "leave";
 		}
 	},
 	handle: function(data){
@@ -1592,6 +1618,7 @@ extend(webim.prototype, {
 function idsArray( ids ) {
 	return ids && ids.split ? ids.split( "," ) : ( isArray( ids ) ? ids : ( parseInt( ids ) ? [ parseInt( ids ) ] : [] ) );
 }
+
 function model( name, defaults, proto ) {
 	function m( data, options ) {
 		var self = this;
@@ -1619,7 +1646,7 @@ function route( ob, val ) {
 window.webim = webim;
 
 extend( webim, {
-	version: "5.4",
+	version: "5.5",
 	defaults:{
 	},
 	log: log,
@@ -1773,12 +1800,27 @@ model( "status", {
 model( "buddy", {
 	active: true
 }, {
-	_init: function(){
+	_init: function() {
 		var self = this;
 		self.data = self.data || [];
 		self.dataHash = {};
 		self.set( self.data );
 	},
+    remove: function(id) {
+		var self = this;
+        var v = self.get(id);
+        if(!v) return;
+        ajax( {
+            type: "post",
+            url: route( "remove_buddy" ),
+            cache: false,
+            data:{ id: id, csrf_token: webim.csrf_token },
+            //context: self,
+            success: function(data) { }
+        } );
+        self.trigger( "unsubscribe", [ [v] ] );
+        delete self.dataHash[id];
+    },
 	clear:function() {
 		var self =this;
 		self.data = [];
@@ -1857,9 +1899,9 @@ model( "buddy", {
 	set: function( addData ) {
 		var self = this, data = self.data, dataHash = self.dataHash, status = {};
 		addData = addData || [];
-		var l = addData.length , v, type, add;
-		//for(var i = 0; i < l; i++){
-		for(var i in addData){
+		var l = addData.length , v, type, add, id;
+		for(var i = 0; i < l; i++){
+		//for(var i in addData){
 			v = addData[i], id = v.id;
 			if(id){
 				if(!dataHash[id]){
@@ -1884,6 +1926,46 @@ model( "buddy", {
 		self.options.active && self.complete();
 	}
 } );
+/**
+* presence //联系人
+*/
+
+model( "presence", {
+}, {
+
+    _init: function() {
+        var self = this;
+        self.data = self.data || {};
+        self.set( self.data );
+    },
+
+    get: function(id) {
+        return this.data[id];     
+    },
+
+    set: function(data) {
+        var self = this;
+        var status = {};
+        for(var id in data) {
+            var show = data[id], presence = "online";
+            if(show  == "unavailable" || show == "invisible") {
+                presence = "offline";
+            }
+            status[presence] = status[presence] || [];
+            status[presence].push({id: id, show: show});
+        }
+        for( var key in status ) {
+            self.trigger(key, [status[key]]);
+        }
+    },
+
+    clear: function() {
+        var self = this;
+        self.data = [];      
+    }
+
+});
+
 /*
 * room
 *
@@ -2068,8 +2150,8 @@ model( "buddy", {
 
         onPresence: function(presence) {
 			var self = this, tp = presence.type;
-            if( (tp == "join") || (tp == "leave") ) {
-                var roomId = presence.to || presence.status;
+            if(presence.to && self.dataHash[presence.to]) {
+                var roomId = presence.to;
                 var oneRoom = this.dataHash[roomId];
                 if(oneRoom && oneRoom.memberLoaded) {
                     //alert("reloading " + roomId);
@@ -2077,8 +2159,14 @@ model( "buddy", {
                 }
                 if(tp == "join") {
                     self.trigger("memberJoined", [roomId, presence]);
-                } else {
+                } else if(tp == "leave") {
                     self.trigger("memberLeaved", [roomId, presence]);
+                } else if(tp == "grponline") {
+                    self.trigger("memberOnline", [roomId, presence]);
+                } else if(tp == "grpoffline") {
+                    self.trigger("memberOffline", [roomId, presence]);
+                } else { //do nothing
+
                 }
             }
         },
@@ -2129,7 +2217,8 @@ model("history", {
 			for (var id in cache[type]){
 				var v = cache[type][id];
 				if(data[type][id]){
-					data[type][id] = data[type][id].concat(v);
+                    //data[type][id] = data[type][id].concat(v);
+                    data[type][id] = [].concat(data[type][id]).concat(v); //Fix memory released in ie9
 					self._triggerMsg(type, id, v);
 				}else{
 					self.load(type, id);

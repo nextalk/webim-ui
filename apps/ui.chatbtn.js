@@ -40,10 +40,10 @@ app("chatbtn", function(options){
 			chat && chat.insert( window.location.href );
 		}
 	});
-	var grepVisible = function(a){ return a.show != "invisible" && a.presence == "online"};
+	var grepVisible = function(a){ return a.show != "invisible" && a.show != "unavailable"};
 	var grepInvisible = function(a){ return a.show == "invisible" };
-	im.buddy.bind("online",function(e, data){
-		chatbtn.on(grep(data, grepVisible));
+	im.models['presence'].bind("online",function(e, data){
+		chatbtn.on(data);
 	}).bind("update",function(e, data){
 		chatbtn.on(grep(data, grepVisible));
 		chatbtn.off(grep(data, grepInvisible));

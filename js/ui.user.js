@@ -66,10 +66,10 @@ widget("user",{
 		$.userStatus.innerHTML =  stripHTML(info.status) || "&nbsp;";
 		$.userNick.innerHTML = info.nick || "";
 		$.userPic.setAttribute("href", info.url);
-		$.userPic.firstChild.setAttribute("defaultsrc", info.default_pic_url ? info.default_pic_url : "");
+		$.userPic.firstChild.setAttribute("defaultsrc", info.default_avatar ? info.default_avatar : "");
 		setTimeout(function(){
-			if(info.pic_url || info.default_pic_url) {
-				$.userPic.firstChild.setAttribute("src", info.pic_url || info.default_pic_url);
+			if(info.avatar || info.default_avatar) {
+				$.userPic.firstChild.setAttribute("src", info.avatar || info.default_avatar);
 			}
 		},100);
 		self.show(type);

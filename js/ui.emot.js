@@ -36,38 +36,39 @@ widget("emot", {
 });
 extend(webimUI.emot, {
         emots: [
-                {"t":"smile","src":"smile.png","q":[":)"]},
-                {"t":"smile_big","src":"smile-big.png","q":[":d",":-d",":D",":-D"]},
-                {"t":"sad","src":"sad.png","q":[":(",":-("]},
-                {"t":"wink","src":"wink.png","q":[";)",";-)"]},
-                {"t":"tongue","src":"tongue.png","q":[":p",":-p",":P",":-P"]},
-                {"t":"shock","src":"shock.png","q":["=-O","=-o"]},
-                {"t":"kiss","src":"kiss.png","q":[":-*"]},
-                {"t":"glasses_cool","src":"glasses-cool.png","q":["8-)"]},
-                {"t":"embarrassed","src":"embarrassed.png","q":[":-["]},
-                {"t":"crying","src":"crying.png","q":[":'("]},
-                {"t":"thinking","src":"thinking.png","q":[":-\/",":-\\"]},
-                {"t":"angel","src":"angel.png","q":["O:-)","o:-)"]},
-                {"t":"shut_mouth","src":"shut-mouth.png","q":[":-X",":-x"]},
-                {"t":"moneymouth","src":"moneymouth.png","q":[":-$"]},
-                {"t":"foot_in_mouth","src":"foot-in-mouth.png","q":[":-!"]},
-                {"t":"shout","src":"shout.png","q":[">:o",">:O"]}
+                {"t":"smile","src":"smile","q":[":)"]},
+                {"t":"smile_big","src":"smile-big","q":[":d",":-d",":D",":-D"]},
+                {"t":"sad","src":"sad","q":[":(",":-("]},
+                {"t":"wink","src":"wink","q":[";)",";-)"]},
+                {"t":"tongue","src":"tongue","q":[":p",":-p",":P",":-P"]},
+                {"t":"shock","src":"shock","q":["=-O","=-o"]},
+                {"t":"kiss","src":"kiss","q":[":-*"]},
+                {"t":"glasses_cool","src":"glasses-cool","q":["8-)"]},
+                {"t":"embarrassed","src":"embarrassed","q":[":-["]},
+                {"t":"crying","src":"crying","q":[":'("]},
+                {"t":"thinking","src":"thinking","q":[":-\/",":-\\"]},
+                {"t":"angel","src":"angel","q":["O:-)","o:-)"]},
+                {"t":"shut_mouth","src":"shut-mouth","q":[":-X",":-x"]},
+                {"t":"moneymouth","src":"moneymouth","q":[":-$"]},
+                {"t":"foot_in_mouth","src":"foot-in-mouth","q":[":-!"]},
+                {"t":"shout","src":"shout","q":[">:o",">:O"]}
         ],
         init: function(options){
             var emot = webim.ui.emot, q = emot._q = {};
             options = extend({
-                dir: 'webim/static/emot/default'
+                dir: 'webim/static/emot/default',
+                ext: 'png'
             }, options);
             if (options.emots) 
                 emot.emots = options.emots;
             var dir = options.dir + "/";
+            var ext = options.ext;
             each(emot.emots, function(key, v){
                 if (v && v.src) 
-                    v.src = dir + v.src;
+                    v.src = dir + v.src + '.' + ext;
                 v && v.q &&
                 each(v.q, function(n, val){
                     q[val] = key;
-
                 });
 
             });

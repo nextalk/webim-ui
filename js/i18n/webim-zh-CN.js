@@ -28,6 +28,7 @@ webim.ui.i18n.store('zh-CN',{
 	"close":"关闭",
 	"minimize":"最小化",
 	"maximize":"最大化",
+    "detach": "移动",
 	"restore":"还原",
 	"setting":"设置",
 	"notification":"通知",
@@ -47,8 +48,10 @@ webim.ui.i18n.store('zh-CN',{
 	"buddy offline notice": "{{name}}已离线，您所发送的消息{{name}}将在下次登录时收到",
 	"input notice": "这里输入消息，Enter键发送",
 	"clear history notice": "聊天历史记录已清除",
-    "user leaved notice": "{{name}}已离线或退去群聊",
-    "user joined notice": "{{name}}加入群聊",
+    "user leaved notice": "{{name}}已退出群組",
+    "user joined notice": "{{name}}加入群組",
+    "member online notice": "{{name}}上线",
+    "member offline notice": "{{name}}已下线",
 	"typing":" 正在输入...",
 	"inputing":" 正在输入...",
 	"chat with":"和{{name}}聊天",
@@ -107,7 +110,9 @@ webim.ui.i18n.store('zh-CN',{
 	"invite": "邀请",
 	"visitor":"访客",
 	"manager":"管理员",
-	"exit": "退出"
+	"exit": "退出",
+    "Exit Room": "确定要退出'{{name}}'讨论组吗?",
+    "Remove Buddy": "确定要删除好友{{name}}吗?"
 });
 
 webim.ui.i18n.store('zh-CN',{
