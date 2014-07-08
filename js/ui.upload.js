@@ -22,7 +22,11 @@ widget("upload", {
 					markup += "["+(data.name || "").replace(/\[|\]/ig, "")+"]("+data.url+")";
 					if( data.thumbnailUrl )
 						markup += "("+data.thumbnailUrl+")";
-					try{self.$.input.value = "";} catch(e){}
+					try{
+						self.$.form.reset();
+						self.$.input.value = "";
+					} catch(e){
+					}
 					self.toggle();
 					self.trigger('upload', markup);
 				}
