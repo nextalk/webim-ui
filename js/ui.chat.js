@@ -26,6 +26,7 @@ app( "chat", function( options ) {
 		buddy = im.buddy,
 		room = im.room,
 		history = im.history,
+        user = im.data.user,
 		id = options.id,
 		type = options.type;
 	if( type == "room" ) {
@@ -61,8 +62,9 @@ app( "chat", function( options ) {
 		}).bind("downloadHistory", function( e, info ){
 			history.download( "grpchat", info.id );
 		}).bind("select", function( e, info ) {
+            if(info.id === user.id) return;
 			info.presence = "online";
-			buddy.presence( info );//online
+			buddy.presence( info ); //online
 			ui.layout.addChat( "buddy", info.id, info.nick );
 			ui.layout.focusChat( "buddy", info.id );
 		}).bind("block", function( e, d ){
