@@ -12,6 +12,8 @@ JS_APP_FILES = ${JS_SRC_DIR}/ui.setting.js\
 	${APP_SRC_DIR}/ui.chatbtn.js\
 	${APP_SRC_DIR}/notification.js\
 	${APP_SRC_DIR}/ui.notification.js\
+	${APP_SRC_DIR}/ask.js\
+	${APP_SRC_DIR}/ui.ask.js\
 
 CSS_APP_FILES = ${CSS_SRC_DIR}/buddy.css\
 	${CSS_SRC_DIR}/setting.css\
@@ -22,5 +24,6 @@ CSS_APP_FILES = ${CSS_SRC_DIR}/buddy.css\
 	${APP_SRC_DIR}/chatlink.css\
 	${APP_SRC_DIR}/chatbtn.css\
 	${APP_SRC_DIR}/notification.css\
+	${APP_SRC_DIR}/ask.css\
 
 include build/include.mk

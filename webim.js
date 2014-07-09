@@ -5,8 +5,8 @@
  * Copyright (c) 2014 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Sat Jun 7 15:15:31 2014 +0800
- * Commit: eddc282944b455ca1b4b172a0c37e04046d19933
+ * Date: Thu Jul 3 11:36:31 2014 +0800
+ * Commit: 5a42251772f4a58f6a03b76864e18bf47acbe16a
  */
 (function(window, document, undefined){
 

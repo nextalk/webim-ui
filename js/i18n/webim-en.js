@@ -109,7 +109,13 @@ webim.ui.i18n.store('en',{
 	"manager":"Manager",
 	"exit": "Exit",
     "Exit Room": "Are you sure to exit '{{name}}'?",
-    "Remove Buddy": "Are you sure to remove {{name}}?"
+    "ask app": "Buddy Request",
+    "accept": "Accept",
+    "reject": "Reject",
+    "Remove Buddy": "Are you sure to remove {{name}}?",
+    "Ask Initiate": "{{name}} want to add you as a friend",
+    "Ask Accepted": "{{name}} accepted",
+    "Ask Rejected": "{{name}} rejected"
 });
 
 webim.ui.i18n.store('en',{
