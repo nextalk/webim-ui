@@ -36,9 +36,10 @@ function _parseJSON( data ){
 		data;
 }
 
-function upload( element, callback ){
+function upload( element, callback, start ){
 	_addEvent( element, "submit", function(e){
 		var name = "_upload_form13123";
+		start && start();
 		element.setAttribute("target", name);
 
 		var el = document.createElement("div");

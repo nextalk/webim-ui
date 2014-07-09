@@ -2,12 +2,13 @@
 //image/jpeg,image/jpg,image/gif,image/png,thumbnailUrl
 
 widget("upload", {
-	template: '<div class="webim-upload ui-widget-content"><form class="ui-helper-clearfix" id=":form" method="POST" enctype="multipart/form-data" encoding="multipart/form-data"><input id=":input" type="file" name="files" /><input class="ui-state-default ui-corner-all webim-upload-submit" type="submit" value="<%=upload%>" /></form></div>'
+	template: '<div class="webim-upload ui-widget-content"><form class="ui-helper-clearfix" id=":form" method="POST" enctype="multipart/form-data" encoding="multipart/form-data"><input id=":input" type="file" name="files" /><input id=":submit" class="ui-state-default ui-corner-all webim-upload-submit" type="submit" value="<%=upload%>" /></form></div>'
 },{
 	_init: function(options){
 		var self = this, element = self.element;
 		self.$.form.setAttribute( "action", route("upload") );
 		upload( self.$.form, function( data ){
+			self.$.submit.disabled = false;
 			data = data && data[0];
 			if( data ) {
 				if( !data.url || data.error ) {
@@ -34,6 +35,8 @@ widget("upload", {
 				alert("Upload error");
 			}
 
+		}, function(){
+			self.$.submit.disabled = true;
 		} );
 	},
 	toggle: function(){
