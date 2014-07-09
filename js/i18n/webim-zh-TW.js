@@ -112,7 +112,13 @@ webim.ui.i18n.store('zh-TW',{
 	"manager":"管理員",
 	"exit": "退出",
     "Exit Room": "確定要退出'{{name}}'討論組嗎?",
-    "Remove Buddy": "确定要刪除好友{{name}}嗎?"
+    "ask app": "好友验证",
+    "accept": "接受",
+    "reject": "拒絕",
+    "Remove Buddy": "确定要刪除好友{{name}}嗎?",
+    "Ask Initiate": "{{name}}請求加您為好友",
+    "Ask Accepted": "{{name}}已接受您的好友請求",
+    "Ask Rejected": "{{name}}拒絕了您的好友請求"
 });
 
 webim.ui.i18n.store('zh-TW',{
