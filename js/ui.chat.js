@@ -62,7 +62,7 @@ app( "chat", function( options ) {
 		}).bind("downloadHistory", function( e, info ){
 			history.download( "grpchat", info.id );
 		}).bind("select", function( e, info ) {
-            if(info.id === user.id) return;
+            if( info.id === user.id && !buddy.get(user.id) ) return;
 			info.presence = "online";
 			buddy.presence( info ); //online
 			ui.layout.addChat( "buddy", info.id, info.nick );
