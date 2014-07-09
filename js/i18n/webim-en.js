@@ -113,9 +113,9 @@ webim.ui.i18n.store('en',{
     "accept": "Accept",
     "reject": "Reject",
     "Remove Buddy": "Are you sure to remove {{name}}?",
-    "Ask Initiate": "{{name}} want to add you as a friend",
-    "Ask Accepted": "{{name}} accepted",
-    "Ask Rejected": "{{name}} rejected"
+    "Ask Initiate": "{{name}} want to add you as a friend ({{time}})",
+    "Ask Accepted": "{{name}} accepted ({{time}})",
+    "Ask Rejected": "{{name}} rejected ({{time}})"
 });
 
 webim.ui.i18n.store('en',{

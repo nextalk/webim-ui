@@ -116,9 +116,9 @@ webim.ui.i18n.store('zh-TW',{
     "accept": "接受",
     "reject": "拒絕",
     "Remove Buddy": "确定要刪除好友{{name}}嗎?",
-    "Ask Initiate": "{{name}}請求加您為好友",
-    "Ask Accepted": "{{name}}已接受您的好友請求",
-    "Ask Rejected": "{{name}}拒絕了您的好友請求"
+    "Ask Initiate": "{{name}}請求加您為好友({{time}})",
+    "Ask Accepted": "{{name}}已接受您的好友請求({{time}})",
+    "Ask Rejected": "{{name}}拒絕了您的好友請求({{time}})"
 });
 
 webim.ui.i18n.store('zh-TW',{
