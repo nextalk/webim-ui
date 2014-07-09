@@ -380,6 +380,9 @@ widget("chat",{
 		//http://hi.baidu.com/beileyhu/blog/item/efe29910f31fd505203f2e53.html
 		var self = this,input = self.$.input;
 		input.focus();
+		//Fix placeholder for IE
+		if(input.value == i18n("input notice"))
+			input.value = "";
 		if(!isCursorPos){
 			input.value = value;
 			return;
