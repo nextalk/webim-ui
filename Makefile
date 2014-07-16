@@ -1,4 +1,4 @@
-all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp jishigou vBulletin ipboard struts2 dotnet4 jinhusns ci rails4 flask slim
+all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp jishigou vBulletin ipboard struts2 dotnet4 jinhusns ci rails4 flask slim spring3
 
 slim:
 	@@echo "Build webim for slimframework"
@@ -139,6 +139,14 @@ struts2:
 clean_struts2:
 	@@echo "Clean struts2"
 	@@$(MAKE) clean -f build/struts2.mk
+
+spring3:
+	@@echo "Build webim for spring3"
+	@@$(MAKE) -f build/spring3.mk
+
+clean_spring3:
+	@@echo "Clean spring3"
+	@@$(MAKE) clean -f build/spring3.mk
 
 dotnet4:
 	@@echo "Build webim for dotnet4"

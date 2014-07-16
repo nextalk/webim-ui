@@ -45,7 +45,7 @@ widget("ask",{
 	<ul id=":ul"></ul>\
 	<div id=":empty" class="webim-ask-empty"><%=empty ask%></div>\
 	</div>',
-	tpl_btn_li: '<li title=""><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=accept%>" /><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=reject%>" /><%=text%></li>',
+	tpl_btn_li: '<li title=""><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=reject%>" /><input class="webim-button ui-state-default ui-corner-all" type="button" value="<%=accept%>" /><%=text%></li>',
 	tpl_li: '<li><%=text%></li>'
 },{
 	_init: function(){
@@ -80,11 +80,11 @@ widget("ask",{
 	_li: function(data) {
         var self = this, text, answer = data.answer, li;
         if(answer == 0) {
-            text = i18n("Ask Initiate", {name: data.nick});
+            text = i18n("Ask Initiate", {name: data.nick, time: data.time});
         } else if(answer == 1) {
-            text = i18n("Ask Accepted", {name: data.nick});
+            text = i18n("Ask Accepted", {name: data.nick, time: data.time});
         } else if(answer == 2) {
-            text = i18n("Ask Rejected", {name: data.nick});
+            text = i18n("Ask Rejected", {name: data.nick, time: data.time});
         }
         if(answer > 0) {
             li = createElement(tpl(this.options.tpl_li, { text: text }));
@@ -94,8 +94,8 @@ widget("ask",{
                     accept: i18n("accept"), 
                     reject: i18n("reject")
                 }));
-            var accetpBtn = li.firstChild;
-            var rejectBtn = accetpBtn.nextSibling;
+            var rejectBtn = li.firstChild;
+            var accetpBtn = rejectBtn.nextSibling;
             addEvent(accetpBtn, "click", function(e) {
                 preventDefault(e);
                 self.trigger( "accept", [data.id] );

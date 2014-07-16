@@ -9,14 +9,14 @@
             maximum-scale=1.0" 
             name="viewport">
         <title>Webim ChatBox</title>
-        <link rel="stylesheet" type="text/css" href="{{SITE_URL}}/static/chatbox/chatbox.css"/>
-        <script type="text/javascript" src="{{SITE_URL}}/static/chatbox/chatbox.js"></script>
+        <link rel="stylesheet" type="text/css" href="chatbox.css"/>
+        <script type="text/javascript" src="chatbox.js"></script>
     </head>
 
     <body id="chatbox">
         <div id="header">
-            <img id="avatar" class="avatar" src="{{endpoint.avatar}}"></img>
-            <h4 id="user">{{endpoint.nick}}</h4>
+            <img id="avatar" class="avatar" src="http://www.gravatar.com/avatar/136e370cbf1cf500cbbf791e56dac614&s=50"></img>
+            <h4 id="user">访客1234</h4>
         </div>
         <div id="notice" class="chatbox-notice ui-state-highlight" style="display: none;">
         </div>
@@ -25,7 +25,7 @@
         </div>
         <div id="footer">
             <form action="javascript:;">
-                <input type="hidden" id="to" value="{{endpoint.id}}">
+                <input type="hidden" id="to" value="v1234">
                 <table style="width:100%">
                 <tbody><tr>
                     <td width="auto"><input type="text" data-inline="true" placeholder="" name="" id="inputbox"> </td>
@@ -37,8 +37,8 @@
         <script> 
         (function(){ 
              window.webim.chatbox.open( {
-                touid: '{{ endpoint.id }}',
-                path: '{{ SITE_URL }}',
+                touid: 'v1234',
+                path: '',
                 params: { siteid: {{endpoint.siteid}} }
              } ); 
         })();

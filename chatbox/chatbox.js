@@ -2506,20 +2506,20 @@ webimChatbox.open = function(options) {
         }
     }
 	webim.route({
-		online: options.path + "/webim.php/online?" + query.join("&"),
-		offline: options.path + "/webim.php/offline",
-		deactivate: options.path + "/webim.php/refresh",
-		message: options.path + "/webim.php/message",
-		presence: options.path + "/webim.php/presence",
-		status: options.path + "/webim.php/status",
-		setting: options.path + "/webim.php/setting",
-		history: options.path + "/webim.php/history",
-		download: options.path + "/webim.php/history/download",
-		buddies: options.path + "/webim.php/buddies",
-		upload: options.path + "/webim.php/upload",
-		notifications: options.path + "/webim.php/notifications",
+		online: options.path + "online?" + query.join("&"),
+		offline: options.path + "offline",
+		deactivate: options.path + "refresh",
+		message: options.path + "message",
+		presence: options.path + "presence",
+		status: options.path + "status",
+		setting: options.path + "setting",
+		history: options.path + "history",
+		download: options.path + "history/download",
+		buddies: options.path + "buddies",
+		upload: options.path + "upload",
+		notifications: options.path + "notifications",
         //upload files
-		upload: options.path + "static/images/upload.php"
+		upload: options.path + "upload.php"
 	});
 
     var im = new webim(null, options);
