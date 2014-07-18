@@ -5,8 +5,8 @@
  * Copyright (c) 2014 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Thu Jul 3 11:36:31 2014 +0800
- * Commit: 5a42251772f4a58f6a03b76864e18bf47acbe16a
+ * Date: Fri Jul 11 11:40:50 2014 +0800
+ * Commit: d4ca621cc222183abececea056397b561944979b
  */
 (function(window, document, undefined){
 
@@ -1443,7 +1443,10 @@ extend(webim.prototype, {
 		});
 
 		self.bind("presence", function( e, data ) {
-			buddy.presence( map( grep( data, grepPresence ), mapFrom ) );
+            var pl = grep( data, grepPresence );
+			buddy.presence( map( pl, mapFrom ) );
+            //fix issue #35
+            presence.update(pl);
 			data = grep( data, grepRoomPresence );
 			for (var i = data.length - 1; i >= 0; i--) {
                 /*
@@ -1957,6 +1960,15 @@ model( "presence", {
         for( var key in status ) {
             self.trigger(key, [status[key]]);
         }
+    },
+
+    update: function(list) {
+        var self = this, data = {};
+        for(var i = 0; i < list.length; i++) {
+            var p = list[i];
+            data[p.from] = p.show;
+        }
+        self.set(data);
     },
 
     clear: function() {
