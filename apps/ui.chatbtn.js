@@ -100,7 +100,7 @@ widget("chatbtn",
 			if(id && children(el).length == 0 && text && (elementId || className.test(el.className))){
 				anthors[id] ? anthors[id].push(el) :(anthors[id] = [el]);
 				list[id] = {id: id, name: text};
-				var icon = createElement('<i class="webim-chaticon"><em>');;
+				var icon = createElement('<i class="webim-chaticon"><em></em></i>');
 				el.appendChild( icon );
 				el.icon = icon;
 				el.title = i18n("offline");
