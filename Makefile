@@ -1,4 +1,12 @@
-all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp jishigou vBulletin ipboard struts2 dotnet4 jinhusns ci rails4 flask slim spring3
+all: uchome discuzX discuz service phpbb  phpwind phpwind9 thinksns thinkphp jishigou vBulletin ipboard struts2 dotnet4 jinhusns ci rails4 flask slim spring3 php5
+
+php5:
+	@@echo "Build webim for php5"
+	@@$(MAKE) -f build/php5.mk
+
+clean_php5:
+	@@echo "Clean webim for php5"
+	@@$(MAKE) clean -f build/php5.mk
 
 slim:
 	@@echo "Build webim for slimframework"
