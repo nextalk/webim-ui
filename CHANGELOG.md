@@ -2,6 +2,25 @@
 CHANGELOG
 ================================
 
+济南项目分支
+---------------------------------
+* 支持聊天消息中，嵌入动作按钮:
+'''javascript
+
+        buddyChatOptions : {
+            downloadHistory : !_IMC.is_visitor,
+            // simple: _IMC.is_visitor,
+            upload : _IMC.upload && !_IMC.is_visitor,
+            historyActions: [{
+                text: "转换任务",
+                href: "http://www.so.com/s?ie=utf-8&shb=1&src=360sou_home&q="
+            }, {
+                text: "转换创意",
+                href: "http://www.so.com/s?ie=utf-8&shb=1&src=360sou_home&q="
+            }]
+        },
+'''
+
 5.7
 ---------------------------------
 * ui.chatbtn.js: 修复IE9聊天按钮不显示问题，</em></li>关闭tag

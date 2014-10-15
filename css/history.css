@@ -30,4 +30,10 @@
 	margin: 5px 0;
 }
 
+.webim a.webim-history-action {
+    padding: 0px 4px;
+    color: #0000ff;
+    text-decoration: underline;
+}
+
 

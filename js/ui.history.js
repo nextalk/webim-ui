@@ -17,6 +17,7 @@
 widget("history", {
         user: {},
         info: {},
+        actions: [],
         template:'<div class="webim-history">\
                         <div id=":content" class="webim-history-content"> \
                 </div></div>'
@@ -40,6 +41,7 @@ widget("history", {
 		}
 		//self.$.content.innerHTML += markup.join('');
 		var el = createElement( "<div>"+markup.join('')+"</div>" );
+        //TODO: add three actions?
 		var imgs = el.getElementsByTagName("img");
 		for (var i = 0, l = imgs.length; i < l; i++) {
 			addEvent(imgs[i], "load", function(){
@@ -55,8 +57,9 @@ widget("history", {
 	},
     
 	_renderMsg: function(logItem){
-		var self = this;
+		var self = this, options = self.options;
 		logItem = extend({}, logItem);
+        var rawMsg = logItem.body;
 		plugin.call(self, "render", [null, self.ui({msg: logItem})]);
 		var  from = logItem.from, to = logItem.to, time = logItem.timestamp, msg = logItem.body, shouldTilte = true, last = self._lastLogItem, markup = [], info = self.options.info, user = self.options.user, nick;
 		nick = logItem.nick;
@@ -85,6 +88,15 @@ widget("history", {
             markup.push('<p>');
         }
 		markup.push(msg);
+
+        var actions = options.actions;
+        if(actions) {
+            markup.push(" (");
+            for(var i = 0; i < actions.length; i++) {
+                markup.push('<a class="webim-history-action" target="_blank" href="' + actions[i].href + encodeURIComponent(rawMsg) + '">' + actions[i].text + '</a>');
+            }
+            markup.push(")");
+        }
 		markup.push('</p>');
 		return markup.join("");
 	},

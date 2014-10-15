@@ -5,8 +5,8 @@
  * Copyright (c) 2014 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Wed Sep 10 17:30:04 2014 +0800
- * Commit: 5a22f8d1fa4a33ab8b17c7bcaccc4583377c71b6
+ * Date: Sun Oct 12 10:17:49 2014 +0800
+ * Commit: 02d46654a4fc361e8cb55e80a37830772061482b
  */
 (function(window, document, undefined){
 
@@ -1292,7 +1292,7 @@ extend(webim.prototype, {
 	_init: function() {
 		var self = this, options = self.options;
 		//Default user status info.
-		self.data = { 
+		self.data = {
 			user: {
 				presence: 'offline', 
 				show: 'unavailable'
@@ -1303,7 +1303,7 @@ extend(webim.prototype, {
 
 		ajax.settings.dataType = options.jsonp ? "jsonp" : "json";
 
-		self.status = new webim.status();
+		self.status = new webim.status(null, options);
 		self.setting = new webim.setting();
         self.models['presence'] = new webim.presence();
 		self.buddy = new webim.buddy();
@@ -1742,11 +1742,13 @@ model("setting",{
 //}
 
 model( "status", {
-	key:"_webim"
+	key:"_webim",
+    storage: "local",
+    domain: document.domain
 }, {
 	_init:function() {
 		var self = this, data = self.data, key = self.options.key;
-		var store = window.localStorage;
+		var store = (self.options.storage == "local") && window.localStorage;
 		if( store ) {
 			//无痕浏览模式
 			try {
@@ -1786,12 +1788,12 @@ model( "status", {
 		this._save( {} );
 	},
 	_save: function( data ) {
-		var self = this, key = self.options.key;
+		var self = this, key = self.options.key, domain = self.options.domain;
 		self.data = data;
 		data = JSON.stringify( data );
 		self.store ? self.store.setItem( key, data ) : cookie( key, data, {
 			path: '/',
-			domain: document.domain
+			domain: domain
 		} );
 	}
 } );

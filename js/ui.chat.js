@@ -174,7 +174,8 @@ widget("chat",{
 		var self = this, element = self.element, options = self.options, win = options.window;
 		var history = self.history = new webimUI.history(null,{
 			user: options.user,
-			info: options.info
+			info: options.info,
+            actions: options.historyActions
 		});
 		addClass( element, "webim-chat-" + options.type );
 		self.$.main.insertBefore(history.element, self.$.main.firstChild);
