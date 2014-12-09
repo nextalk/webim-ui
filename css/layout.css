@@ -147,6 +147,16 @@
         width: 24em; /*20em*/
 }
 
+/*vsn 5.8 max window support*/
+.webim-maximized-window {
+	position: fixed !important;
+	right: 0px !important;
+	bottom: 0px !important;
+	z-index: 9999 !important;
+	width: 100% !important;
+	height: 100% !important;
+}
+
 .webim-layout .webim-window-content {
         border-top-width: 0;
 }
