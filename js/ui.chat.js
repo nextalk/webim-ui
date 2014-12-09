@@ -265,9 +265,37 @@ widget("chat",{
 		self._adjustContent();
 
 	},
-	_bindWindow: function(){
-		var self = this, win = self.window;
+
+	_bindWindow: function() {
+
+		var self = this, options = self.options, win = self.window, $ = self.$, content = $.content, main = $.main;
+		
 		win.bind("displayStateChange", function(e, type){
+
+			//TODO: 5.8 max window
+			if(type == "maximize") {
+				//TODO: FIXME Later... compute when init...
+				var sz = winSize(), height = (sz.y - 128);
+				content.style.height = main.style.height = height + "px";
+				//TODO:refactor later	
+				if(options.member) {
+					var sidebar = $.sidebar.firstChild;
+					sidebar.style.marginTop = "0px";
+					sidebar.style.height = (height - 1) + "px";
+					sidebar.style.left = "-1px";
+					main.style.marginLeft = "8.2em"; //TODO: fix later...
+				}
+			} else {
+				//TODO:refactor later	
+				content.style.height = main.style.height = "";
+				if(options.member) {
+					var sidebar = $.sidebar.firstChild;
+					sidebar.style.marginTop = "";
+					sidebar.style.height = "";
+					sidebar.style.left = "";
+					main.style.marginLeft = "0px";
+				}
+			}
 			if(type != "minimize"){
 				//fix firefox
 				window.setTimeout(function(){self.$.input.focus();},0);
