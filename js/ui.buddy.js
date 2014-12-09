@@ -75,6 +75,11 @@ app("buddy", function( options ){
 		}
 	});
 
+	//5.8
+	buddyUI.bind("search", function(e, val, callback) {
+		im.buddy.search(val, callback);
+	});
+
 	var mapId = function(a){ return isObject(a) ? a.id : a };
 	var grepVisible = function(a){ return a.show != "invisible" && a.presence == "online"};
 	var grepInvisible = function(a){ return a.show == "invisible"; };
@@ -120,7 +125,7 @@ app("buddy", function( options ){
 	buddyUI.offline();
 	im.bind( "beforeOnline", function(){
 		buddyUI.online();
-	}).bind("online", function() {
+	}).bind( "online", function() {
 		userUI && buddyUI.window.subHeader( userUI.element );
 		buddyUI.titleCount();
 	}).bind( "offline", function( type, msg ) {
@@ -131,7 +136,7 @@ app("buddy", function( options ){
 	return buddyUI;
 });
 
-widget("buddy",{
+widget("buddy", {
 	template: '<div id="webim-buddy" class="webim-buddy webim-flex webim-box">\
 		<div id=":search" class="webim-buddy-search ui-state-default ui-corner-all"><em class="ui-icon ui-icon-search"></em><input id=":searchInput" type="text" value="" /></div>\
 			<div class="webim-buddy-content webim-flex" id=":content">\
@@ -168,7 +173,7 @@ widget("buddy",{
 
 	},
 	_initEvents: function(){
-		var self = this, $ = self.$, search = $.search, input = $.searchInput, placeholder = i18n("search buddy"), activeClass = "ui-state-active";
+		var self = this, $ = self.$, options = self.options, search = $.search, input = $.searchInput, placeholder = i18n("search buddy"), activeClass = "ui-state-active";
 		addEvent(search.firstChild, "click",function(){
 			input.focus();
 		});
@@ -181,28 +186,44 @@ widget("buddy",{
 			removeClass(search, activeClass);
 			if(this.value == "")this.value = placeholder;
 		});
-		addEvent(input, "keyup", function(){
+
+
+
+		//5.8 vsn: remote search
+		addEvent(input, "keyup", function(e) {
+			
+			function localSearch() {
+				//hide all first
+				each(self.groups, function(n, grp) { hide(grp.el) });      
+				each(self.on_li, function(n,li) { hide(li); });
+				each(self.li, function(n,li) { hide(li); });
+				//show searched
+				each(self.li, function(id, li){
+					 if ( (li.text || li.innerHTML.replace(/<[^>]*>/g, "")).indexOf(val) >= 0 ) {
+						 var grp = self.li_group[id];
+						 if(grp) show(grp.el);
+						 show(li);
+					 }
+				});
+			}
+
 			var val = this.value;
-            if(val == undefined || val == "") {
-                //show all when finished
-                each(self.groups, function(n, grp) { show(grp.el) });
-                each(self.on_li, function(n,li) { show(li); });
-                each(self.li, function(n,li) { show(li); });
-            } else {
-                //hide all first
-                each(self.groups, function(n, grp) { hide(grp.el) });      
-                each(self.on_li, function(n,li) { hide(li); });
-                each(self.li, function(n,li) { hide(li); });
-                //show searched
-                each(self.li, function(id, li){
-                     if ( (li.text || li.innerHTML.replace(/<[^>]*>/g, "")).indexOf(val) >= 0 ) {
-                         var grp = self.li_group[id];
-                         if(grp) show(grp.el);
-                         show(li);
-                     }
-                });
-            }
+			if(val == undefined || val == "") {
+				//show all when finished
+				each(self.groups, function(n, grp) { show(grp.el) });
+				each(self.on_li, function(n,li) { show(li); });
+				each(self.li, function(n,li) { show(li); });
+			} else {
+				//5.8 add
+				if(options.search && options.search == 'remote') { //remote, enter key
+					(e.keyCode == 13) && self.trigger("search", [val, localSearch]);
+				} else {
+					localSearch();
+				}
+			}
 		});
+		
+	
 /*
 var a = $.online.firstChild;
 addEvent(a, "click", function(e){
