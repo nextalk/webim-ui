@@ -648,6 +648,7 @@ widget("layout",{
 			isMinimize: self.activeTabId || !self.options.chatAutoPop,
 			tabWidth: self.tabWidth -2,
             detachable: self.options.detachable || false,
+			maximizable: self.options.maximizable || false,
 			titleVisibleLength: 9
 		}, winOptions))
 			.bind("close", function(){ 
