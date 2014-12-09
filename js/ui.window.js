@@ -181,11 +181,23 @@ widget("window", {
 		_countDisplay($.tabCount, 0);
 	},
 	maximize: function(){
-		var self = this;
-		if(self.isMaximize())return;
+		var self = this, win = self.$.window;
+		//TODO: 5.8 max window, is this ok? 
+		if(self.isMaximize()) {
+			//TODO: NORMAL, fixme
+			window.onresize = null;
+			removeClass(win, "webim-maximized-window");
+			self._changeState("restore");
+			return;
+		}
+		addClass(win, "webim-maximized-window");
 		self._setVisibile();
 		self._changeState("maximize");
+		window.onresize = function() {
+			self._changeState("maximize");
+		};
 	},
+
 	restore: function(){
 		var self = this;
 		if(hasClass(self.element, "webim-window-normal"))return;
