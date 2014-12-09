@@ -109,6 +109,7 @@ webim.ui.i18n.store('zh-CN',{
 	"cancel": "取消",
 	"invite": "邀请",
 	"visitor":"访客",
+	"robot": "机器人",
 	"manager":"管理员",
 	"exit": "退出",
     "Exit Room": "确定要退出'{{name}}'讨论组吗?",
