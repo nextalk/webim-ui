@@ -145,7 +145,7 @@ app( "chat", function( options ) {
 	return chatUI;
 } );
 
-widget("chat",{
+widget("chat", {
 	tpl_header: '<div><div id=":user" class="webim-user"> \
 	<a id=":userPic" class="webim-user-pic ui-corner-all ui-state-active" href="#id"><img width="50" height="50" src="" defaultsrc="" onerror="var d=this.getAttribute(\'defaultsrc\');if(d && this.src!=d)this.src=d;" class="ui-corner-all"></a> \
 	<span id=":userStatus" title="" class="webim-user-status">&nbsp;</span> \
@@ -170,7 +170,7 @@ widget("chat",{
 	</div> \
 	</div>'
 },{
-	_init: function(){
+	_init: function() {
 		var self = this, element = self.element, options = self.options, win = options.window;
 		var history = self.history = new webimUI.history(null,{
 			user: options.user,
@@ -260,24 +260,24 @@ widget("chat",{
 		if( main.scrollTop != main.scrollHeight)
 			main.scrollTop = main.scrollHeight;
 	},
-	_fitUI: function(e){
+
+	_fitUI: function(e) {
 		var self = this, win = self.window, $ = self.$;
 		self._adjustContent();
-
 	},
 
 	_bindWindow: function() {
 
 		var self = this, options = self.options, win = self.window, $ = self.$, content = $.content, main = $.main;
 		
-		win.bind("displayStateChange", function(e, type){
+		win.bind("displayStateChange", function(e, type) {
 
 			//TODO: 5.8 max window
 			if(type == "maximize") {
 				//TODO: FIXME Later... compute when init...
 				var sz = winSize(), height = (sz.y - 128);
 				content.style.height = main.style.height = height + "px";
-				//TODO:refactor later	
+				//TODO: should be moved to 'member' plugin... 
 				if(options.member) {
 					var sidebar = $.sidebar.firstChild;
 					sidebar.style.marginTop = "0px";
@@ -285,10 +285,10 @@ widget("chat",{
 					sidebar.style.left = "-1px";
 					main.style.marginLeft = "8.2em"; //TODO: fix later...
 				}
-			} else {
-				//TODO:refactor later	
+			} else if(type == "restore") {
 				content.style.height = main.style.height = "";
 				if(options.member) {
+					//TODO: should be moved to 'member' plugin... 
 					var sidebar = $.sidebar.firstChild;
 					sidebar.style.marginTop = "";
 					sidebar.style.height = "";
@@ -296,7 +296,7 @@ widget("chat",{
 					main.style.marginLeft = "0px";
 				}
 			}
-			if(type != "minimize"){
+			if(type != "minimize") {
 				//fix firefox
 				window.setTimeout(function(){self.$.input.focus();},0);
 				//self.$.input.focus();
