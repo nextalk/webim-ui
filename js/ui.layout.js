@@ -671,6 +671,7 @@ widget("layout",{
 		!win.isMinimize() && self._changeActive(panelId);
 		self._fitUI();
 		//else self.focusChat(panelId);
+		return win;
 	},
 	removeChat: function(type, id){
 		//ids = idsArray(ids);
