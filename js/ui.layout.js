@@ -639,10 +639,11 @@ widget("layout",{
 	addChat: function(type, id, chatOptions, winOptions, nick){
 		type = _tr_type(type);
 		var self = this;
-		if(self.chat(type, id))return;
-
 		var  panels 	= self.panels;
 		var panelId = _id_with_type(type, id);
+        
+        //5.8 return win;
+		if(self.chat(type, id)) { return self.tabs[panelId]; }
 
 		var win = self.tabs[panelId] = new webimUI.window(null, extend({
 			isMinimize: self.activeTabId || !self.options.chatAutoPop,
@@ -671,7 +672,7 @@ widget("layout",{
 		!win.isMinimize() && self._changeActive(panelId);
 		self._fitUI();
 		//else self.focusChat(panelId);
-		return win;
+        return win;
 	},
 	removeChat: function(type, id){
 		//ids = idsArray(ids);

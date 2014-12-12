@@ -2,6 +2,27 @@
 CHANGELOG
 ================================
 
+5.8
+---------------------------------
+* 支持remote搜索:
+
+```javascript
+	ui.addApp("buddy", {
+		search: 'remote',
+		...
+	});
+```
+
+* 完善手机窗口chatBox应用
+
+* 支持聊天窗口最大化
+
+```
+layoutOptions : {
+	maximizable: true
+},
+```
+
 5.7
 ---------------------------------
 * ui.chatbtn.js: 修复IE9聊天按钮不显示问题，</em></li>关闭tag
