@@ -240,7 +240,7 @@ self.trigger("offline");
 	},
     //FIXME Later: should be moved to model...
 	titleCount: function(){
-		var self = this, size = self.size, win = self.window, empty = self.$.empty, element = self.element;
+		var self = this, size = self.size, win = self.window, empty = self.$.empty, element = self.element, options = self.options;
         var ol_sz = 0;
         each(self.presences, function(id, p) { if(p.o) ol_sz++; });
 		win && win.title(self.options.title + "[" + ol_sz + "/" + (size ? size : "0") + "]");
@@ -249,10 +249,15 @@ self.trigger("offline");
 		}else{
 			hide(empty);
 		}
-		if(size > 8){
+		//5.8 remote search...
+		if(options.search && options.search == 'remote') {
 			self.scroll(true);
-		}else{
-			self.scroll(false);
+		} else {
+			if(size > 8){
+				self.scroll(true);
+			}else{
+				self.scroll(false);
+			}
 		}
 	},
 
