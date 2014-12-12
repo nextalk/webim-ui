@@ -78,7 +78,7 @@ widget("window", {
 	html: function(obj){
 		html( this.$.content, obj );
 	},
-	subHeader: function(obj){
+	subHeader: function(obj) {
 		html( this.$.subHeader, obj );
 	},
 	_init: function(element, options){
@@ -180,7 +180,7 @@ widget("window", {
 		self.activate();
 		_countDisplay($.tabCount, 0);
 	},
-	maximize: function(){
+	maximize: function() {
 		var self = this, win = self.$.window;
 		//TODO: 5.8 max window, is this ok? 
 		if(self.isMaximize()) {
