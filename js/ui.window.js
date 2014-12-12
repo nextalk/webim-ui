@@ -96,9 +96,9 @@ widget("window", {
 		       	hide($.tabClose);
 		       	hide($.close);
 		}
-		if(options.isMinimize){
+		if(options.isMinimize) {
 			self.minimize();
-		}else{
+        }else{
 			self.restore();
 		}
         self.position = {right: 0, bottom: 0};
@@ -170,7 +170,7 @@ widget("window", {
 		if(!self.options.sticky) self.minimize();
 		self.trigger("deactivate");
 	},
-	_setVisibile: function(){
+	_setVisibile: function() {
 		var self = this, $ = self.$;
         if(self.isDetached()) { 
             hide($.tab); 
@@ -180,7 +180,8 @@ widget("window", {
 		self.activate();
 		_countDisplay($.tabCount, 0);
 	},
-	maximize: function(){
+
+	maximize: function() {
 		var self = this, win = self.$.window;
 		//TODO: 5.8 max window, is this ok? 
 		if(self.isMaximize()) {
@@ -199,11 +200,14 @@ widget("window", {
 	},
 
 	restore: function(){
-		var self = this;
-		if(hasClass(self.element, "webim-window-normal"))return;
+		var self = this, win = self.$.window;
+		if(hasClass(self.element, "webim-window-normal")) return;
+        //5.8 max window...
+        if(hasClass(win, "webim-maximized-window")) { self.maximize(); return; }
 		self._setVisibile();
 		self._changeState("restore");
 	},
+
 	minimize: function(){
 		var self = this;
 		if(self.isMinimize())return;
