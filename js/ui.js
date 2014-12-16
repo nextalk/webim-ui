@@ -24,6 +24,15 @@ function winSize() {
 	return {x: x, y: y};
 }
 
+/**
+ * open chatbox in another window
+ */
+function openChatbox(url, height, width) {
+	height = height || 600;
+	width = width || 400;
+	window.open(url, "_blank","height="+height+",width="+width+",fullscreen=3,top=40,left=40,status=no,toolbar=no,menubar=no,resizable=no,scrollbars=no,location=no,titlebar=no,fullscreen=no");
+}
+
 /*----------------------------------------
  Webim UI
 ----------------------------------------*/
@@ -202,6 +211,7 @@ extend(webimUI,{
 	date: date,
 	ready: ready,
 	createElement: createElement,
+	openChatbox: openChatbox,
 	defaults: {},
 	apps:{}
 });
