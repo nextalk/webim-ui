@@ -7,10 +7,12 @@
  * webim.$product.js:
  *
  * ui.addApp("chatbtn", {
- *  wrap: document.getElementById('wrap')
- *	elementId: null,
- * 	className: /webim-chatbtn/,
- *  autoInsertlink: true
+ *  wrap: document.getElementById('wrap'),
+ *  elementId: null,
+ * 	classRe: /webim-chatbtn/,
+ *  hrefRe: [/chat\/([^\/]+)/i],
+ *  autoInsertlink: false,
+ *  chatbox: false
  * });
  * 
  * TODO: 支持群组Link
@@ -28,16 +30,20 @@
  * 
  */
 
-app("chatbtn", function(options){
+app("chatbtn", function(options) {
 	var ui = this, im = ui.im;
-	var chatbtn = ui.chatbtn = new webim.ui.chatbtn(null, options).bind("select", function(e, id){
-		ui.im.online();
-        id = id.substr("webim-chatid-".length);
-		ui.layout.addChat("buddy", id);
-		ui.layout.focusChat("buddy", id);
-		if( options && options.autoInsertlink ) {
-			var chat = ui.layout.chat( "buddy", id );
-			chat && chat.insert( window.location.href );
+	var chatbtn = ui.chatbtn = new webim.ui.chatbtn(null, options).bind("select", function(e, id, url){
+		if(options.chatbox) {
+			openChatbox(url);
+		} else {
+			ui.im.online();
+			id = id.substr("webim-chatid-".length);
+			ui.layout.addChat("buddy", id);
+			ui.layout.focusChat("buddy", id);
+			if( options && options.autoInsertlink ) {
+				var chat = ui.layout.chat( "buddy", id );
+				chat && chat.insert( window.location.href );
+			}
 		}
 	});
 	var grepVisible = function(a){ return a.show != "invisible" && a.show != "unavailable"};
@@ -63,17 +69,17 @@ app("chatbtn", function(options){
 widget("chatbtn",
 {
 	wrap: null,
-	re_id: [/chat\/([^\/]+)/i],
 	elementId: null,
-	className: /webim-chatbtn/
+	hrefRe: [/chat\/([^\/]+)/i],
+	classRe: /webim-chatbtn/
 },
 {
 	_init: function(){
 		var self = this, element = self.element, list = self.list = {}, 
 			options = self.options, anthors = self.anthors = {}, 
-			re_id = options.re_id, 
+			hrefRe = options.hrefRe,
 			elementId = options.elementId, 
-			className = options.className,
+			classRe = options.classRe,
 			wrap = options.wrap || document;
 
 		function parse_id(link, re){
@@ -95,9 +101,9 @@ widget("chatbtn",
 		} else {
 			a = wrap.getElementsByTagName("a");
 		}
-		a && each(a, function(i, el){
-			var id = parse_id(el.href, re_id), text = el.innerHTML;
-			if(id && children(el).length == 0 && text && (elementId || className.test(el.className))){
+		a && each(a, function(i, el) {
+			var id = parse_id(el.href, hrefRe), text = el.innerHTML;
+			if(id && children(el).length == 0 && text && (elementId || classRe.test(el.className))){
 				anthors[id] ? anthors[id].push(el) :(anthors[id] = [el]);
 				list[id] = {id: id, name: text};
 				var icon = createElement('<i class="webim-chaticon"><em></em></i>');
@@ -105,11 +111,14 @@ widget("chatbtn",
 				el.icon = icon;
 				el.title = i18n("offline");
 				el.id = 'webim-chatid-' + id;
-				addEvent(el, "click", function(e){
-					self.trigger("select", this.id);
-					stopPropagation(e);
-					preventDefault(e);
-				});
+				//5.8: don't respond 'click' on mobile device
+				if( !webim.isMobile() ) {
+					addEvent(el, "click", function(e) {
+						self.trigger("select", [this.id, el.href]);
+						stopPropagation(e);
+						preventDefault(e);
+					});
+				}
 			}
 		});
 	},
