@@ -5,8 +5,8 @@
  * Copyright (c) 2014 Arron
  * Released under the MIT, BSD, and GPL Licenses.
  *
- * Date: Fri Dec 12 20:13:48 2014 +0800
- * Commit: 55f4525666505fb1050373edb2d5dd8bd20eb36f
+ * Date: Wed Dec 17 00:27:22 2014 +0800
+ * Commit: 0233da81724642bededc77a372983c416c7b6692
  */
 (function(window, document, undefined){
 
@@ -1679,7 +1679,8 @@ extend( webim, {
 	socket: socket,
 	model: model,
 	route: route,
-	ClassEvent: ClassEvent
+	ClassEvent: ClassEvent,
+	isMobile: isMobile
 } );
 /*
 * 配置(数据库永久存储)
