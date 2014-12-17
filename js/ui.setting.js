@@ -53,7 +53,7 @@ widget("setting",{
 		//this._initEvents();
 		var copyright = this.options.copyright;	
 		if( copyright ) {
-			copyright = copyright === true ? '<p style="margin: 5px 10px;"><a class="webim-gray" href="http://nextalk.im/" target="_blank">Powered by <strong>NexTalk</strong><em>&nbsp5.5</em></a></p>' : copyright;
+			copyright = copyright === true ? '<p style="margin: 5px 10px;"><a class="webim-gray" href="http://nextalk.im/" target="_blank">Powered by <strong>NexTalk</strong><em>&nbsp5.8</em></a></p>' : copyright;
 			this.element.appendChild(createElement(copyright));
 		}
 	},
